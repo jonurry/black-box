@@ -51,6 +51,57 @@ test('It should initialise the grid by populating the grid and gutters with zero
   }
 });
 
+test('It should place the correct number of marbles on the grid.', () => {
+  var marbleCounter = 0;
+  var blackbox1 = new BlackBox(8, 4);
+  blackbox1.createGrid();
+  blackbox1.initialiseGrid();
+  blackbox1.placeMarblesRandomlyOnGrid();
+  for (var i = 1; i <= blackbox1.gridSize; i++) {
+    for (var j = 1; j <= blackbox1.gridSize; j++) {
+      if (blackbox1.grid[i][j] === 1) {
+        marbleCounter += 1;
+      }
+    }
+  }
+  expect(marbleCounter).toBe(4);
+});
+
+test('It should not place marbles in the gutters.', () => {
+  var blackbox1 = new BlackBox(8, 4);
+  blackbox1.createGrid();
+  blackbox1.initialiseGrid();
+  blackbox1.placeMarblesRandomlyOnGrid();
+  // expect gutters to not contain a marble
+  expect(blackbox1.grid[0]).not.toEqual(expect.arrayContaining([1]));
+  expect(blackbox1.grid[9]).not.toEqual(expect.arrayContaining([1]));
+  for (var i = 0; i < blackbox1.grid.length; i++) {
+    expect(blackbox1.grid[0][i]).not.toBe(1);
+    expect(blackbox1.grid[9][i]).not.toBe(1);
+  }
+});
+
+test('It should place marbles randomly on the grid.', () => {
+  var numberOfMatchedMarbles = 0;
+  var blackbox1 = new BlackBox(8, 4);
+  blackbox1.createGrid();
+  blackbox1.initialiseGrid();
+  blackbox1.placeMarblesRandomlyOnGrid();
+  // create a second black box and expect its marbles not to be in the same position as the first black box
+  var blackbox2 = new BlackBox(8, 4);
+  blackbox2.createGrid();
+  blackbox2.initialiseGrid();
+  blackbox2.placeMarblesRandomlyOnGrid();
+  for (var i = 1; i <= blackbox1.gridSize; i++) {
+    for (var j = 1; j <= blackbox1.gridSize; j++) {
+      if (blackbox1.grid[i][j] === 1 && blackbox2.grid[i][j]) {
+        numberOfMatchedMarbles += 1;
+      }
+    }
+  }
+  expect(numberOfMatchedMarbles).not.toBe(4);
+});
+
 test.skip('It should set the current ray position by row and column number', () => {
   var pos = [2, 4];
   blackbox.setRayPosition(pos);
