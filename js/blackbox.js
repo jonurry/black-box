@@ -199,9 +199,3 @@ function BlackBox(gridSize = 8, numberOfMarbles = 4) {
 
   }
 };
-
-var blackbox = new BlackBox();
-blackbox.createGrid();
-blackbox.initialiseGrid();
-blackbox.placeMarblesRandomlyOnGrid();
-blackbox.renderGrid();
