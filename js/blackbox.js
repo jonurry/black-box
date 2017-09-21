@@ -1,17 +1,17 @@
-var blackbox = {
-  grid: [],
-  gridSize: 8,
-  guesses: [],
-  numberOfMarbles: 4,
-  numberOfRays: 0,
-  createGrid: function() {
+function BlackBox(gridSize = 8, numberOfMarbles = 4) {
+  this.grid = [];
+  this.gridSize = gridSize;
+  this.guesses= [];
+  this.numberOfMarbles = numberOfMarbles;
+  this.numberOfRays = 0;
+  this.createGrid = function() {
     //first row. 2 extra slots to record ray outcomes at either end
     this.grid = new Array(this.gridSize + 2);
     for (i = 0; i < this.grid.length; i++) {
       this.grid[i] = new Array(this.gridSize + 2);
     }
-  },
-  guess: function(x, y) {
+  };
+  this.guess = function(x, y) {
     var removeGuess = -1;
     for (var i = 0, guess; guess = this.guesses[i]; i++) {
       if (guess[0] === x && guess[1] === y) {
@@ -24,15 +24,15 @@ var blackbox = {
     } else if (this.guesses.length < this.numberOfMarbles) {
       this.guesses.push([x, y]);
     }
-  },
-  initialiseGrid: function() {
+  };
+  this.initialiseGrid = function() {
     for (i = 0; i < this.grid.length; i++) {
       for (j = 0; j < this.grid.length; j++) {
         this.grid[i][j] = 0;
       }
     }
-  },
-  placeMarblesRandomlyOnGrid: function() {
+  };
+  this.placeMarblesRandomlyOnGrid = function() {
     for (i = 0; i < this.numberOfMarbles; i++) {
       do {
         var x = util.getRandomIntInclusive(1, this.gridSize);
@@ -40,8 +40,8 @@ var blackbox = {
       } while (this.grid[x][y] === 1);
       this.grid[x][y] = 1;
     }
-  },
-  renderGrid: function() {
+  };
+  this.renderGrid = function() {
     var gridLine;
     for (i = 0; i < this.grid.length; i++) {
       gridLine = '';
@@ -51,8 +51,8 @@ var blackbox = {
       console.log(gridLine + '\t' + String(i));
       //console.log(this.grid[i][0], this.grid[i][1], this.grid[i][2], this.grid[i][3], this.grid[i][4], this.grid[i][5], this.grid[i][6], this.grid[i][7], this.grid[i][8], this.grid[i][9]);
     }
-  },
-  shootRay: function(x, y) {
+  };
+  this.shootRay = function(x, y) {
 
     // initialise ray position
     var xPos = x;
@@ -198,8 +198,9 @@ var blackbox = {
     this.renderGrid();
 
   }
-}
+};
 
+var blackbox = new BlackBox();
 blackbox.createGrid();
 blackbox.initialiseGrid();
 blackbox.placeMarblesRandomlyOnGrid();
