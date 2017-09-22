@@ -1,3 +1,10 @@
+var locationType = {
+  CORNER: 'corner',
+  GRID: 'grid',
+  OUTSIDE: 'outside',
+  RIM: 'rim'
+};
+
 function BlackBox(gridSize = 8, numberOfMarbles = 4) {
   this.grid = [];
   this.gridSize = gridSize;
@@ -11,6 +18,32 @@ function BlackBox(gridSize = 8, numberOfMarbles = 4) {
       this.grid[i] = new Array(this.gridSize + 2);
     }
   };
+  this.getLocationType = function(position) {
+    var gridUpperBound = this.gridSize + 1;
+    var row = position.row;
+    var col = position.column;
+    var returnLocationType;
+    // check if position is inside the grid
+    if (row > 0 && col > 0 && row < gridUpperBound && col < gridUpperBound) {
+      returnLocationType = locationType.GRID;
+    } else if
+      // check if position is at a corner of the grid
+      ((row === 0 && col === 0) ||
+      (row === 0 && col === gridUpperBound) ||
+      (row === gridUpperBound && col === 0) ||
+      (row === gridUpperBound && col === gridUpperBound)) {
+        returnLocationType = locationType.CORNER;
+    } else if
+      // check if position is on the rim (i.e. a valid place to shoot a ray)
+      (((row === 0 || row === this.gridSize + 1) && (col >= 1 && col <= this.gridSize)) ||
+      ((col === 0 || col === this.gridSize + 1) && (row >= 1 && row <= this.gridSize))) {
+        returnLocationType = locationType.RIM;
+    } else {
+      // otherwise, position must be outside the black box
+      returnLocationType = locationType.OUTSIDE;
+    }
+    return returnLocationType;
+  }
   this.guess = function(x, y) {
     var removeGuess = -1;
     for (var i = 0, guess; guess = this.guesses[i]; i++) {

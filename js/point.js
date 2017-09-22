@@ -29,7 +29,7 @@ function Point(row, column) {
     return this;
   },
   this.getPosition = function() {
-    return {row: this.position.row, column: this.position.column};
+    return this.position;
   },
   this.setPosition = function(row, column) {
     this.position.row = row;
