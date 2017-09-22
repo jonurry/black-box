@@ -170,6 +170,78 @@ describe('It should know the location type of a Point.', () => {
   });
 });
 
+describe('It should handle guesses as to the locations of the marbles in the Black Box.', () => {
+
+  test('It should accept guesses.', () => {
+    var blackbox = new BlackBox(8, 4);
+    // Create 2 Points and add them as guesses
+    var guess1 = new Point(3, 4);
+    blackbox.guess(guess1.getPosition());
+    var guess2 = new Point(7, 2);
+    blackbox.guess(guess2.getPosition());
+    expect(blackbox.guesses.length).toBe(2);
+    expect(blackbox.guesses[0]).toEqual(guess1.getPosition());
+    expect(blackbox.guesses[1]).toEqual(guess2.getPosition());
+  });
+
+  test('It should accept no more guesses than there are marbles in the game.', () => {
+    var blackbox = new BlackBox(8, 4);
+    var guess1 = new Point(1, 1);
+    blackbox.guess(guess1.getPosition());
+    var guess2 = new Point(2, 2);
+    blackbox.guess(guess2.getPosition());
+    var guess3 = new Point(3, 3);
+    blackbox.guess(guess3.getPosition());
+    var guess4 = new Point(4, 4);
+    blackbox.guess(guess4.getPosition());
+    var guess5 = new Point(5, 5);
+    blackbox.guess(guess5.getPosition());
+    var guess6 = new Point(6, 6);
+    blackbox.guess(guess6.getPosition());
+    expect(blackbox.guesses.length).toBe(4);
+    expect(blackbox.guesses[0]).toEqual(guess1.getPosition());
+    expect(blackbox.guesses[1]).toEqual(guess2.getPosition());
+    expect(blackbox.guesses[2]).toEqual(guess3.getPosition());
+    expect(blackbox.guesses[3]).toEqual(guess4.getPosition());
+  });
+
+  test('It should treat a duplicate guess as a withdrawal of that guess.', () => {
+    var blackbox = new BlackBox(8, 4);
+    // first 3 guesses are different so all are added in order
+    var guess1 = new Point(1, 1);
+    blackbox.guess(guess1.getPosition());
+    expect(blackbox.guesses.length).toBe(1);
+    expect(blackbox.guesses[0]).toEqual(guess1.getPosition());
+    var guess2 = new Point(2, 2);
+    blackbox.guess(guess2.getPosition());
+    expect(blackbox.guesses.length).toBe(2);
+    expect(blackbox.guesses[0]).toEqual(guess1.getPosition());
+    expect(blackbox.guesses[1]).toEqual(guess2.getPosition());
+    var guess3 = new Point(3, 3);
+    blackbox.guess(guess3.getPosition());
+    expect(blackbox.guesses.length).toBe(3);
+    expect(blackbox.guesses[0]).toEqual(guess1.getPosition());
+    expect(blackbox.guesses[1]).toEqual(guess2.getPosition());
+    expect(blackbox.guesses[2]).toEqual(guess3.getPosition());
+    // next guess is duplicate of second guess so second guess is removed leaving guesses one and three.
+    var guess4 = new Point(2, 2);
+    blackbox.guess(guess4.getPosition());
+    expect(blackbox.guesses.length).toBe(2);
+    expect(blackbox.guesses[0]).toEqual(guess1.getPosition());
+    expect(blackbox.guesses[1]).toEqual(guess3.getPosition());
+    // next guess is duplicate of first guess so first guess is removed leaving only third guess.
+    var guess5 = new Point(1, 1);
+    blackbox.guess(guess5.getPosition());
+    expect(blackbox.guesses.length).toBe(1);
+    expect(blackbox.guesses[0]).toEqual(guess3.getPosition());
+    // final guess is a duplicate of third guess so thired guess us removed. There are no guesses left.
+    var guess6 = new Point(3, 3);
+    blackbox.guess(guess6.getPosition());
+    expect(blackbox.guesses.length).toBe(0);
+  });
+
+});
+
 test.skip('It should set the current ray position by row and column number', () => {
   var pos = [2, 4];
   blackbox.setRayPosition(pos);

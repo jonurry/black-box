@@ -44,10 +44,10 @@ function BlackBox(gridSize = 8, numberOfMarbles = 4) {
     }
     return returnLocationType;
   }
-  this.guess = function(x, y) {
+  this.guess = function(newGuess) {
     var removeGuess = -1;
     for (var i = 0, guess; guess = this.guesses[i]; i++) {
-      if (guess[0] === x && guess[1] === y) {
+      if (guess.row === newGuess.row && guess.column === newGuess.column) {
         // that guess has already been made so remove guess
         removeGuess = i;
       }
@@ -55,7 +55,7 @@ function BlackBox(gridSize = 8, numberOfMarbles = 4) {
     if (removeGuess > -1) {
       this.guesses.splice(removeGuess, 1);
     } else if (this.guesses.length < this.numberOfMarbles) {
-      this.guesses.push([x, y]);
+      this.guesses.push(newGuess);
     }
   };
   this.initialiseGrid = function() {
