@@ -1,9 +1,16 @@
-var locationType = {
+var LOCATION_TYPE = {
   CORNER: 'corner',
   GRID: 'grid',
   OUTSIDE: 'outside',
   RIM: 'rim'
 };
+
+var SHOOT_RAY_OUTCOME = {
+  ABSORBED: 'absorbed',
+  NOTHING: 'nothing',
+  PROPOGATED: 'propogated',
+  REFLECTED: 'reflected'
+}
 
 function BlackBox(gridSize = 8, numberOfMarbles = 4) {
   this.grid = [];
@@ -25,22 +32,22 @@ function BlackBox(gridSize = 8, numberOfMarbles = 4) {
     var returnLocationType;
     // check if position is inside the grid
     if (row > 0 && col > 0 && row < gridUpperBound && col < gridUpperBound) {
-      returnLocationType = locationType.GRID;
+      returnLocationType = LOCATION_TYPE.GRID;
     } else if
       // check if position is at a corner of the grid
       ((row === 0 && col === 0) ||
       (row === 0 && col === gridUpperBound) ||
       (row === gridUpperBound && col === 0) ||
       (row === gridUpperBound && col === gridUpperBound)) {
-        returnLocationType = locationType.CORNER;
+        returnLocationType = LOCATION_TYPE.CORNER;
     } else if
       // check if position is on the rim (i.e. a valid place to shoot a ray)
       (((row === 0 || row === this.gridSize + 1) && (col >= 1 && col <= this.gridSize)) ||
       ((col === 0 || col === this.gridSize + 1) && (row >= 1 && row <= this.gridSize))) {
-        returnLocationType = locationType.RIM;
+        returnLocationType = LOCATION_TYPE.RIM;
     } else {
       // otherwise, position must be outside the black box
-      returnLocationType = locationType.OUTSIDE;
+      returnLocationType = LOCATION_TYPE.OUTSIDE;
     }
     return returnLocationType;
   }
@@ -85,7 +92,10 @@ function BlackBox(gridSize = 8, numberOfMarbles = 4) {
       //console.log(this.grid[i][0], this.grid[i][1], this.grid[i][2], this.grid[i][3], this.grid[i][4], this.grid[i][5], this.grid[i][6], this.grid[i][7], this.grid[i][8], this.grid[i][9]);
     }
   };
-  this.shootRay = function(x, y) {
+  this.shootRay = function(ray) {
+    return SHOOT_RAY_OUTCOME.ABSORBED;
+  };
+  this.shootRayOriginal = function(x, y) {
 
     // initialise ray position
     var xPos = x;

@@ -1,23 +1,8 @@
 // Load the javascript files to be tested
-var fs = require('fs');
+let fs = require('fs');
 eval(fs.readFileSync('./js/utility.js').toString());
-eval(fs.readFileSync('./js/point.js').toString());
+eval(fs.readFileSync('./js/vector.js').toString());
 eval(fs.readFileSync('./js/blackbox.js').toString());
-
-/*
-set current position
-get current position
-set current direction
-get current direction
-test movement up, down, left, right - move next
-do nothing if corners selected
-check for hit at current position
-check for change in direction i.e. proximity of marbles
-check rim shot outcome for known grid (shot position, get outcome)
-only accept shots from side of grid
-shots within grid are treated as guesses
-guesses are toggled i.e. if guess already made then guess is removed. if guess is new then guess is made.
- */
 
 describe('It should create and initialise the Black Box.', () => {
 
@@ -110,74 +95,76 @@ describe('It should place the marbles in valid locations.', () => {
 
 });
 
-describe('It should know the location type of a Point.', () => {
-  test('It should know if a Point is the corner.', () => {
+describe('It should know the location type of a Vector.', () => {
+
+  test('It should know if a Vector is the corner.', () => {
     var blackbox = new BlackBox(8, 4);
     blackbox.createGrid();
     // Check all 4 corner locations
-    expect(blackbox.getLocationType(new Point(0, 0).getPosition())).toBe(locationType.CORNER);
-    expect(blackbox.getLocationType(new Point(9, 0).getPosition())).toBe(locationType.CORNER);
-    expect(blackbox.getLocationType(new Point(0, 9).getPosition())).toBe(locationType.CORNER);
-    expect(blackbox.getLocationType(new Point(9, 9).getPosition())).toBe(locationType.CORNER);
+    expect(blackbox.getLocationType(new Vector(0, 0).getPosition())).toBe(LOCATION_TYPE.CORNER);
+    expect(blackbox.getLocationType(new Vector(9, 0).getPosition())).toBe(LOCATION_TYPE.CORNER);
+    expect(blackbox.getLocationType(new Vector(0, 9).getPosition())).toBe(LOCATION_TYPE.CORNER);
+    expect(blackbox.getLocationType(new Vector(9, 9).getPosition())).toBe(LOCATION_TYPE.CORNER);
   });
 
-  test('It should know if a Point is on the rim.', () => {
+  test('It should know if a Vector is on the rim.', () => {
     var blackbox = new BlackBox(8, 4);
     blackbox.createGrid();
     // Check rim on all 4 sides of the grid, lower bound, upper bound and centre
     // top row, far left, far right, centre
-    expect(blackbox.getLocationType(new Point(0, 1).getPosition())).toBe(locationType.RIM);
-    expect(blackbox.getLocationType(new Point(0, 8).getPosition())).toBe(locationType.RIM);
-    expect(blackbox.getLocationType(new Point(0, 4).getPosition())).toBe(locationType.RIM);
+    expect(blackbox.getLocationType(new Vector(0, 1).getPosition())).toBe(LOCATION_TYPE.RIM);
+    expect(blackbox.getLocationType(new Vector(0, 8).getPosition())).toBe(LOCATION_TYPE.RIM);
+    expect(blackbox.getLocationType(new Vector(0, 4).getPosition())).toBe(LOCATION_TYPE.RIM);
     // bottom row, far left, far right, centre
-    expect(blackbox.getLocationType(new Point(9, 1).getPosition())).toBe(locationType.RIM);
-    expect(blackbox.getLocationType(new Point(9, 8).getPosition())).toBe(locationType.RIM);
-    expect(blackbox.getLocationType(new Point(9, 4).getPosition())).toBe(locationType.RIM);
+    expect(blackbox.getLocationType(new Vector(9, 1).getPosition())).toBe(LOCATION_TYPE.RIM);
+    expect(blackbox.getLocationType(new Vector(9, 8).getPosition())).toBe(LOCATION_TYPE.RIM);
+    expect(blackbox.getLocationType(new Vector(9, 4).getPosition())).toBe(LOCATION_TYPE.RIM);
     // left side, top, bottom, centre
-    expect(blackbox.getLocationType(new Point(1, 0).getPosition())).toBe(locationType.RIM);
-    expect(blackbox.getLocationType(new Point(8, 0).getPosition())).toBe(locationType.RIM);
-    expect(blackbox.getLocationType(new Point(4, 0).getPosition())).toBe(locationType.RIM);
+    expect(blackbox.getLocationType(new Vector(1, 0).getPosition())).toBe(LOCATION_TYPE.RIM);
+    expect(blackbox.getLocationType(new Vector(8, 0).getPosition())).toBe(LOCATION_TYPE.RIM);
+    expect(blackbox.getLocationType(new Vector(4, 0).getPosition())).toBe(LOCATION_TYPE.RIM);
     // right side, top, bottom, centre
-    expect(blackbox.getLocationType(new Point(1, 9).getPosition())).toBe(locationType.RIM);
-    expect(blackbox.getLocationType(new Point(8, 9).getPosition())).toBe(locationType.RIM);
-    expect(blackbox.getLocationType(new Point(4, 9).getPosition())).toBe(locationType.RIM);
+    expect(blackbox.getLocationType(new Vector(1, 9).getPosition())).toBe(LOCATION_TYPE.RIM);
+    expect(blackbox.getLocationType(new Vector(8, 9).getPosition())).toBe(LOCATION_TYPE.RIM);
+    expect(blackbox.getLocationType(new Vector(4, 9).getPosition())).toBe(LOCATION_TYPE.RIM);
   });
 
-  test('It should know if a Point is in the grid.', () => {
+  test('It should know if a Vector is in the grid.', () => {
     var blackbox = new BlackBox(8, 4);
     blackbox.createGrid();
     // Check locations within the playable game grid
     // Test upper and lower bounds for rows and columns
     // Also test for locations near the centre of the grid
-    expect(blackbox.getLocationType(new Point(1, 1).getPosition())).toBe(locationType.GRID);
-    expect(blackbox.getLocationType(new Point(1, 8).getPosition())).toBe(locationType.GRID);
-    expect(blackbox.getLocationType(new Point(8, 1).getPosition())).toBe(locationType.GRID);
-    expect(blackbox.getLocationType(new Point(8, 8).getPosition())).toBe(locationType.GRID);
-    expect(blackbox.getLocationType(new Point(3, 4).getPosition())).toBe(locationType.GRID);
-    expect(blackbox.getLocationType(new Point(7, 2).getPosition())).toBe(locationType.GRID);
+    expect(blackbox.getLocationType(new Vector(1, 1).getPosition())).toBe(LOCATION_TYPE.GRID);
+    expect(blackbox.getLocationType(new Vector(1, 8).getPosition())).toBe(LOCATION_TYPE.GRID);
+    expect(blackbox.getLocationType(new Vector(8, 1).getPosition())).toBe(LOCATION_TYPE.GRID);
+    expect(blackbox.getLocationType(new Vector(8, 8).getPosition())).toBe(LOCATION_TYPE.GRID);
+    expect(blackbox.getLocationType(new Vector(3, 4).getPosition())).toBe(LOCATION_TYPE.GRID);
+    expect(blackbox.getLocationType(new Vector(7, 2).getPosition())).toBe(LOCATION_TYPE.GRID);
   });
 
-  test('It should know if a Point is outside of the black box.', () => {
+  test('It should know if a Vector is outside of the black box.', () => {
     var blackbox = new BlackBox(8, 4);
     blackbox.createGrid();
     // Check locations outside of the grid
-    expect(blackbox.getLocationType(new Point(-1, 2).getPosition())).toBe(locationType.OUTSIDE);
-    expect(blackbox.getLocationType(new Point(12, 5).getPosition())).toBe(locationType.OUTSIDE);
-    expect(blackbox.getLocationType(new Point(3, -4).getPosition())).toBe(locationType.OUTSIDE);
-    expect(blackbox.getLocationType(new Point(6, 11).getPosition())).toBe(locationType.OUTSIDE);
-    expect(blackbox.getLocationType(new Point(-1, -1).getPosition())).toBe(locationType.OUTSIDE);
-    expect(blackbox.getLocationType(new Point(10, 10).getPosition())).toBe(locationType.OUTSIDE);
+    expect(blackbox.getLocationType(new Vector(-1, 2).getPosition())).toBe(LOCATION_TYPE.OUTSIDE);
+    expect(blackbox.getLocationType(new Vector(12, 5).getPosition())).toBe(LOCATION_TYPE.OUTSIDE);
+    expect(blackbox.getLocationType(new Vector(3, -4).getPosition())).toBe(LOCATION_TYPE.OUTSIDE);
+    expect(blackbox.getLocationType(new Vector(6, 11).getPosition())).toBe(LOCATION_TYPE.OUTSIDE);
+    expect(blackbox.getLocationType(new Vector(-1, -1).getPosition())).toBe(LOCATION_TYPE.OUTSIDE);
+    expect(blackbox.getLocationType(new Vector(10, 10).getPosition())).toBe(LOCATION_TYPE.OUTSIDE);
   });
+
 });
 
 describe('It should handle guesses as to the locations of the marbles in the Black Box.', () => {
 
   test('It should accept guesses.', () => {
     var blackbox = new BlackBox(8, 4);
-    // Create 2 Points and add them as guesses
-    var guess1 = new Point(3, 4);
+    // Create 2 Vectors and add them as guesses
+    var guess1 = new Vector(3, 4);
     blackbox.guess(guess1.getPosition());
-    var guess2 = new Point(7, 2);
+    var guess2 = new Vector(7, 2);
     blackbox.guess(guess2.getPosition());
     expect(blackbox.guesses.length).toBe(2);
     expect(blackbox.guesses[0]).toEqual(guess1.getPosition());
@@ -186,17 +173,17 @@ describe('It should handle guesses as to the locations of the marbles in the Bla
 
   test('It should accept no more guesses than there are marbles in the game.', () => {
     var blackbox = new BlackBox(8, 4);
-    var guess1 = new Point(1, 1);
+    var guess1 = new Vector(1, 1);
     blackbox.guess(guess1.getPosition());
-    var guess2 = new Point(2, 2);
+    var guess2 = new Vector(2, 2);
     blackbox.guess(guess2.getPosition());
-    var guess3 = new Point(3, 3);
+    var guess3 = new Vector(3, 3);
     blackbox.guess(guess3.getPosition());
-    var guess4 = new Point(4, 4);
+    var guess4 = new Vector(4, 4);
     blackbox.guess(guess4.getPosition());
-    var guess5 = new Point(5, 5);
+    var guess5 = new Vector(5, 5);
     blackbox.guess(guess5.getPosition());
-    var guess6 = new Point(6, 6);
+    var guess6 = new Vector(6, 6);
     blackbox.guess(guess6.getPosition());
     expect(blackbox.guesses.length).toBe(4);
     expect(blackbox.guesses[0]).toEqual(guess1.getPosition());
@@ -208,36 +195,71 @@ describe('It should handle guesses as to the locations of the marbles in the Bla
   test('It should treat a duplicate guess as a withdrawal of that guess.', () => {
     var blackbox = new BlackBox(8, 4);
     // first 3 guesses are different so all are added in order
-    var guess1 = new Point(1, 1);
+    var guess1 = new Vector(1, 1);
     blackbox.guess(guess1.getPosition());
     expect(blackbox.guesses.length).toBe(1);
     expect(blackbox.guesses[0]).toEqual(guess1.getPosition());
-    var guess2 = new Point(2, 2);
+    var guess2 = new Vector(2, 2);
     blackbox.guess(guess2.getPosition());
     expect(blackbox.guesses.length).toBe(2);
     expect(blackbox.guesses[0]).toEqual(guess1.getPosition());
     expect(blackbox.guesses[1]).toEqual(guess2.getPosition());
-    var guess3 = new Point(3, 3);
+    var guess3 = new Vector(3, 3);
     blackbox.guess(guess3.getPosition());
     expect(blackbox.guesses.length).toBe(3);
     expect(blackbox.guesses[0]).toEqual(guess1.getPosition());
     expect(blackbox.guesses[1]).toEqual(guess2.getPosition());
     expect(blackbox.guesses[2]).toEqual(guess3.getPosition());
     // next guess is duplicate of second guess so second guess is removed leaving guesses one and three.
-    var guess4 = new Point(2, 2);
+    var guess4 = new Vector(2, 2);
     blackbox.guess(guess4.getPosition());
     expect(blackbox.guesses.length).toBe(2);
     expect(blackbox.guesses[0]).toEqual(guess1.getPosition());
     expect(blackbox.guesses[1]).toEqual(guess3.getPosition());
     // next guess is duplicate of first guess so first guess is removed leaving only third guess.
-    var guess5 = new Point(1, 1);
+    var guess5 = new Vector(1, 1);
     blackbox.guess(guess5.getPosition());
     expect(blackbox.guesses.length).toBe(1);
     expect(blackbox.guesses[0]).toEqual(guess3.getPosition());
     // final guess is a duplicate of third guess so thired guess us removed. There are no guesses left.
-    var guess6 = new Point(3, 3);
+    var guess6 = new Vector(3, 3);
     blackbox.guess(guess6.getPosition());
     expect(blackbox.guesses.length).toBe(0);
+  });
+
+});
+
+describe('It should shoot rays from the rim.', () => {
+
+//  beforeAll(() => {
+  //});
+
+  test('It should absorb rays shot at marbles.', () => {
+    var blackbox = new BlackBox(8, 4);
+    blackbox.grid[0] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    blackbox.grid[1] = [0, 1, 0, 0, 0, 0, 0, 0, 0, 0];
+    blackbox.grid[2] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    blackbox.grid[3] = [0, 1, 0, 0, 0, 0, 0, 0, 0, 0];
+    blackbox.grid[4] = [0, 0, 0, 0, 0, 0, 0, 0, 1, 0];
+    blackbox.grid[5] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    blackbox.grid[6] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    blackbox.grid[7] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    blackbox.grid[8] = [0, 0, 0, 0, 0, 0, 1, 0, 0, 0];
+    blackbox.grid[9] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    expect(blackbox.shootRay(new Vector(0, 1, DIRECTION.DOWN))).toBe(SHOOT_RAY_OUTCOME.ABSORBED);
+    expect(blackbox.shootRay(new Vector(0, 6, DIRECTION.DOWN))).toBe(SHOOT_RAY_OUTCOME.ABSORBED);
+    expect(blackbox.shootRay(new Vector(0, 7, DIRECTION.DOWN))).toBe(SHOOT_RAY_OUTCOME.ABSORBED);
+    expect(blackbox.shootRay(new Vector(0, 8, DIRECTION.DOWN))).toBe(SHOOT_RAY_OUTCOME.ABSORBED);
+    expect(blackbox.shootRay(new Vector(1, 9, DIRECTION.LEFT))).toBe(SHOOT_RAY_OUTCOME.ABSORBED);
+    expect(blackbox.shootRay(new Vector(4, 9, DIRECTION.LEFT))).toBe(SHOOT_RAY_OUTCOME.ABSORBED);
+    expect(blackbox.shootRay(new Vector(8, 9, DIRECTION.LEFT))).toBe(SHOOT_RAY_OUTCOME.ABSORBED);
+    expect(blackbox.shootRay(new Vector(9, 1, DIRECTION.UP))).toBe(SHOOT_RAY_OUTCOME.ABSORBED);
+    expect(blackbox.shootRay(new Vector(9, 2, DIRECTION.UP))).toBe(SHOOT_RAY_OUTCOME.ABSORBED);
+    expect(blackbox.shootRay(new Vector(9, 6, DIRECTION.UP))).toBe(SHOOT_RAY_OUTCOME.ABSORBED);
+    expect(blackbox.shootRay(new Vector(9, 8, DIRECTION.UP))).toBe(SHOOT_RAY_OUTCOME.ABSORBED);
+    expect(blackbox.shootRay(new Vector(1, 0, DIRECTION.RIGHT))).toBe(SHOOT_RAY_OUTCOME.ABSORBED);
+    expect(blackbox.shootRay(new Vector(3, 0, DIRECTION.RIGHT))).toBe(SHOOT_RAY_OUTCOME.ABSORBED);
+    expect(blackbox.shootRay(new Vector(8, 0, DIRECTION.RIGHT))).toBe(SHOOT_RAY_OUTCOME.ABSORBED);
   });
 
 });

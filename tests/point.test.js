@@ -1,37 +1,49 @@
 // Load the javascript files to be tested
-var fs = require('fs');
-eval(fs.readFileSync('./js/point.js').toString());
+let fs = require('fs');
+eval(fs.readFileSync('./js/vector.js').toString());
 
 // Get testing
-test('It should create a point at position 2, 4.', () => {
-  var point1 = new Point(2, 4);
-  expect(point1.position.row).toBe(2);
-  expect(point1.position.column).toBe(4);
+test('It should create a vector at a position with no direction.', () => {
+  var vector1 = new Vector(2, 4);
+  expect(vector1.position.row).toBe(2);
+  expect(vector1.position.column).toBe(4);
+  expect(vector1.direction).toBe(DIRECTION.NONE);
 });
 
-describe('It should move a point in all 4 directions.', () => {
-  var point;
+test('It should create a vector at a position and with a direction.', () => {
+  var vector1 = new Vector(2, 4, DIRECTION.UP);
+  expect(vector1.position.row).toBe(2);
+  expect(vector1.position.column).toBe(4);
+  expect(vector1.direction).toBe(DIRECTION.UP);
+});
+
+describe('It should move a vector in all 4 directions.', () => {
+  var vector;
   beforeEach(() => {
-    point = new Point(2, 4);
+    vector = new Vector(2, 4);
   });
-  test('It should move point position UP by 1.', () => {
-    var pointExpected = new Point(1, 4);
-    point.move(direction.UP);
-    expect(point.position).toEqual(pointExpected.position);
+  test('It should move vector position UP by 1.', () => {
+    var vectorExpected = new Vector(1, 4);
+    vector.direction = DIRECTION.UP;
+    vector.move();
+    expect(vector.position).toEqual(vectorExpected.position);
   });
-  test('It should move point position DOWN by 1.', () => {
-    var pointExpected = new Point(3, 4);
-    point.move(direction.DOWN);
-    expect(point.position).toEqual(pointExpected.position);
+  test('It should move vector position DOWN by 1.', () => {
+    var vectorExpected = new Vector(3, 4);
+    vector.direction = DIRECTION.DOWN;
+    vector.move();
+    expect(vector.position).toEqual(vectorExpected.position);
   });
-  test('It should move point position LEFT by 1.', () => {
-    var pointExpected = new Point(2, 3);
-    point.move(direction.LEFT);
-    expect(point.position).toEqual(pointExpected.position);
+  test('It should move vector position LEFT by 1.', () => {
+    var vectorExpected = new Vector(2, 3);
+    vector.direction = DIRECTION.LEFT;
+    vector.move();
+    expect(vector.position).toEqual(vectorExpected.position);
   });
-  test('It should move point position RIGHT by 1.', () => {
-    var pointExpected = new Point(2, 5);
-    point.move(direction.RIGHT);
-    expect(point.position).toEqual(pointExpected.position);
+  test('It should move vector position RIGHT by 1.', () => {
+    var vectorExpected = new Vector(2, 5);
+    vector.direction = DIRECTION.RIGHT;
+    vector.move();
+    expect(vector.position).toEqual(vectorExpected.position);
   });
 });

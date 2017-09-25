@@ -1,16 +1,18 @@
-var direction = {
+var DIRECTION = {
   UP: {rowIncrement: -1, columnIncrement: 0},
   DOWN: {rowIncrement: 1, columnIncrement: 0},
   LEFT: {rowIncrement: 0, columnIncrement: -1},
-  RIGHT: {rowIncrement: 0, columnIncrement: 1}
+  RIGHT: {rowIncrement: 0, columnIncrement: 1},
+  NONE: {rowIncrement: 0, columnIncrement: 0}
 };
 
-function Point(row, column) {
+function Vector(row, column, direction = DIRECTION.NONE) {
+  this.direction = direction;
   this.position = {row: row, column: column};
-  this.move = function(/*direction*/direction) {
+  this.move = function() {
     try {
-      var rowInc = direction.rowIncrement;
-      var columnInc = direction.columnIncrement;
+      var rowInc = this.direction.rowIncrement;
+      var columnInc = this.direction.columnIncrement;
       if (
         Number.isInteger(rowInc) &&
         Number.isInteger(columnInc) &&
@@ -24,7 +26,7 @@ function Point(row, column) {
         this.position.column += columnInc;
       }
     } catch (e) {
-      throw("The specified direction parameter was not a valid direction.");
+      throw("The vector direction was not a valid direction.");
     }
     return this;
   },
