@@ -6,8 +6,8 @@ var DIRECTION = {
   NONE: {rowIncrement: 0, columnIncrement: 0}
 };
 
-function Vector(row, column, direction = DIRECTION.NONE) {
-  this.direction = direction;
+function Vector(row, column, direction) {
+  this.direction = (typeof direction !== 'undefined') ? direction : DIRECTION.NONE;
   this.position = {row: row, column: column};
   this.move = function() {
     try {

@@ -395,3 +395,133 @@ describe('It should shoot rays from the rim.', () => {
   });
 
 });
+
+describe('It should place and remove guesses using shootRay', () => {
+
+  test('it should place and remove guesses', () => {
+
+    var blackbox = new BlackBox(8, 4);
+    blackbox.createGrid();
+    blackbox.initialiseGrid();
+    expect(blackbox.shootRay(new Vector(1, 1))).toBe(SHOOT_RAY_OUTCOME.MARBLE_PLACED);
+    expect(blackbox.shootRay(new Vector(2, 2))).toBe(SHOOT_RAY_OUTCOME.MARBLE_PLACED);
+    expect(blackbox.shootRay(new Vector(3, 3))).toBe(SHOOT_RAY_OUTCOME.MARBLE_PLACED);
+    expect(blackbox.shootRay(new Vector(4, 4))).toBe(SHOOT_RAY_OUTCOME.MARBLE_PLACED);
+    expect(blackbox.shootRay(new Vector(5, 5))).toBe(SHOOT_RAY_OUTCOME.MARBLE_MAX);
+    expect(blackbox.shootRay(new Vector(6, 6))).toBe(SHOOT_RAY_OUTCOME.MARBLE_MAX);
+    for (var i = 0; i < blackbox.numberOfMarbles; i++) {
+      expect(blackbox.guesses[i]).toEqual(new Vector(i + 1, i + 1).getPosition());
+    }
+    expect(blackbox.guesses.length).toBe(4);
+    expect(blackbox.shootRay(new Vector(2, 2))).toBe(SHOOT_RAY_OUTCOME.MARBLE_REMOVED);
+    expect(blackbox.shootRay(new Vector(1, 1))).toBe(SHOOT_RAY_OUTCOME.MARBLE_REMOVED);
+    expect(blackbox.shootRay(new Vector(4, 4))).toBe(SHOOT_RAY_OUTCOME.MARBLE_REMOVED);
+    expect(blackbox.guesses[0]).toEqual(new Vector(3, 3).getPosition());
+    expect(blackbox.guesses.length).toBe(1);
+    expect(blackbox.shootRay(new Vector(3, 3))).toBe(SHOOT_RAY_OUTCOME.MARBLE_REMOVED);
+    expect(blackbox.shootRay(new Vector(5, 5))).toBe(SHOOT_RAY_OUTCOME.MARBLE_PLACED);
+    expect(blackbox.shootRay(new Vector(5, 5))).toBe(SHOOT_RAY_OUTCOME.MARBLE_REMOVED);
+    expect(blackbox.shootRay(new Vector(6, 6))).toBe(SHOOT_RAY_OUTCOME.MARBLE_PLACED);
+    expect(blackbox.guesses[0]).toEqual(new Vector(6, 6).getPosition());
+    expect(blackbox.guesses.length).toBe(1);
+
+  });
+
+});
+
+describe('it should score games', () => {
+
+  test('it should not score incomplete games', () => {
+
+    var blackbox = new BlackBox(8, 4);
+    blackbox.grid[0] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    blackbox.grid[1] = [0, 1, 0, 0, 0, 0, 0, 0, 0, 0];
+    blackbox.grid[2] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    blackbox.grid[3] = [0, 1, 0, 0, 0, 0, 0, 0, 0, 0];
+    blackbox.grid[4] = [0, 0, 0, 0, 0, 0, 0, 0, 1, 0];
+    blackbox.grid[5] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    blackbox.grid[6] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    blackbox.grid[7] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    blackbox.grid[8] = [0, 0, 0, 0, 0, 0, 1, 0, 0, 0];
+    blackbox.grid[9] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
+    expect(blackbox.shootRay(new Vector(1, 1))).toBe(SHOOT_RAY_OUTCOME.MARBLE_PLACED);
+    expect(blackbox.isGameComplete()).toBe(false);
+    expect(blackbox.scoreGame()).toBe('make 3 more guesses to get a score');
+    expect(blackbox.shootRay(new Vector(2, 2))).toBe(SHOOT_RAY_OUTCOME.MARBLE_PLACED);
+    expect(blackbox.isGameComplete()).toBe(false);
+    expect(blackbox.scoreGame()).toBe('make 2 more guesses to get a score');
+    expect(blackbox.shootRay(new Vector(3, 3))).toBe(SHOOT_RAY_OUTCOME.MARBLE_PLACED);
+    expect(blackbox.isGameComplete()).toBe(false);
+    expect(blackbox.scoreGame()).toBe('make 1 more guess to get a score');
+    expect(blackbox.shootRay(new Vector(4, 4))).toBe(SHOOT_RAY_OUTCOME.MARBLE_PLACED);
+    expect(blackbox.isGameComplete()).toBe(true);
+    expect(blackbox.scoreGame()).toBe(15);
+
+  });
+
+  test('it should score the perfect game', () => {
+
+    var blackbox = new BlackBox(8, 4);
+    blackbox.grid[0] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    blackbox.grid[1] = [0, 1, 0, 0, 0, 0, 0, 0, 0, 0];
+    blackbox.grid[2] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    blackbox.grid[3] = [0, 1, 0, 0, 0, 0, 0, 0, 0, 0];
+    blackbox.grid[4] = [0, 0, 0, 0, 0, 0, 0, 0, 1, 0];
+    blackbox.grid[5] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    blackbox.grid[6] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    blackbox.grid[7] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    blackbox.grid[8] = [0, 0, 0, 0, 0, 0, 1, 0, 0, 0];
+    blackbox.grid[9] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
+    expect(blackbox.shootRay(new Vector(1, 1))).toBe(SHOOT_RAY_OUTCOME.MARBLE_PLACED);
+    expect(blackbox.shootRay(new Vector(3, 1))).toBe(SHOOT_RAY_OUTCOME.MARBLE_PLACED);
+    expect(blackbox.shootRay(new Vector(4, 8))).toBe(SHOOT_RAY_OUTCOME.MARBLE_PLACED);
+    expect(blackbox.shootRay(new Vector(8, 6))).toBe(SHOOT_RAY_OUTCOME.MARBLE_PLACED);
+    expect(blackbox.scoreGame()).toBe(0);
+
+  });
+
+  test('it should score the worst game', () => {
+
+    var blackbox = new BlackBox(8, 4);
+    blackbox.grid[0] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    blackbox.grid[1] = [0, 1, 0, 0, 0, 0, 0, 0, 0, 0];
+    blackbox.grid[2] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    blackbox.grid[3] = [0, 1, 0, 0, 0, 0, 0, 0, 0, 0];
+    blackbox.grid[4] = [0, 0, 0, 0, 0, 0, 0, 0, 1, 0];
+    blackbox.grid[5] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    blackbox.grid[6] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    blackbox.grid[7] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    blackbox.grid[8] = [0, 0, 0, 0, 0, 0, 1, 0, 0, 0];
+    blackbox.grid[9] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    // [0, a, r, 1, 2, 3, a, a, a, 0];
+    // [a, 1, 0, g, g, g, g, 0, 0, a];
+    // [r, 0, 0, 0, 0, 0, 0, 0, 0, r];
+    // [a, 1, 0, 0, 0, 0, 0, 0, 0, r];
+    // [r, 0, 0, 0, 0, 0, 0, 0, 1, a];
+    // [5, 0, 0, 0, 0, 0, 0, 0, 0, r];
+    // [4, 0, 0, 0, 0, 0, 0, 0, 0, 4];
+    // [3, 0, 0, 0, 0, 0, 0, 0, 0, 5];
+    // [a, 0, 0, 0, 0, 0, 1, 0, 0, a];
+    // [0, a, a, 1, 2, r, a, r, a, 0];
+
+    for (var i = 1; i <= 8; i++) {
+      blackbox.shootRay(new Vector(0, i, DIRECTION.DOWN));
+      blackbox.shootRay(new Vector(9, i, DIRECTION.UP));
+      blackbox.shootRay(new Vector(i, 0, DIRECTION.RIGHT));
+      blackbox.shootRay(new Vector(i, 9, DIRECTION.LEFT));
+    }
+    expect(blackbox.shootRay(new Vector(1, 3))).toBe(SHOOT_RAY_OUTCOME.MARBLE_PLACED);
+    expect(blackbox.shootRay(new Vector(1, 4))).toBe(SHOOT_RAY_OUTCOME.MARBLE_PLACED);
+    expect(blackbox.shootRay(new Vector(1, 5))).toBe(SHOOT_RAY_OUTCOME.MARBLE_PLACED);
+    expect(blackbox.shootRay(new Vector(1, 6))).toBe(SHOOT_RAY_OUTCOME.MARBLE_PLACED);
+    expect(blackbox.scoreGame()).toBe((4*8)+(4*5));
+
+  });
+
+  test('it should score a \'normal\' game', () => {
+
+  });
+
+});

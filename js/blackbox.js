@@ -9,6 +9,7 @@ var SHOOT_RAY_OUTCOME = {
   ABSORBED: 'ray hit marble and was absorbed',
   CORNER: 'ray is in a corner',
   DUPLICATE: 'ray has already been shot',
+  MARBLE_MAX: 'marble ignored - maximum number already placed',
   MARBLE_PLACED: 'marble has been placed',
   MARBLE_REMOVED: 'marble has been removed',
   NOTHING: 'no outcome',
@@ -120,10 +121,12 @@ function BlackBox(gridSize = 8, numberOfMarbles = 4) {
     return returnLocationType;
   }
   this.guess = function(newGuess) {
+    var guessRow = newGuess.getPosition().row;
+    var guessColumn = newGuess.getPosition().column;
     var removeGuess = -1;
     for (var i = 0, guess; guess = this.guesses[i]; i++) {
-      if (guess.row === newGuess.getPosition().row &&
-          guess.column === newGuess.getPosition().column) {
+      if (guess.row === guessRow &&
+          guess.column === guessColumn) {
         // that guess has already been made so remove guess
         removeGuess = i;
       }
@@ -134,6 +137,8 @@ function BlackBox(gridSize = 8, numberOfMarbles = 4) {
     } else if (this.guesses.length < this.numberOfMarbles) {
       this.guesses.push(newGuess.getPosition());
       return SHOOT_RAY_OUTCOME.MARBLE_PLACED;
+    } else {
+      return SHOOT_RAY_OUTCOME.MARBLE_MAX;
     }
   };
   this.initialiseGrid = function() {
@@ -143,13 +148,16 @@ function BlackBox(gridSize = 8, numberOfMarbles = 4) {
       }
     }
   };
+  this.isGameComplete = function() {
+    return (this.guesses.length === this.numberOfMarbles);
+  };
   this.placeMarblesRandomlyOnGrid = function() {
     for (i = 0; i < this.numberOfMarbles; i++) {
       do {
-        var x = util.getRandomIntInclusive(1, this.gridSize);
-        var y = util.getRandomIntInclusive(1, this.gridSize);
-      } while (this.grid[x][y] === 1);
-      this.grid[x][y] = 1;
+        var row = util.getRandomIntInclusive(1, this.gridSize);
+        var column = util.getRandomIntInclusive(1, this.gridSize);
+      } while (this.grid[row][column] === 1);
+      this.grid[row][column] = 1;
     }
   };
   this.rayAlreadyShot = function(ray) {
@@ -206,8 +214,43 @@ function BlackBox(gridSize = 8, numberOfMarbles = 4) {
         gridLine += String(this.grid[i][j]) + '\t';
       }
       console.log(gridLine + '\t' + String(i));
-      //console.log(this.grid[i][0], this.grid[i][1], this.grid[i][2], this.grid[i][3], this.grid[i][4], this.grid[i][5], this.grid[i][6], this.grid[i][7], this.grid[i][8], this.grid[i][9]);
     }
+  };
+  this.scoreGame = function() {
+    // 1 point for each entry and exit location
+    // 5 points for each guess in the wrong location
+    // incomplete games will not be scored
+    var score;
+    if (this.isGameComplete()) {
+      score = 0;
+      for (var i = 1; i <= this.gridSize; i++) {
+        if (this.grid[0][i] !== 0) {
+          score++;
+        }
+        if (this.grid[this.gridSize + 1][i] !== 0) {
+          score++;
+        }
+        if (this.grid[i][0] !== 0) {
+          score++;
+        }
+        if (this.grid[i][this.gridSize + 1] !== 0) {
+          score++;
+        }
+      }
+      this.guesses.forEach(function(guess) {
+        if (this.grid[guess.row][guess.column] === 0) {
+          score += 5;
+        }
+      }, this);
+    } else {
+      var numberMissingGuesses = this.numberOfMarbles - this.guesses.length;
+      score = 'make ' +
+              numberMissingGuesses.toString() +
+              ' more guess' +
+              ((numberMissingGuesses === 1) ? '' : 'es') +
+              ' to get a score';
+    }
+    return score;
   };
   this.shootRay = function(ray) {
     var originalRow = ray.getPosition().row;
