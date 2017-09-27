@@ -1,0 +1,95 @@
+body {
+  font-family: 'Lato', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-style: normal;
+	font-variant: normal;
+	font-weight: 400;
+	line-height: 23px;
+}
+
+h1 {
+  font-family: 'Passion One';
+	font-size: 20vmin;
+  text-align: center;
+}
+
+p {
+	font-size: 3vmin;
+}
+
+.grid, .cell {
+  /* flexbox */
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  flex-wrap: wrap;
+  /* Horizontal Centering */
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -moz-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  /* Vertical Centering */
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -moz-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.cell {
+  background-color: #eee;
+  margin: 1%;
+  font-size: 50px;
+}
+
+.cell:after {
+  content: '';
+  display: block;
+  padding-bottom: 100%;
+}
+
+// Sizes – Number of cells per row
+
+.cell-10 {
+  flex-basis: 10%;
+}
+
+.cell-9 {
+  flex-basis: 11.1111111%;
+}
+
+.cell-8 {
+  flex-basis: 12.5%;
+}
+
+.cell-7 {
+  flex-basis: 14.2857143%;
+}
+
+.cell-6 {
+  flex-basis: 16.6666667%;
+}
+
+.cell-5 {
+  flex-basis: 20%;
+}
+
+.cell-4 {
+  flex-basis: 25%;
+}
+
+.cell-3 {
+  flex-basis: 31.333vmin;
+  margin: 1vmin;
+  font-size: 10vmin;
+}
+
+.cell-2 {
+  flex-basis: 50%;
+}
+
+.cell-1 {
+  flex-basis: 100%;
+}
