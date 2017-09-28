@@ -2,4 +2,6 @@ var blackbox = new BlackBox();
 blackbox.createGrid();
 blackbox.initialiseGrid();
 blackbox.placeMarblesRandomlyOnGrid();
-blackbox.renderGrid();
+var view = new View(blackbox);
+view.renderGridConsole();
+view.renderGridHTML();

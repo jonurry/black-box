@@ -12,6 +12,13 @@
 				<h1>Black Box</h1>
 			</header>
 			<section id="main">
+				<div id="controls">
+					<label for="inputGridSize">Grid Size: </label>
+					<input id="inputGridSize" type="number" min="6" max="16" value="8">
+					<label for="inputMarbles">Marbles: </label>
+					<input id="inputMarbles" type="number" min="4" max="16" value="4">
+					<button id="buttonNewGame" autofocus>New Game</button>
+				</div>
 				<div id="blackbox" class="grid">
 					<!--  -->
 					<div class="cell cell-10 corner"></div>
@@ -125,6 +132,12 @@
 					<div class="cell cell-10 corner"></div>
 					<!--  -->
 				</div>
+				<div id="score">
+					<button id="buttonScoreGame">Score Game</button>
+					<div>
+						<label id="labelScore"></label>
+					</div>
+				</div>
 			</section>
 			<footer id="footer"></footer>
 		</section>
@@ -132,7 +145,7 @@
 			<p>Black Box</p>
 			<p>Created by <a href="http://jon.urry.me">Jon Urry</a></p>
 		</footer>
-		<script src="js/point.js"></script>
+		<script src="js/vector.js"></script>
 		<script src="js/utility.js"></script>
 		<script src="js/blackbox.js"></script>
 		<script src="js/init.js"></script>
