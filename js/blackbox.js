@@ -19,11 +19,15 @@ var SHOOT_RAY_OUTCOME = {
 }
 
 function BlackBox(gridSize = 8, numberOfMarbles = 4) {
+  this.gameHasFinished = false;
   this.grid = [];
   this.gridSize = gridSize;
   this.guesses= [];
   this.numberOfMarbles = numberOfMarbles;
   this.numberOfRays = 0;
+  this.allMarblesPlaced = function() {
+    return (this.guesses.length === this.numberOfMarbles);
+  };
   this.checkForDeflectedRay = function(ray) {
     var probe1 = 0;
     var probe2 = 0;
@@ -148,9 +152,6 @@ function BlackBox(gridSize = 8, numberOfMarbles = 4) {
       }
     }
   };
-  this.isGameComplete = function() {
-    return (this.guesses.length === this.numberOfMarbles);
-  };
   this.placeMarblesRandomlyOnGrid = function() {
     for (i = 0; i < this.numberOfMarbles; i++) {
       do {
@@ -211,7 +212,7 @@ function BlackBox(gridSize = 8, numberOfMarbles = 4) {
     // 5 points for each guess in the wrong location
     // incomplete games will not be scored
     var score;
-    if (this.isGameComplete()) {
+    if (this.allMarblesPlaced()) {
       score = 0;
       // Add up the ray scores
       for (var i = 1; i <= this.gridSize; i++) {
@@ -260,34 +261,22 @@ function BlackBox(gridSize = 8, numberOfMarbles = 4) {
     var originalRow = ray.getPosition().row;
     var originalColumn = ray.getPosition().column;
     var outcome = SHOOT_RAY_OUTCOME.NOTHING;
-    if (this.rayIsOutsideGrid(ray)) {
-      outcome = SHOOT_RAY_OUTCOME.OUTSIDE;
-    } else if (this.rayIsInCorner(ray)) {
-      outcome = SHOOT_RAY_OUTCOME.CORNER;
-    } else if (this.rayIsInsideGrid(ray)){
-      outcome = this.guess(ray);
-    } else if (this.rayAlreadyShot(ray)) {
-      outcome = SHOOT_RAY_OUTCOME.DUPLICATE;
-    } else {
-      do {
-        ray.move();
-        if (this.rayHasHitMarble(ray)) {
-          this.grid[originalRow][originalColumn] = 'a';
-          outcome = SHOOT_RAY_OUTCOME.ABSORBED;
-        } else if (this.rayHasRechedRim(ray)) {
-          if (ray.getPosition().row === originalRow &&
-              ray.getPosition().column === originalColumn) {
-            this.grid[originalRow][originalColumn] = 'r';
-            outcome = SHOOT_RAY_OUTCOME.REFLECTED;
-          } else {
-            this.numberOfRays += 1;
-            this.grid[ray.getPosition().row][ray.getPosition().column] = this.numberOfRays;
-            this.grid[originalRow][originalColumn] = this.numberOfRays;
-            outcome = SHOOT_RAY_OUTCOME.PROPOGATED;
-          }
-        } else {
-          this.checkForDeflectedRay(ray);
-          if (this.rayHasRechedRim(ray)) {
+    if (!this.gameHasFinished) {
+      if (this.rayIsOutsideGrid(ray)) {
+        outcome = SHOOT_RAY_OUTCOME.OUTSIDE;
+      } else if (this.rayIsInCorner(ray)) {
+        outcome = SHOOT_RAY_OUTCOME.CORNER;
+      } else if (this.rayIsInsideGrid(ray)){
+        outcome = this.guess(ray);
+      } else if (this.rayAlreadyShot(ray)) {
+        outcome = SHOOT_RAY_OUTCOME.DUPLICATE;
+      } else {
+        do {
+          ray.move();
+          if (this.rayHasHitMarble(ray)) {
+            this.grid[originalRow][originalColumn] = 'a';
+            outcome = SHOOT_RAY_OUTCOME.ABSORBED;
+          } else if (this.rayHasRechedRim(ray)) {
             if (ray.getPosition().row === originalRow &&
                 ray.getPosition().column === originalColumn) {
               this.grid[originalRow][originalColumn] = 'r';
@@ -298,9 +287,23 @@ function BlackBox(gridSize = 8, numberOfMarbles = 4) {
               this.grid[originalRow][originalColumn] = this.numberOfRays;
               outcome = SHOOT_RAY_OUTCOME.PROPOGATED;
             }
+          } else {
+            this.checkForDeflectedRay(ray);
+            if (this.rayHasRechedRim(ray)) {
+              if (ray.getPosition().row === originalRow &&
+                  ray.getPosition().column === originalColumn) {
+                this.grid[originalRow][originalColumn] = 'r';
+                outcome = SHOOT_RAY_OUTCOME.REFLECTED;
+              } else {
+                this.numberOfRays += 1;
+                this.grid[ray.getPosition().row][ray.getPosition().column] = this.numberOfRays;
+                this.grid[originalRow][originalColumn] = this.numberOfRays;
+                outcome = SHOOT_RAY_OUTCOME.PROPOGATED;
+              }
+            }
           }
-        }
-      } while (outcome === SHOOT_RAY_OUTCOME.NOTHING)
+        } while (outcome === SHOOT_RAY_OUTCOME.NOTHING)
+      }
     }
     return outcome;
   };
@@ -323,11 +326,11 @@ function View(blackbox) {
     var blackboxDiv = document.getElementById('blackbox');
     blackboxDiv.innerHTML = '';
     var upperGridBound = blackbox.gridSize + 1;
-    // render ray outcomes
     for (var row = 0; row <= upperGridBound; row++) {
       for (var column = 0; column <= upperGridBound; column++) {
         var cellDiv = document.createElement('div');
         var classes = ['cell', 'cell-' + (upperGridBound + 1)];
+        // render ray outcomes
         switch (blackbox.grid[row][column]) {
           case 0:
             // no action required
@@ -352,26 +355,32 @@ function View(blackbox) {
               classes.push('ray-' + blackbox.grid[row][column]);
             }
         }
+        // set row and column data
         cellDiv.dataset.row = row;
         cellDiv.dataset.column = column;
         // render guesses
-        blackbox.guesses.forEach(function(guess) {
-          if (Number(guess.row) === row && Number(guess.column) === column) {
-            classes.push('guess');
-          }
-        }, this);
+        if (!blackbox.gameHasFinished) {
+          blackbox.guesses.forEach(function(guess) {
+            if (parseInt(guess.row) === row && parseInt(guess.column) === column) {
+              classes.push('guess');
+            }
+          }, this);
+        }
         cellDiv.className = classes.join(' ');
         blackboxDiv.appendChild(cellDiv);
       }
     }
+    // enable/disable score game button
+    var buttonScoreGame = document.getElementById('buttonScoreGame');
+    buttonScoreGame.disabled = !(blackbox.allMarblesPlaced() && !blackbox.gameHasFinished);
   };
   this.setupEventHandlers = function() {
     var blackboxDiv = document.getElementById('blackbox');
     blackboxDiv.addEventListener('click', function(event) {
       var clickedElement = event.target;
       if (clickedElement.className.includes('cell')) {
-        var row = Number(clickedElement.dataset.row);
-        var column = Number(clickedElement.dataset.column);
+        var row = parseInt(clickedElement.dataset.row);
+        var column = parseInt(clickedElement.dataset.column);
         var upperGridBound = blackbox.gridSize + 1;
         var direction = DIRECTION.NONE;
         if (row === 0) {
@@ -389,8 +398,8 @@ function View(blackbox) {
     });
     var buttonNewGame = document.getElementById('buttonNewGame');
     buttonNewGame.addEventListener('click', function(event) {
-      var gridSize = Number(document.getElementById('inputGridSize').value);
-      var numberOfMarbles = Number(document.getElementById('inputMarbles').value);
+      var gridSize = parseInt(document.getElementById('inputGridSize').value);
+      var numberOfMarbles = parseInt(document.getElementById('inputMarbles').value);
       blackbox = new BlackBox(gridSize, numberOfMarbles);
       blackbox.createGrid();
       blackbox.initialiseGrid();
@@ -398,13 +407,38 @@ function View(blackbox) {
       view.blackbox = blackbox;
       view.renderGridConsole();
       view.renderGridHTML();
+      document.getElementById('labelScore').innerHTML = '';
     });
     var buttonScoreGame = document.getElementById('buttonScoreGame');
     buttonScoreGame.addEventListener('click', function(event) {
       var score = blackbox.scoreGame();
       document.getElementById('labelScore').innerHTML = score;
+      blackbox.gameHasFinished = true;
       view.renderGridConsole();
       view.renderGridHTML();
+    });
+    var inputGridSize = document.getElementById('inputGridSize');
+    inputGridSize.addEventListener('focusout', function(event) {
+      var gridSize = parseInt(event.currentTarget.value);
+      if (gridSize < 6) {
+        event.currentTarget.value = 6;
+      } else if (gridSize > 16) {
+        event.currentTarget.value = 16;
+      } else if (isNaN(gridSize)) {
+        event.currentTarget.value = 8;
+      }
+    });
+    var inputMarbles = document.getElementById('inputMarbles');
+    inputMarbles.addEventListener('focusout', function(event) {
+      var gridSize = parseInt(document.getElementById('inputGridSize').value);
+      var numberOfMarbles = parseInt(event.currentTarget.value);
+      if (numberOfMarbles < 4) {
+        event.currentTarget.value = 4;
+      } else if (numberOfMarbles > 16) {
+        event.currentTarget.value = 16;
+      } else if (isNaN(numberOfMarbles)) {
+        event.currentTarget.value = gridSize - 4;
+      }
     });
   };
   this.setupEventHandlers();

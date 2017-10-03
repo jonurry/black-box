@@ -446,17 +446,24 @@ describe('it should score games', () => {
     blackbox.grid[9] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
     expect(blackbox.shootRay(new Vector(1, 1))).toBe(SHOOT_RAY_OUTCOME.MARBLE_PLACED);
-    expect(blackbox.isGameComplete()).toBe(false);
-    expect(blackbox.scoreGame()).toBe('make 3 more guesses to get a score');
+    expect(blackbox.allMarblesPlaced()).toBe(false);
+    expect(blackbox.scoreGame()).toBe('Make 3 more guesses to get a score');
     expect(blackbox.shootRay(new Vector(2, 2))).toBe(SHOOT_RAY_OUTCOME.MARBLE_PLACED);
-    expect(blackbox.isGameComplete()).toBe(false);
-    expect(blackbox.scoreGame()).toBe('make 2 more guesses to get a score');
+    expect(blackbox.allMarblesPlaced()).toBe(false);
+    expect(blackbox.scoreGame()).toBe('Make 2 more guesses to get a score');
     expect(blackbox.shootRay(new Vector(3, 3))).toBe(SHOOT_RAY_OUTCOME.MARBLE_PLACED);
-    expect(blackbox.isGameComplete()).toBe(false);
-    expect(blackbox.scoreGame()).toBe('make 1 more guess to get a score');
+    expect(blackbox.allMarblesPlaced()).toBe(false);
+    expect(blackbox.scoreGame()).toBe('Make 1 more guess to get a score');
     expect(blackbox.shootRay(new Vector(4, 4))).toBe(SHOOT_RAY_OUTCOME.MARBLE_PLACED);
-    expect(blackbox.isGameComplete()).toBe(true);
-    expect(blackbox.scoreGame()).toBe(15);
+    expect(blackbox.allMarblesPlaced()).toBe(true);
+    expect(blackbox.scoreGame()).toBe('Your score is: 15');
+    expect(blackbox.grid[1][1]).toBe('y');
+    expect(blackbox.grid[2][2]).toBe('n');
+    expect(blackbox.grid[3][3]).toBe('n');
+    expect(blackbox.grid[4][4]).toBe('n');
+    expect(blackbox.grid[3][1]).toBe('x');
+    expect(blackbox.grid[4][8]).toBe('x');
+    expect(blackbox.grid[8][6]).toBe('x');
 
   });
 
@@ -478,7 +485,11 @@ describe('it should score games', () => {
     expect(blackbox.shootRay(new Vector(3, 1))).toBe(SHOOT_RAY_OUTCOME.MARBLE_PLACED);
     expect(blackbox.shootRay(new Vector(4, 8))).toBe(SHOOT_RAY_OUTCOME.MARBLE_PLACED);
     expect(blackbox.shootRay(new Vector(8, 6))).toBe(SHOOT_RAY_OUTCOME.MARBLE_PLACED);
-    expect(blackbox.scoreGame()).toBe(0);
+    expect(blackbox.scoreGame()).toBe('Your score is: 0');
+    expect(blackbox.grid[1][1]).toBe('y');
+    expect(blackbox.grid[3][1]).toBe('y');
+    expect(blackbox.grid[4][8]).toBe('y');
+    expect(blackbox.grid[8][6]).toBe('y');
 
   });
 
@@ -516,7 +527,15 @@ describe('it should score games', () => {
     expect(blackbox.shootRay(new Vector(1, 4))).toBe(SHOOT_RAY_OUTCOME.MARBLE_PLACED);
     expect(blackbox.shootRay(new Vector(1, 5))).toBe(SHOOT_RAY_OUTCOME.MARBLE_PLACED);
     expect(blackbox.shootRay(new Vector(1, 6))).toBe(SHOOT_RAY_OUTCOME.MARBLE_PLACED);
-    expect(blackbox.scoreGame()).toBe((4*8)+(4*5));
+    expect(blackbox.scoreGame()).toBe('Your score is: ' + ((4*8)+(4*5)).toString());
+    expect(blackbox.grid[1][3]).toBe('n');
+    expect(blackbox.grid[1][4]).toBe('n');
+    expect(blackbox.grid[1][5]).toBe('n');
+    expect(blackbox.grid[1][6]).toBe('n');
+    expect(blackbox.grid[1][1]).toBe('x');
+    expect(blackbox.grid[3][1]).toBe('x');
+    expect(blackbox.grid[4][8]).toBe('x');
+    expect(blackbox.grid[8][6]).toBe('x');
 
   });
 
