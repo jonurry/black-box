@@ -2,24 +2,24 @@
 let fs = require('fs');
 eval(fs.readFileSync('./js/utility.js').toString());
 eval(fs.readFileSync('./js/vector.js').toString());
-eval(fs.readFileSync('./js/blackbox.js').toString());
+eval(fs.readFileSync('./js/model.js').toString());
 
 describe('It should create and initialise the Black Box.', () => {
 
   test('It should create a new blackbox with default dimensions and marbles.', () => {
-    var blackbox = new BlackBox();
+    var blackbox = new BlackBoxModel();
     expect(blackbox.gridSize).toBe(8);
     expect(blackbox.numberOfMarbles).toBe(4);
   });
 
   test('It should create a new blackbox with specified dimensions and marbles.', () => {
-    var blackbox = new BlackBox(16, 10);
+    var blackbox = new BlackBoxModel(16, 10);
     expect(blackbox.gridSize).toBe(16);
     expect(blackbox.numberOfMarbles).toBe(10);
   });
 
   test('It should create the grid.', () => {
-    var blackbox = new BlackBox(8, 4);
+    var blackbox = new BlackBoxModel(8, 4);
     blackbox.createGrid();
     expect(blackbox.grid).toHaveLength(10);
     for (var i = 0; i < blackbox.grid.length; i++) {
@@ -28,7 +28,7 @@ describe('It should create and initialise the Black Box.', () => {
   });
 
   test('It should initialise the grid by populating the entire grid (incl. rim and corners) with zeros.', () => {
-    var blackbox = new BlackBox(8, 4);
+    var blackbox = new BlackBoxModel(8, 4);
     blackbox.createGrid();
     blackbox.initialiseGrid();
     for (var i = 0; i < blackbox.grid.length; i++) {
@@ -44,7 +44,7 @@ describe('It should place the marbles in valid locations.', () => {
 
   test('It should place the correct number of marbles on the grid.', () => {
     var marbleCounter = 0;
-    var blackbox1 = new BlackBox(8, 4);
+    var blackbox1 = new BlackBoxModel(8, 4);
     blackbox1.createGrid();
     blackbox1.initialiseGrid();
     blackbox1.placeMarblesRandomlyOnGrid();
@@ -59,7 +59,7 @@ describe('It should place the marbles in valid locations.', () => {
   });
 
   test('It should not place marbles on the rim.', () => {
-    var blackbox1 = new BlackBox(8, 4);
+    var blackbox1 = new BlackBoxModel(8, 4);
     blackbox1.createGrid();
     blackbox1.initialiseGrid();
     blackbox1.placeMarblesRandomlyOnGrid();
@@ -74,12 +74,12 @@ describe('It should place the marbles in valid locations.', () => {
 
   test('It should place marbles randomly on the grid.', () => {
     var numberOfMatchedMarbles = 0;
-    var blackbox1 = new BlackBox(8, 4);
+    var blackbox1 = new BlackBoxModel(8, 4);
     blackbox1.createGrid();
     blackbox1.initialiseGrid();
     blackbox1.placeMarblesRandomlyOnGrid();
     // create a second black box and expect its marbles not to be in the same position as the first black box
-    var blackbox2 = new BlackBox(8, 4);
+    var blackbox2 = new BlackBoxModel(8, 4);
     blackbox2.createGrid();
     blackbox2.initialiseGrid();
     blackbox2.placeMarblesRandomlyOnGrid();
@@ -98,7 +98,7 @@ describe('It should place the marbles in valid locations.', () => {
 describe('It should know the location type of a Vector.', () => {
 
   test('It should know if a Vector is the corner.', () => {
-    var blackbox = new BlackBox(8, 4);
+    var blackbox = new BlackBoxModel(8, 4);
     blackbox.createGrid();
     // Check all 4 corner locations
     expect(blackbox.getLocationType(new Vector(0, 0).getPosition())).toBe(LOCATION_TYPE.CORNER);
@@ -108,7 +108,7 @@ describe('It should know the location type of a Vector.', () => {
   });
 
   test('It should know if a Vector is on the rim.', () => {
-    var blackbox = new BlackBox(8, 4);
+    var blackbox = new BlackBoxModel(8, 4);
     blackbox.createGrid();
     // Check rim on all 4 sides of the grid, lower bound, upper bound and centre
     // top row, far left, far right, centre
@@ -130,7 +130,7 @@ describe('It should know the location type of a Vector.', () => {
   });
 
   test('It should know if a Vector is in the grid.', () => {
-    var blackbox = new BlackBox(8, 4);
+    var blackbox = new BlackBoxModel(8, 4);
     blackbox.createGrid();
     // Check locations within the playable game grid
     // Test upper and lower bounds for rows and columns
@@ -144,7 +144,7 @@ describe('It should know the location type of a Vector.', () => {
   });
 
   test('It should know if a Vector is outside of the black box.', () => {
-    var blackbox = new BlackBox(8, 4);
+    var blackbox = new BlackBoxModel(8, 4);
     blackbox.createGrid();
     // Check locations outside of the grid
     expect(blackbox.getLocationType(new Vector(-1, 2).getPosition())).toBe(LOCATION_TYPE.OUTSIDE);
@@ -160,7 +160,7 @@ describe('It should know the location type of a Vector.', () => {
 describe('It should handle guesses as to the locations of the marbles in the Black Box.', () => {
 
   test('It should accept guesses.', () => {
-    var blackbox = new BlackBox(8, 4);
+    var blackbox = new BlackBoxModel(8, 4);
     // Create 2 Vectors and add them as guesses
     var guess1 = new Vector(3, 4);
     blackbox.guess(guess1);
@@ -172,7 +172,7 @@ describe('It should handle guesses as to the locations of the marbles in the Bla
   });
 
   test('It should accept no more guesses than there are marbles in the game.', () => {
-    var blackbox = new BlackBox(8, 4);
+    var blackbox = new BlackBoxModel(8, 4);
     var guess1 = new Vector(1, 1);
     blackbox.guess(guess1);
     var guess2 = new Vector(2, 2);
@@ -193,7 +193,7 @@ describe('It should handle guesses as to the locations of the marbles in the Bla
   });
 
   test('It should treat a duplicate guess as a withdrawal of that guess.', () => {
-    var blackbox = new BlackBox(8, 4);
+    var blackbox = new BlackBoxModel(8, 4);
     // first 3 guesses are different so all are added in order
     var guess1 = new Vector(1, 1);
     blackbox.guess(guess1);
@@ -232,7 +232,7 @@ describe('It should handle guesses as to the locations of the marbles in the Bla
 describe('It should ignore rays shot from the corners or from outside.', () => {
 
   test('It should ignore shots from the corners.', () => {
-    var blackbox = new BlackBox(8, 4);
+    var blackbox = new BlackBoxModel(8, 4);
     blackbox.grid[0] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     blackbox.grid[1] = [0, 1, 0, 0, 0, 0, 0, 0, 0, 0];
     blackbox.grid[2] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
@@ -250,7 +250,7 @@ describe('It should ignore rays shot from the corners or from outside.', () => {
   });
 
   test('It should ignore shots from ouside the black box.', () => {
-    var blackbox = new BlackBox(8, 4);
+    var blackbox = new BlackBoxModel(8, 4);
     blackbox.grid[0] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     blackbox.grid[1] = [0, 1, 0, 0, 0, 0, 0, 0, 0, 0];
     blackbox.grid[2] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
@@ -280,7 +280,7 @@ describe('It should ignore rays shot from the corners or from outside.', () => {
 describe('It should shoot rays from the rim.', () => {
 
   test('It should absorb rays shot at marbles.', () => {
-    var blackbox = new BlackBox(8, 4);
+    var blackbox = new BlackBoxModel(8, 4);
     blackbox.grid[0] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     blackbox.grid[1] = [0, 1, 0, 0, 0, 0, 0, 0, 0, 0];
     blackbox.grid[2] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
@@ -318,7 +318,7 @@ describe('It should shoot rays from the rim.', () => {
   });
 
   test('It should deflect rays shot past marbles', () => {
-    var blackbox = new BlackBox(8, 4);
+    var blackbox = new BlackBoxModel(8, 4);
     blackbox.grid[0] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     blackbox.grid[1] = [0, 1, 0, 0, 0, 0, 0, 0, 0, 0];
     blackbox.grid[2] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
@@ -342,7 +342,7 @@ describe('It should shoot rays from the rim.', () => {
   });
 
   test('It should reflect rays', () => {
-    var blackbox = new BlackBox(8, 4);
+    var blackbox = new BlackBoxModel(8, 4);
     blackbox.grid[0] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     blackbox.grid[1] = [0, 1, 0, 0, 0, 0, 0, 0, 0, 0];
     blackbox.grid[2] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
@@ -372,7 +372,7 @@ describe('It should shoot rays from the rim.', () => {
   });
 
   test('It should propogate rays without reflection', () => {
-    var blackbox = new BlackBox(8, 4);
+    var blackbox = new BlackBoxModel(8, 4);
     blackbox.grid[0] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     blackbox.grid[1] = [0, 1, 0, 0, 0, 0, 0, 0, 0, 0];
     blackbox.grid[2] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
@@ -400,7 +400,7 @@ describe('It should place and remove guesses using shootRay', () => {
 
   test('it should place and remove guesses', () => {
 
-    var blackbox = new BlackBox(8, 4);
+    var blackbox = new BlackBoxModel(8, 4);
     blackbox.createGrid();
     blackbox.initialiseGrid();
     expect(blackbox.shootRay(new Vector(1, 1))).toBe(SHOOT_RAY_OUTCOME.MARBLE_PLACED);
@@ -433,7 +433,7 @@ describe('it should score games', () => {
 
   test('it should not score incomplete games', () => {
 
-    var blackbox = new BlackBox(8, 4);
+    var blackbox = new BlackBoxModel(8, 4);
     blackbox.grid[0] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     blackbox.grid[1] = [0, 1, 0, 0, 0, 0, 0, 0, 0, 0];
     blackbox.grid[2] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
@@ -469,7 +469,7 @@ describe('it should score games', () => {
 
   test('it should score the perfect game', () => {
 
-    var blackbox = new BlackBox(8, 4);
+    var blackbox = new BlackBoxModel(8, 4);
     blackbox.grid[0] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     blackbox.grid[1] = [0, 1, 0, 0, 0, 0, 0, 0, 0, 0];
     blackbox.grid[2] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
@@ -495,7 +495,7 @@ describe('it should score games', () => {
 
   test('it should score the worst game', () => {
 
-    var blackbox = new BlackBox(8, 4);
+    var blackbox = new BlackBoxModel(8, 4);
     blackbox.grid[0] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     blackbox.grid[1] = [0, 1, 0, 0, 0, 0, 0, 0, 0, 0];
     blackbox.grid[2] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
