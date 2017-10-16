@@ -1,64 +1,71 @@
-var LOCATION_TYPE = {
-  CORNER: 'corner',
-  GRID: 'grid',
-  OUTSIDE: 'outside',
-  RIM: 'rim'
-};
+(function(root, BLACKBOX, undefined) {
 
-var SHOOT_RAY_OUTCOME = {
-  ABSORBED: 'ray hit marble and was absorbed',
-  CORNER: 'ray is in a corner',
-  DUPLICATE: 'ray has already been shot',
-  MARBLE_MAX: 'marble ignored - maximum number already placed',
-  MARBLE_PLACED: 'marble has been placed',
-  MARBLE_REMOVED: 'marble has been removed',
-  NOTHING: 'no outcome',
-  OUTSIDE: 'ray is outside of the black box',
-  PROPOGATED: 'ray has reached the rim',
-  REFLECTED: 'ray has been reflected'
-}
+  // define black box constants
+  const SHOOT_RAY_OUTCOME = {
+    ABSORBED: 'ray hit marble and was absorbed',
+    CORNER: 'ray is in a corner',
+    DUPLICATE: 'ray has already been shot',
+    MARBLE_MAX: 'marble ignored - maximum number already placed',
+    MARBLE_PLACED: 'marble has been placed',
+    MARBLE_REMOVED: 'marble has been removed',
+    NOTHING: 'no outcome',
+    OUTSIDE: 'ray is outside of the black box',
+    PROPOGATED: 'ray has reached the rim',
+    REFLECTED: 'ray has been reflected'
+  }
 
-function BlackBoxModel(gridSize = 8, numberOfMarbles = 4) {
-  this.gameHasFinished = false;
-  this.grid = [];
-  this.gridSize = gridSize;
-  this.guesses= [];
-  this.numberOfMarbles = numberOfMarbles;
-  this.numberOfRays = 0;
-  this.allMarblesPlaced = function() {
-    return (this.guesses.length === this.numberOfMarbles);
-  };
-  this.checkForDeflectedRay = function(ray) {
+  // dependencies
+  // Node.js import modules
+  if (typeof exports === 'object') {
+    if (BLACKBOX === undefined) {
+      BLACKBOX = {};
+    }
+    if (BLACKBOX.VECTOR === undefined) {
+      var vectorModule = require('../js/vector.js');
+      BLACKBOX.VECTOR = vectorModule.VECTOR;
+    }
+    if (BLACKBOX.utility === undefined) {
+      var utilModule = require('../js/utility.js');
+      BLACKBOX.utility = utilModule.blackBoxUtil;
+    }
+  }
+
+  // private properties
+  //
+
+  // private methods
+  function checkForDeflectedRay(ray, grid, gridSize) {
     var probe1 = 0;
     var probe2 = 0;
-    var row = ray.getPosition().row;
-    var column = ray.getPosition().column;
-    var gridUpperBound = this.gridSize + 1;
-    if (ray.direction === DIRECTION.UP || ray.direction === DIRECTION.DOWN) {
+    var row = ray.position.row;
+    var column = ray.position.column;
+    var gridUpperBound = gridSize + 1;
+    var DIR = BLACKBOX.VECTOR.DIRECTION;
+    if (ray.direction === DIR.UP || ray.direction === DIR.DOWN) {
       if(column + 1 === gridUpperBound) {
         probe1 = 0;
       } else {
-        probe1 = this.grid[row][column + 1];
+        probe1 = grid[row][column + 1];
       }
       if(column - 1 === 0) {
         probe2 = 0;
       } else {
-        probe2 = this.grid[row][column - 1];
+        probe2 = grid[row][column - 1];
       }
       if (probe1 === 1 && probe2 === 1) {
         //two adjacent marbles so ray is reversed
-        ray.direction = (ray.direction === DIRECTION.UP) ? DIRECTION.DOWN : DIRECTION.UP;
+        ray.direction = (ray.direction === DIR.UP) ? DIR.DOWN : DIR.UP;
         ray.move();
       } else if (probe1 === 1) {
         // one adjacent marble so go back one space and then head LEFT
-        ray.direction = (ray.direction === DIRECTION.UP) ? DIRECTION.DOWN : DIRECTION.UP;
+        ray.direction = (ray.direction === DIR.UP) ? DIR.DOWN : DIR.UP;
         ray.move();
-        ray.direction = DIRECTION.LEFT;
+        ray.direction = DIR.LEFT;
       } else if (probe2 === 1) {
         // one adjacent marble so go back one space and then head RIGHT
-        ray.direction = (ray.direction === DIRECTION.UP) ? DIRECTION.DOWN : DIRECTION.UP;
+        ray.direction = (ray.direction === DIR.UP) ? DIR.DOWN : DIR.UP;
         ray.move();
-        ray.direction = DIRECTION.RIGHT;
+        ray.direction = DIR.RIGHT;
       }
     } else {
       //ray is travelling LEFT or RIGHT
@@ -66,67 +73,135 @@ function BlackBoxModel(gridSize = 8, numberOfMarbles = 4) {
       if(row + 1 === gridUpperBound) {
         probe1 = 0;
       } else {
-        probe1 = this.grid[row + 1][column];
+        probe1 = grid[row + 1][column];
       }
       if(row - 1 === 0) {
         probe2 = 0;
       } else {
-        probe2 = this.grid[row - 1][column];
+        probe2 = grid[row - 1][column];
       }
       if (probe1 === 1 && probe2 === 1) {
         //two adjacent marbles so ray is reversed
-        ray.direction = (ray.direction === DIRECTION.LEFT) ? DIRECTION.RIGHT : DIRECTION.LEFT;
+        ray.direction = (ray.direction === DIR.LEFT) ? DIR.RIGHT : DIR.LEFT;
         ray.move();
       } else if (probe1 === 1) {
         // one adjacent marble so go back one space and then head UP
-        ray.direction = (ray.direction === DIRECTION.LEFT) ? DIRECTION.RIGHT : DIRECTION.LEFT;
+        ray.direction = (ray.direction === DIR.LEFT) ? DIR.RIGHT : DIR.LEFT;
         ray.move();
-        ray.direction = DIRECTION.UP;
+        ray.direction = DIR.UP;
       } else if (probe2 === 1) {
         // one adjacent marble so go back one space and then head DOWN
-        ray.direction = (ray.direction === DIRECTION.LEFT) ? DIRECTION.RIGHT : DIRECTION.LEFT;
+        ray.direction = (ray.direction === DIR.LEFT) ? DIR.RIGHT : DIR.LEFT;
         ray.move();
-        ray.direction = DIRECTION.DOWN;
+        ray.direction = DIR.DOWN;
       }
     }
 
   };
-  this.createGrid = function() {
+
+  function createGrid(grid, gridSize) {
+    // reset empty array without creating a new array
+    grid.length = 0;
     //first row. 2 extra slots to record ray outcomes at either end
-    this.grid = new Array(this.gridSize + 2);
-    for (i = 0; i < this.grid.length; i++) {
-      this.grid[i] = new Array(this.gridSize + 2);
+    for (var row = 0; row < gridSize + 2; row++) {
+      grid[row] = [];
+      grid[row].length = gridSize + 2;
     }
   };
-  this.getLocationType = function(position) {
-    var gridUpperBound = this.gridSize + 1;
-    var row = position.row;
-    var col = position.column;
-    var returnLocationType;
-    // check if position is inside the grid
-    if (row > 0 && col > 0 && row < gridUpperBound && col < gridUpperBound) {
-      returnLocationType = LOCATION_TYPE.GRID;
-    } else if
-      // check if position is at a corner of the grid
-      ((row === 0 && col === 0) ||
-      (row === 0 && col === gridUpperBound) ||
-      (row === gridUpperBound && col === 0) ||
-      (row === gridUpperBound && col === gridUpperBound)) {
-        returnLocationType = LOCATION_TYPE.CORNER;
-    } else if
-      // check if position is on the rim (i.e. a valid place to shoot a ray)
-      (((row === 0 || row === this.gridSize + 1) && (col >= 1 && col <= this.gridSize)) ||
-      ((col === 0 || col === this.gridSize + 1) && (row >= 1 && row <= this.gridSize))) {
-        returnLocationType = LOCATION_TYPE.RIM;
-    } else {
-      // otherwise, position must be outside the black box
-      returnLocationType = LOCATION_TYPE.OUTSIDE;
+
+  function initialiseGrid(grid, gridSize) {
+    for (var row = 0; row < gridSize + 2; row++) {
+      grid[row].fill(0);
     }
-    return returnLocationType;
-  }
-  this.guess = function(newGuess) {
-    var guessRow = newGuess.getPosition().row;
-    var guessColumn = newGuess.getPosition().column;
+  };
+
+  function placeMarblesRandomlyOnGrid(grid, gridSize, numberOfMarbles) {
+    for (i = 0; i < numberOfMarbles; i++) {
+      do {
+        var row = BLACKBOX.utility.getRandomIntInclusive(1, gridSize);
+        var column = BLACKBOX.utility.getRandomIntInclusive(1, gridSize);
+      } while (grid[row][column] === 1);
+      grid[row][column] = 1;
+    }
+  };
+
+  function rayAlreadyShot(ray, grid) {
+    // check if ray has already been shot from current location (i.e. duplicate)
+    return (grid[ray.position.row][ray.position.column] !== 0);
+  };
+
+  function rayHasHitMarble(ray, grid) {
+    // check if ray has hit a marble
+    return (grid[ray.position.row][ray.position.column] === 1);
+  };
+
+  function rayHasRechedRim(ray, gridSize) {
+    var currentRow = ray.position.row;
+    var currentColumn = ray.position.column;
+    var gridUpperBound = gridSize + 1;
+    // check if ray has reached the rim
+    return (currentRow === 0 ||
+            currentRow === gridUpperBound ||
+            currentColumn === 0 ||
+            currentColumn === gridUpperBound);
+  };
+
+  function rayIsInCorner(ray, gridSize) {
+    var currentRow = ray.position.row;
+    var currentColumn = ray.position.column;
+    var gridUpperBound = gridSize + 1;
+    // check if ray is in a corner
+    return ((currentRow === 0 && currentColumn === 0) ||
+            (currentRow === 0 && currentColumn === gridUpperBound) ||
+            (currentRow === gridUpperBound && currentColumn === 0) ||
+            (currentRow === gridUpperBound && currentColumn === gridUpperBound));
+  };
+
+  function rayIsInsideGrid(ray, gridSize) {
+    var currentRow = ray.position.row;
+    var currentColumn = ray.position.column;
+    var gridUpperBound = gridSize + 1;
+    return (currentRow > 0 &&
+            currentColumn > 0 &&
+            currentRow < gridUpperBound &&
+            currentColumn < gridUpperBound);
+  };
+
+  function rayIsOutsideGrid(ray, gridSize) {
+    var currentRow = ray.position.row;
+    var currentColumn = ray.position.column;
+    var gridUpperBound = gridSize + 1;
+    return (currentRow < 0 ||
+            currentColumn < 0 ||
+            currentRow > gridUpperBound ||
+            currentColumn > gridUpperBound);
+  };
+
+  // public API - constructor
+  function BlackBox(gridSize = 8, numberOfMarbles = 4, newGame = false) {
+
+    this.gameHasFinished = false;
+    this.numberOfRays = 0;
+    this.grid = [];
+    this.gridSize = gridSize;
+    this.guesses= [];
+    this.numberOfMarbles = numberOfMarbles;
+
+    if (newGame) {
+      this.newGame(this.gridSize, this.numberOfMarbles);
+    }
+
+  };
+
+  // public API - prototype methods
+
+  BlackBox.prototype.allMarblesPlaced = function() {
+    return (this.guesses.length === this.numberOfMarbles);
+  };
+
+  BlackBox.prototype.guess = function(newGuess) {
+    var guessRow = newGuess.position.row;
+    var guessColumn = newGuess.position.column;
     var removeGuess = -1;
     for (var i = 0, guess; guess = this.guesses[i]; i++) {
       if (guess.row === guessRow &&
@@ -139,87 +214,26 @@ function BlackBoxModel(gridSize = 8, numberOfMarbles = 4) {
       this.guesses.splice(removeGuess, 1);
       return SHOOT_RAY_OUTCOME.MARBLE_REMOVED;
     } else if (this.guesses.length < this.numberOfMarbles) {
-      this.guesses.push(newGuess.getPosition());
+      this.guesses.push(newGuess.position);
       return SHOOT_RAY_OUTCOME.MARBLE_PLACED;
     } else {
       return SHOOT_RAY_OUTCOME.MARBLE_MAX;
     }
   };
-  this.initialiseGrid = function() {
-    for (i = 0; i < this.grid.length; i++) {
-      for (j = 0; j < this.grid.length; j++) {
-        this.grid[i][j] = 0;
-      }
-    }
-  };
-  this.newGame = function (gridSize, numberOfMarbles) {
+
+  BlackBox.prototype.newGame = function(gridSize = 8, numberOfMarbles = 4) {
     this.gameHasFinished = false;
     this.grid = [];
     this.gridSize = gridSize;
     this.guesses= [];
     this.numberOfMarbles = numberOfMarbles;
     this.numberOfRays = 0;
-    this.createGrid();
-    this.initialiseGrid();
-    this.placeMarblesRandomlyOnGrid();
-    return this;
+    createGrid(this.grid, this.gridSize);
+    initialiseGrid(this.grid, this.gridSize);
+    placeMarblesRandomlyOnGrid(this.grid, this.gridSize, this.numberOfMarbles);
   };
-  this.placeMarblesRandomlyOnGrid = function() {
-    for (i = 0; i < this.numberOfMarbles; i++) {
-      do {
-        var row = util.getRandomIntInclusive(1, this.gridSize);
-        var column = util.getRandomIntInclusive(1, this.gridSize);
-      } while (this.grid[row][column] === 1);
-      this.grid[row][column] = 1;
-    }
-  };
-  this.rayAlreadyShot = function(ray) {
-    // check if ray has already been shot from current location (i.e. duplicate)
-    return (this.grid[ray.getPosition().row][ray.getPosition().column] !== 0);
-  };
-  this.rayHasHitMarble = function(ray) {
-    // check if ray has hit a marble
-    return (this.grid[ray.getPosition().row][ray.getPosition().column] === 1);
-  };
-  this.rayHasRechedRim = function(ray) {
-    var currentRow = ray.getPosition().row;
-    var currentColumn = ray.getPosition().column;
-    var gridUpperBound = this.gridSize + 1;
-    // check if ray has reached the rim
-    return (currentRow === 0 ||
-            currentRow === gridUpperBound ||
-            currentColumn === 0 ||
-            currentColumn === gridUpperBound);
-  };
-  this.rayIsInCorner = function(ray) {
-    var currentRow = ray.getPosition().row;
-    var currentColumn = ray.getPosition().column;
-    var gridUpperBound = this.gridSize + 1;
-    // check if ray is in a corner
-    return ((currentRow === 0 && currentColumn === 0) ||
-            (currentRow === 0 && currentColumn === gridUpperBound) ||
-            (currentRow === gridUpperBound && currentColumn === 0) ||
-            (currentRow === gridUpperBound && currentColumn === gridUpperBound));
-  };
-  this.rayIsInsideGrid = function(ray) {
-    var currentRow = ray.getPosition().row;
-    var currentColumn = ray.getPosition().column;
-    var gridUpperBound = this.gridSize + 1;
-    return (currentRow > 0 &&
-            currentColumn > 0 &&
-            currentRow < gridUpperBound &&
-            currentColumn < gridUpperBound);
-  };
-  this.rayIsOutsideGrid = function(ray) {
-    var currentRow = ray.getPosition().row;
-    var currentColumn = ray.getPosition().column;
-    var gridUpperBound = this.gridSize + 1;
-    return (currentRow < 0 ||
-            currentColumn < 0 ||
-            currentRow > gridUpperBound ||
-            currentColumn > gridUpperBound);
-  };
-  this.scoreGame = function() {
+
+  BlackBox.prototype.scoreGame = function() {
     // 1 point for each entry and exit location
     // 5 points for each guess in the wrong location
     // incomplete games will not be scored
@@ -269,46 +283,47 @@ function BlackBoxModel(gridSize = 8, numberOfMarbles = 4) {
     }
     return score;
   };
-  this.shootRay = function(ray) {
-    var originalRow = ray.getPosition().row;
-    var originalColumn = ray.getPosition().column;
+
+  BlackBox.prototype.shootRay = function(ray) {
+    var originalRow = ray.position.row;
+    var originalColumn = ray.position.column;
     var outcome = SHOOT_RAY_OUTCOME.NOTHING;
     if (!this.gameHasFinished) {
-      if (this.rayIsOutsideGrid(ray)) {
+      if (rayIsOutsideGrid(ray, this.gridSize)) {
         outcome = SHOOT_RAY_OUTCOME.OUTSIDE;
-      } else if (this.rayIsInCorner(ray)) {
+      } else if (rayIsInCorner(ray, this.gridSize)) {
         outcome = SHOOT_RAY_OUTCOME.CORNER;
-      } else if (this.rayIsInsideGrid(ray)){
+      } else if (rayIsInsideGrid(ray, this.gridSize)){
         outcome = this.guess(ray);
-      } else if (this.rayAlreadyShot(ray)) {
+      } else if (rayAlreadyShot(ray, this.grid)) {
         outcome = SHOOT_RAY_OUTCOME.DUPLICATE;
       } else {
         do {
           ray.move();
-          if (this.rayHasHitMarble(ray)) {
+          if (rayHasHitMarble(ray, this.grid)) {
             this.grid[originalRow][originalColumn] = 'a';
             outcome = SHOOT_RAY_OUTCOME.ABSORBED;
-          } else if (this.rayHasRechedRim(ray)) {
-            if (ray.getPosition().row === originalRow &&
-                ray.getPosition().column === originalColumn) {
+          } else if (rayHasRechedRim(ray, this.gridSize)) {
+            if (ray.position.row === originalRow &&
+                ray.position.column === originalColumn) {
               this.grid[originalRow][originalColumn] = 'r';
               outcome = SHOOT_RAY_OUTCOME.REFLECTED;
             } else {
               this.numberOfRays += 1;
-              this.grid[ray.getPosition().row][ray.getPosition().column] = this.numberOfRays;
+              this.grid[ray.position.row][ray.position.column] = this.numberOfRays;
               this.grid[originalRow][originalColumn] = this.numberOfRays;
               outcome = SHOOT_RAY_OUTCOME.PROPOGATED;
             }
           } else {
-            this.checkForDeflectedRay(ray);
-            if (this.rayHasRechedRim(ray)) {
-              if (ray.getPosition().row === originalRow &&
-                  ray.getPosition().column === originalColumn) {
+            checkForDeflectedRay(ray, this.grid, this.gridSize);
+            if (rayHasRechedRim(ray, this.gridSize)) {
+              if (ray.position.row === originalRow &&
+                  ray.position.column === originalColumn) {
                 this.grid[originalRow][originalColumn] = 'r';
                 outcome = SHOOT_RAY_OUTCOME.REFLECTED;
               } else {
                 this.numberOfRays += 1;
-                this.grid[ray.getPosition().row][ray.getPosition().column] = this.numberOfRays;
+                this.grid[ray.position.row][ray.position.column] = this.numberOfRays;
                 this.grid[originalRow][originalColumn] = this.numberOfRays;
                 outcome = SHOOT_RAY_OUTCOME.PROPOGATED;
               }
@@ -319,4 +334,35 @@ function BlackBoxModel(gridSize = 8, numberOfMarbles = 4) {
     }
     return outcome;
   };
-};
+
+  // Export to root (window in browser)
+  if (typeof define === 'function' && define.amd) {
+    // requireJS
+    //define(VECTOR);
+  } else if (typeof exports === 'object') {
+    // Node.js
+    module.exports.SHOOT_RAY_OUTCOME = SHOOT_RAY_OUTCOME;
+    module.exports.BlackBoxModel = BlackBox;
+    if (process.env.NODE_ENV === 'test') {
+      module.exports.BlackBoxModel._private = {
+        checkForDeflectedRay: checkForDeflectedRay,
+        createGrid: createGrid,
+        initialiseGrid: initialiseGrid,
+        placeMarblesRandomlyOnGrid: placeMarblesRandomlyOnGrid,
+        rayAlreadyShot: rayAlreadyShot,
+        rayHasHitMarble: rayHasHitMarble,
+        rayHasRechedRim: rayHasRechedRim,
+        rayIsInCorner: rayIsInCorner,
+        rayIsInsideGrid: rayIsInsideGrid,
+        rayIsOutsideGrid: rayIsOutsideGrid
+      }
+    }
+  } else {
+    // in the browser
+    root = root || {};
+    root.BLACKBOX = root.BLACKBOX || {};
+    root.BLACKBOX.SHOOT_RAY_OUTCOME = SHOOT_RAY_OUTCOME;
+    root.BLACKBOX.Model = BlackBox;
+  }
+
+})(this, this.BLACKBOX);

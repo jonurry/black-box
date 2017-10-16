@@ -1,20 +1,32 @@
-debugger;
-var model = new BlackBoxModel();
-var view = new BlackBoxView();
+(function(root, BLACKBOX) {
 
-var BlackBoxController = function BlackBoxController(model /* BlackBoxModel */, view /* BlackBoxView */) {
-  this.model = model;
-  this.view = view;
-};
+  function BlackBoxController(model, view) {
+    this.model = model;
+    this.view = view;
+  };
 
-BlackBoxController.prototype.initialise = function initialise() {
-  this.view.onClickNewGame = this.onClickNewGame.bind(this);
-};
+  BlackBoxController.prototype.initialise = function initialise() {
+    this.view.onClickNewGame = this.onClickNewGame.bind(this);
+    this.view.renderGridHTML();
+  };
 
-BlackBoxController.prototype.onClickNewGame = function onClickNewGame(gridSize = 8, numberOfMarbles = 4) {
-  // todo: render view(s)
-  return this.model.newGame(gridSize, numberOfMarbles);
-};
+  BlackBoxController.prototype.onClickNewGame = function onClickNewGame(gridSize = 8, numberOfMarbles = 4) {
+    // todo: render view(s)
+    this.model.newGame(gridSize, numberOfMarbles);
+  };
 
-controller = new BlackBoxController(model, view);
-controller.initialise();
+  // Export to root (window in browser)
+  if (typeof define === 'function' && define.amd) {
+    // requireJS
+    //define(VECTOR);
+  } else if (typeof exports === 'object') {
+    // Node.js
+    module.exports.BlackBoxController = BlackBoxController;
+  } else {
+    // in the browser
+    root = root || {};
+    root.BLACKBOX = root.BLACKBOX || {};
+    root.BLACKBOX.Controller = BlackBoxController;
+  }
+
+})(this, this.BLACKBOX);
