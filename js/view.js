@@ -1,27 +1,63 @@
 (function(root, BLACKBOX, undefined) {
 
-  function View(blackbox) {
-    this.blackbox = blackbox;
+  function View() {
     this.view = this;
-    this.onClickNewGame = null;
     this.setupEventHandlers();
   };
 
-  View.prototype.renderGridConsole = function() {
+  View.prototype.bind = function (event, handler) {
+
+		var self = this,
+        blackboxDiv,
+        buttonNewGame,
+        buttonScoreGame,
+        gridSize,
+        numberOfMarbles;
+
+    if (event === 'newGame') {
+      buttonNewGame = document.getElementById('buttonNewGame');
+      buttonNewGame.addEventListener('click', function(event) {
+        gridSize = parseInt(document.getElementById('inputGridSize').value);
+        numberOfMarbles = parseInt(document.getElementById('inputMarbles').value);
+        handler(gridSize, numberOfMarbles);
+        document.getElementById('labelScore').innerHTML = '';
+      });
+    } else if (event === 'scoreGame') {
+      buttonScoreGame = document.getElementById('buttonScoreGame');
+      buttonScoreGame.addEventListener('click', function(event) {
+        var score = handler();
+        document.getElementById('labelScore').innerHTML = score;
+      });
+    } else if (event === 'shootRay') {
+      blackboxDiv = document.getElementById('blackbox');
+      blackboxDiv.addEventListener('click', function(event) {
+        var clickedElement = event.target;
+        if (clickedElement.className.includes('cell')) {
+          var row = parseInt(clickedElement.dataset.pos.split(',')[0]);
+          var column = parseInt(clickedElement.dataset.pos.split(',')[1]);
+          handler(new BLACKBOX.Vector(row, column));
+        }
+      });
+    }
+
+	};
+
+  View.prototype.renderGridConsole = function(grid) {
     var gridLine;
-    for (i = 0; i < this.blackbox.grid.length; i++) {
+    console.log();
+    for (i = 0; i < grid.length; i++) {
       gridLine = '';
-      for (j = 0; j < this.blackbox.grid.length; j++) {
-        gridLine += String(this.blackbox.grid[i][j]) + '\t';
+      for (j = 0; j < grid.length; j++) {
+        gridLine += String(grid[i][j]) + '\t';
       }
       console.log(gridLine + '\t' + String(i));
     }
   };
 
-  View.prototype.renderGridHTML = function() {
+  View.prototype.renderGrid = function(grid, gridSize, gameHasFinished, allMarblesPlaced, guesses) {
     var blackboxDiv = document.getElementById('blackbox');
     blackboxDiv.innerHTML = '';
-    var upperGridBound = this.blackbox.gridSize + 1;
+    var upperGridBound = gridSize + 1;
     for (var row = 0; row <= upperGridBound; row++) {
       for (var column = 0; column <= upperGridBound; column++) {
         var cellDiv = document.createElement('div');
@@ -29,7 +65,7 @@
           'cell', 'cell-' + (upperGridBound + 1)
         ];
         // render ray outcomes
-        switch (this.blackbox.grid[row][column]) {
+        switch (grid[row][column]) {
           case 0:
             // no action required
             break;
@@ -50,15 +86,14 @@
             break;
           default:
             if (row === 0 || row === upperGridBound || column === 0 || column === upperGridBound) {
-              classes.push('ray-' + this.blackbox.grid[row][column]);
+              classes.push('ray-' + grid[row][column]);
             }
         }
         // set row and column data
-        cellDiv.dataset.row = row;
-        cellDiv.dataset.column = column;
+        cellDiv.dataset.pos = row + ',' + column;
         // render guesses
-        if (!this.blackbox.gameHasFinished) {
-          this.blackbox.guesses.forEach(function(guess) {
+        if (!gameHasFinished) {
+          guesses.forEach(function(guess) {
             if (parseInt(guess.row) === row && parseInt(guess.column) === column) {
               classes.push('guess');
             }
@@ -70,57 +105,46 @@
     }
     // enable/disable score game button
     var buttonScoreGame = document.getElementById('buttonScoreGame');
-    buttonScoreGame.disabled = !(this.blackbox.allMarblesPlaced() && !this.blackbox.gameHasFinished);
+    buttonScoreGame.disabled = !(allMarblesPlaced && !gameHasFinished);
+  };
+
+  View.prototype.renderShot = function(shot, gameHasFinished, allMarblesPlaced) {
+    var OUTCOME = BLACKBOX.SHOOT_RAY_OUTCOME;
+    var blackboxDiv = document.getElementById('blackbox');
+    var buttonScoreGame = document.getElementById('buttonScoreGame');
+    var startVector = JSON.parse(shot.path[0]);
+    var endVector = JSON.parse(shot.path[shot.path.length - 1]);
+    var startPos = startVector.position.row + ',' + startVector.position.column;
+    var endPos = endVector.position.row + ',' + endVector.position.column;
+    var startElement = document.querySelectorAll("[data-pos='" + startPos + "']")[0];
+    var endElement = document.querySelectorAll("[data-pos='" + endPos + "']")[0];
+    switch (shot.outcome) {
+      case OUTCOME.ABSORBED:
+        startElement.className += ' hit';
+        break;
+      case OUTCOME.MARBLE_PLACED:
+        startElement.className += ' guess';
+        break;
+      case OUTCOME.MARBLE_REMOVED:
+        startElement.className = startElement.className.replace(' guess', '');
+        break;
+      case OUTCOME.PROPOGATED:
+        startElement.className += ' ray-' + shot.numberOfRays;
+        endElement.className += ' ray-' + shot.numberOfRays;
+        break;
+      case OUTCOME.REFLECTED:
+        startElement.className += ' reflect';
+        break;
+    }
+    // enable/disable score game button
+    buttonScoreGame.disabled = !(allMarblesPlaced && !gameHasFinished);
   };
 
   View.prototype.setupEventHandlers = function() {
 
-    var blackbox = this.blackbox;
     var view = this.view;
-    var blackboxDiv = document.getElementById('blackbox');
-    var buttonNewGame = document.getElementById('buttonNewGame');
-    var buttonScoreGame = document.getElementById('buttonScoreGame');
     var inputGridSize = document.getElementById('inputGridSize');
     var inputMarbles = document.getElementById('inputMarbles');
-
-    blackboxDiv.addEventListener('click', function(event) {
-      var clickedElement = event.target;
-      if (clickedElement.className.includes('cell')) {
-        var row = parseInt(clickedElement.dataset.row);
-        var column = parseInt(clickedElement.dataset.column);
-        var upperGridBound = blackbox.gridSize + 1;
-        var DIR = BLACKBOX.VECTOR.DIRECTION;
-        var direction = DIR.NONE;
-        if (row === 0) {
-          direction = DIR.DOWN;
-        } else if (row === upperGridBound) {
-          direction = DIR.UP;
-        } else if (column === 0) {
-          direction = DIR.RIGHT;
-        } else if (column === upperGridBound) {
-          direction = DIR.LEFT;
-        }
-        blackbox.shootRay(new BLACKBOX.Vector(row, column, direction));
-        view.renderGridHTML();
-      }
-    });
-
-    buttonNewGame.addEventListener('click', function(event) {
-      var gridSize = parseInt(document.getElementById('inputGridSize').value);
-      var numberOfMarbles = parseInt(document.getElementById('inputMarbles').value);
-      view.onClickNewGame(gridSize, numberOfMarbles);
-      view.renderGridConsole();
-      view.renderGridHTML();
-      document.getElementById('labelScore').innerHTML = '';
-    });
-
-    buttonScoreGame.addEventListener('click', function(event) {
-      var score = blackbox.scoreGame();
-      document.getElementById('labelScore').innerHTML = score;
-      blackbox.gameHasFinished = true;
-      view.renderGridConsole();
-      view.renderGridHTML();
-    });
 
     inputGridSize.addEventListener('focusout', function(event) {
       var gridSize = parseInt(event.currentTarget.value);
