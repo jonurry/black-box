@@ -131,7 +131,6 @@ if (typeof exports === 'object') {
     var position;
     for (i = 0; i < numberOfMarbles; i++) {
       position = {};
-      debugger;
       do {
         position.row = BLACKBOX.utility.getRandomIntInclusive(1, gridSize);
         position.column = BLACKBOX.utility.getRandomIntInclusive(1, gridSize);
