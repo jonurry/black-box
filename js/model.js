@@ -5,6 +5,7 @@
     ABSORBED: 'ray hit marble and was absorbed',
     CORNER: 'ray is in a corner',
     DUPLICATE: 'ray has already been shot',
+    INSIDE: 'ray is inside the black box',
     MARBLE_MAX: 'marble ignored - maximum number already placed',
     MARBLE_PLACED: 'marble has been placed',
     MARBLE_REMOVED: 'marble has been removed',
@@ -12,6 +13,12 @@
     OUTSIDE: 'ray is outside of the black box',
     PROPOGATED: 'ray has reached the rim',
     REFLECTED: 'ray has been reflected'
+  }
+
+  const DEFLECTION = {
+    DEFLECTED: 'ray has been deflected',
+    NONE: 'ray has not been deflected',
+    REVERSED: 'ray has been reversed'
   }
 
   // dependencies
@@ -35,67 +42,55 @@
   //
 
   // private methods
-  function checkForDeflectedRay(ray, grid, gridSize) {
+  function checkForDeflectedRay(ray, marbles, gridSize) {
 
-    var probe1 = 0;
-    var probe2 = 0;
+    var probe1 = false;
+    var probe2 = false;
     var row = ray.position.row + ray.direction.rowIncrement;
     var column = ray.position.column + ray.direction.columnIncrement;
     var gridUpperBound = gridSize + 1;
     var DIR = BLACKBOX.VECTOR.DIRECTION;
-    var result = false;
+    var result;
 
     if (row === 0 || row === gridUpperBound || column === 0 || column === gridUpperBound) {
-      result = false;
+      result = DEFLECTION.NONE;
     } else if (ray.direction === DIR.UP || ray.direction === DIR.DOWN) {
-      if(column + 1 === gridUpperBound) {
-        probe1 = 0;
-      } else {
-        probe1 = grid[row][column + 1];
-      }
-      if(column - 1 === 0) {
-        probe2 = 0;
-      } else {
-        probe2 = grid[row][column - 1];
-      }
-      if (probe1 === 1 && probe2 === 1) {
+      probe1 = marbles.some(marble => marble.row === row && marble.column === column + 1);
+      probe2 = marbles.some(marble => marble.row === row && marble.column === column - 1);
+      if (probe1 && probe2) {
         //two adjacent marbles so ray is reversed
         ray.direction = (ray.direction === DIR.UP) ? DIR.DOWN : DIR.UP;
-        result = true;
-      } else if (probe1 === 1) {
+        result = DEFLECTION.REVERSED;
+      } else if (probe1) {
         // one adjacent marble so head LEFT
         ray.direction = DIR.LEFT;
-        result = true;
-      } else if (probe2 === 1) {
+        result = DEFLECTION.DEFLECTED;
+      } else if (probe2) {
         // one adjacent marble so head RIGHT
         ray.direction = DIR.RIGHT;
-        result = true;
+        result = DEFLECTION.DEFLECTED;
+      } else {
+        result = DEFLECTION.NONE;
       }
     } else {
       //ray is travelling LEFT or RIGHT
       // ignore case where first propogated ray is encoutered at edge
-      if(row + 1 === gridUpperBound) {
-        probe1 = 0;
-      } else {
-        probe1 = grid[row + 1][column];
-      }
-      if(row - 1 === 0) {
-        probe2 = 0;
-      } else {
-        probe2 = grid[row - 1][column];
-      }
-      if (probe1 === 1 && probe2 === 1) {
+      probe1 = marbles.some(marble => marble.row === row + 1 && marble.column === column);
+      probe2 = marbles.some(marble => marble.row === row - 1 && marble.column === column);
+      if (probe1 && probe2) {
         //two adjacent marbles so ray is reversed
         ray.direction = (ray.direction === DIR.LEFT) ? DIR.RIGHT : DIR.LEFT;
-        result = true;
-      } else if (probe1 === 1) {
+        result = DEFLECTION.REVERSED;
+      } else if (probe1) {
         // one adjacent marble so head UP
         ray.direction = DIR.UP;
-        result = true;
-      } else if (probe2 === 1) {
+        result = DEFLECTION.DEFLECTED;
+      } else if (probe2) {
         // one adjacent marble so head DOWN
         ray.direction = DIR.DOWN;
-        result = true;
+        result = DEFLECTION.DEFLECTED;
+      } else {
+        result = DEFLECTION.NONE;
       }
     }
 
@@ -119,13 +114,29 @@
     }
   };
 
-  function placeMarblesRandomlyOnGrid(grid, gridSize, numberOfMarbles) {
+  function placeMarbleOnGrid(row, column, numberOfMarbles, marbles) {
+    // place marble according to row and column position
+    // if marble already placed then ignore request
+    // if max number of marbles would be exceeded then don't place marble
+    var position = {};
+    position.row = row;
+    position.column = column;
+    if (marbles.length < numberOfMarbles) {
+      if (!marbles.some(marble => marble.row === position.row && marble.column === position.column)) {
+        marbles.push(position);
+      }
+    }
+  };
+
+  function placeMarblesRandomlyOnGrid(gridSize, numberOfMarbles, marbles) {
+    var position;
     for (i = 0; i < numberOfMarbles; i++) {
+      position = {};
       do {
-        var row = BLACKBOX.utility.getRandomIntInclusive(1, gridSize);
-        var column = BLACKBOX.utility.getRandomIntInclusive(1, gridSize);
-      } while (grid[row][column] === 1);
-      grid[row][column] = 1;
+        position.row = BLACKBOX.utility.getRandomIntInclusive(1, gridSize);
+        position.column = BLACKBOX.utility.getRandomIntInclusive(1, gridSize);
+      } while (marbles.indexOf(position) !== -1);
+      marbles.push(position);
     }
   };
 
@@ -134,9 +145,13 @@
     return (grid[ray.position.row][ray.position.column] !== 0);
   };
 
-  function rayHasHitMarble(ray, grid) {
+  function rayHasHitMarble(ray, marbles) {
     // check if ray will hit a marble on next move
-    return (grid[ray.position.row + ray.direction.rowIncrement][ray.position.column + ray.direction.columnIncrement] === 1);
+    var position = {};
+    var result = false;
+    position.row = ray.position.row + ray.direction.rowIncrement;
+    position.column = ray.position.column + ray.direction.columnIncrement;
+    return marbles.some(marble => marble.row === position.row && marble.column === position.column);
   };
 
   function rayHasRechedRim(ray, gridSize) {
@@ -189,6 +204,7 @@
     this.grid = [];
     this.gridSize = gridSize;
     this.guesses= [];
+    this.marbles= [];
     this.numberOfMarbles = numberOfMarbles;
 
     if (newGame) {
@@ -230,11 +246,12 @@
     this.grid = [];
     this.gridSize = gridSize;
     this.guesses= [];
+    this.marbles= [];
     this.numberOfMarbles = numberOfMarbles;
     this.numberOfRays = 0;
     createGrid(this.grid, this.gridSize);
     initialiseGrid(this.grid, this.gridSize);
-    placeMarblesRandomlyOnGrid(this.grid, this.gridSize, this.numberOfMarbles);
+    placeMarblesRandomlyOnGrid(this.gridSize, this.numberOfMarbles, this.marbles);
   };
 
   BlackBox.prototype.scoreGame = function() {
@@ -261,11 +278,11 @@
       }
       // process the guesses
       this.guesses.forEach(function(guess) {
-        if (this.grid[guess.row][guess.column] === 0) {
-          score += 5;
-          this.grid[guess.row][guess.column] = 'n'
+        if (this.marbles.some(marble => marble.row === guess.row && marble.column === guess.column)) {
+          this.grid[guess.row][guess.column] = 'y';
         } else {
-          this.grid[guess.row][guess.column] = 'y'
+          score += 5;
+          this.grid[guess.row][guess.column] = 'n';
         }
       }, this);
       // cycle through grid and mark any marbles that were not found
@@ -296,75 +313,100 @@
     // {
     //  outcome: SHOOT_RAY_OUTCOME,
     //  path: array of Vectors,
-    //  numberOfRays: this.numberOfRays
+    //  rayNumber: the number of the ray
     // }
     var result = {
       outcome: SHOOT_RAY_OUTCOME.NOTHING,
       path: [],
-      numberOfRays: 0
+      rayNumber: 0
     };
+    var originalRay;
+    var deflectionOutcome = DEFLECTION.NONE;
     var originalRow = ray.position.row;
     var originalColumn = ray.position.column;
     var grid = this.grid;
     var gridSize = this.gridSize;
     var upperGridBound = gridSize + 1;
+    var marbles = this.marbles;
+    var gameHasFinished = this.gameHasFinished;
     var DIR = BLACKBOX.VECTOR.DIRECTION;
-    result.path.push(JSON.stringify(ray));
-    if (!this.gameHasFinished) {
+    // determine ray direction if not specified
+    if (ray.direction === DIR.NONE) {
+      if (ray.position.row === 0) {
+        ray.direction = DIR.DOWN;
+      } else if (ray.position.row === upperGridBound) {
+        ray.direction = DIR.UP;
+      } else if (ray.position.column === 0) {
+        ray.direction = DIR.RIGHT;
+      } else if (ray.position.column === upperGridBound) {
+        ray.direction = DIR.LEFT;
+      }
+    }
+    result.path.push(JSON.parse(JSON.stringify(ray)));
+    //if (!this.gameHasFinished) {
       if (rayIsOutsideGrid(ray, gridSize)) {
         result.outcome = SHOOT_RAY_OUTCOME.OUTSIDE;
       } else if (rayIsInCorner(ray, gridSize)) {
         result.outcome = SHOOT_RAY_OUTCOME.CORNER;
-      } else if (rayIsInsideGrid(ray, gridSize)){
-        result.outcome = this.guess(ray);
-      } else if (rayAlreadyShot(ray, grid)) {
+      } else if (rayIsInsideGrid(ray, gridSize)) {
+        if (!this.gameHasFinished) {
+          result.outcome = this.guess(ray);
+        } else {
+          result.outcome = SHOOT_RAY_OUTCOME.INSIDE;
+        }
+      } else if (rayAlreadyShot(ray, grid) && !this.gameHasFinished) {
         result.outcome = SHOOT_RAY_OUTCOME.DUPLICATE;
       } else {
-        // determine ray direction if not specified
-        if (ray.direction === DIR.NONE) {
-          if (ray.position.row === 0) {
-            ray.direction = DIR.DOWN;
-          } else if (ray.position.row === upperGridBound) {
-            ray.direction = DIR.UP;
-          } else if (ray.position.column === 0) {
-            ray.direction = DIR.RIGHT;
-          } else if (ray.position.column === upperGridBound) {
-            ray.direction = DIR.LEFT;
-          }
-        }
         // shoot the ray
         do {
-          if (rayHasHitMarble(ray, grid)) {
-            grid[originalRow][originalColumn] = 'a';
+          if (rayHasHitMarble(ray, marbles)) {
+            if (!this.gameHasFinished) {
+              grid[originalRow][originalColumn] = 'a';
+            }
+            result.path.push(JSON.parse(JSON.stringify(ray)));
             result.outcome = SHOOT_RAY_OUTCOME.ABSORBED;
           } else {
-            if (checkForDeflectedRay(ray, grid, gridSize)) {
+            originalRay = JSON.stringify(ray);
+            deflectionOutcome = checkForDeflectedRay(ray, marbles, gridSize);
+            if (deflectionOutcome !== DEFLECTION.NONE) {
               if (result.path.length === 1) {
-                grid[originalRow][originalColumn] = 'r';
+                if (!this.gameHasFinished) {
+                  grid[originalRow][originalColumn] = 'r';
+                }
                 result.outcome = SHOOT_RAY_OUTCOME.REFLECTED;
+              } else if (deflectionOutcome === DEFLECTION.REVERSED) {
+                result.path.push(JSON.parse(originalRay));
               }
             };
           }
           if (result.outcome === SHOOT_RAY_OUTCOME.NOTHING) {
             ray.move();
-            result.path.push(JSON.stringify(ray));
+            result.path.push(JSON.parse(JSON.stringify(ray)));
             if (rayHasRechedRim(ray, gridSize)) {
               if (ray.position.row === originalRow &&
                   ray.position.column === originalColumn) {
-                grid[originalRow][originalColumn] = 'r';
+                if (!this.gameHasFinished) {
+                  grid[originalRow][originalColumn] = 'r';
+                }
                 result.outcome = SHOOT_RAY_OUTCOME.REFLECTED;
               } else {
-                this.numberOfRays++;
-                grid[ray.position.row][ray.position.column] = this.numberOfRays;
-                grid[originalRow][originalColumn] = this.numberOfRays;
+                if (!this.gameHasFinished) {
+                  this.numberOfRays++;
+                  grid[ray.position.row][ray.position.column] = this.numberOfRays;
+                  grid[originalRow][originalColumn] = this.numberOfRays;
+                }
                 result.outcome = SHOOT_RAY_OUTCOME.PROPOGATED;
               }
             }
           }
         } while (result.outcome === SHOOT_RAY_OUTCOME.NOTHING)
       }
+    //}
+    if (gameHasFinished) {
+      result.rayNumber = grid[originalRow][originalColumn];
+    } else {
+      result.rayNumber = this.numberOfRays;
     }
-    result.numberOfRays = this.numberOfRays;
     return result;
   };
 
@@ -381,6 +423,7 @@
         checkForDeflectedRay: checkForDeflectedRay,
         createGrid: createGrid,
         initialiseGrid: initialiseGrid,
+        placeMarbleOnGrid: placeMarbleOnGrid,
         placeMarblesRandomlyOnGrid: placeMarblesRandomlyOnGrid,
         rayAlreadyShot: rayAlreadyShot,
         rayHasHitMarble: rayHasHitMarble,

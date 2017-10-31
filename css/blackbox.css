@@ -28,6 +28,7 @@ button, input, label {
 }
 
 #blackbox {
+  position: relative;
   width: 90vmin;
   margin: auto;
 }
@@ -100,6 +101,7 @@ p {
 
 .hit {
   border-radius: 50%;
+  stroke: #212121;
   background-color: #212121;
   background-image:
     radial-gradient(
@@ -111,6 +113,7 @@ p {
 
 .reflect {
   border-radius: 50%;
+  stroke: #fff;
   background-color: #eee;
   background-image:
     radial-gradient(
@@ -148,6 +151,7 @@ p {
 
 .ray-1 {
   border-radius: 50%;
+  stroke: #e91e63;
   background-color: #e91e63;
   background-image:
     radial-gradient(
@@ -159,6 +163,7 @@ p {
 
 .ray-2 {
   border-radius: 50%;
+  stroke: #673ab7;
   background-color: #673ab7;
   background-image:
     radial-gradient(
@@ -168,19 +173,9 @@ p {
     );
 }
 
-/*.ray- {
-  border-radius: 50%;
-  background-color: #2196f3;
-  background-image:
-    radial-gradient(
-      circle at 60% 40%,
-      #90caf9,
-      #2196f3 50%
-    );
-}*/
-
 .ray-3 {
   border-radius: 50%;
+  stroke: #03a9f4;
   background-color: #03a9f4;
   background-image:
     radial-gradient(
@@ -192,6 +187,7 @@ p {
 
 .ray-4 {
   border-radius: 50%;
+  stroke: #8bc34a;
   background-color: #8bc34a;
   background-image:
     radial-gradient(
@@ -203,6 +199,7 @@ p {
 
 .ray-5 {
   border-radius: 50%;
+  stroke: #ffeb3b;
   background-color: #ffeb3b;
   background-image:
     radial-gradient(
@@ -214,6 +211,7 @@ p {
 
 .ray-6 {
   border-radius: 50%;
+  stroke: #ff5722;
   background-color: #ff5722;
   background-image:
     radial-gradient(
@@ -225,6 +223,7 @@ p {
 
 .ray-7 {
   border-radius: 50%;
+  stroke: #607d8b;
   background-color: #607d8b;
   background-image:
     radial-gradient(
@@ -236,6 +235,7 @@ p {
 
 .ray-8 {
   border-radius: 50%;
+  stroke: #9c27b0;
   background-color: #9c27b0;
   background-image:
     radial-gradient(
@@ -247,6 +247,7 @@ p {
 
 .ray-9 {
   border-radius: 50%;
+  stroke: #009688;
   background-color: #009688;
   background-image:
     radial-gradient(
@@ -258,6 +259,7 @@ p {
 
 .ray-10 {
   border-radius: 50%;
+  stroke: #cddc39;
   background-color: #cddc39;
   background-image:
     radial-gradient(
@@ -269,6 +271,7 @@ p {
 
 .ray-11 {
   border-radius: 50%;
+  stroke: #795548;
   background-color: #795548;
   background-image:
     radial-gradient(
@@ -280,6 +283,7 @@ p {
 
 .ray-12 {
   border-radius: 50%;
+  stroke: #3f51b5;
   background-color: #3f51b5;
   background-image:
     radial-gradient(
@@ -291,6 +295,7 @@ p {
 
 .ray-13 {
   border-radius: 50%;
+  stroke: #ffc107;
   background-color: #ffc107;
   background-image:
     radial-gradient(
@@ -302,17 +307,19 @@ p {
 
 .ray-14 {
   border-radius: 50%;
-  background-color: #009688;
+  stroke: #00bfa5;
+  background-color: #00bfa5;
   background-image:
     radial-gradient(
       circle at 60% 40%,
-      #80cbc4,
-      #009688 50%
+      #1de9b6,
+      #00bfa5 50%
     );
 }
 
 .ray-15 {
   border-radius: 50%;
+  stroke: #ff9800;
   background-color: #ff9800;
   background-image:
     radial-gradient(
@@ -322,8 +329,9 @@ p {
     );
 }
 
-.ray-8 {
+.ray-16 {
   border-radius: 50%;
+  stroke: #00bcd4;
   background-color: #00bcd4;
   background-image:
     radial-gradient(
@@ -333,9 +341,69 @@ p {
     );
 }
 
+.ray-17 {
+  border-radius: 50%;
+  stroke: #2196f3;
+  background-color: #2196f3;
+  background-image:
+    radial-gradient(
+      circle at 60% 40%,
+      #90caf9,
+      #2196f3 50%
+    );
+}
+
+.ray-18 {
+  border-radius: 50%;
+  stroke: #f44336;
+  background-color: #f44336;
+  background-image:
+    radial-gradient(
+      circle at 60% 40%,
+      #e57373,
+      #f44336 50%
+    );
+}
+
+.ray-19 {
+  border-radius: 50%;
+  stroke: #ffff00;
+  background-color: #ffff00;
+  background-image:
+    radial-gradient(
+      circle at 60% 40%,
+      #ffff8d,
+      #ffff00 50%
+    );
+}
+
+.ray-20 {
+  border-radius: 50%;
+  stroke: #00e676;
+  background-color: #00e676;
+  background-image:
+    radial-gradient(
+      circle at 60% 40%,
+      #b9f6ca,
+      #00e676 50%
+    );
+}
 
 
-/*Sizes – Number of cells per row*/
+ /* svg properties */
+svg {
+  position: absolute;
+}
+
+path {
+  stroke-width: 0.5;
+  stroke: blue;
+  fill: none;
+}
+
+
+
+/* Sizes – Number of cells per row */
 
 .cell-18 {
   flex-basis: 4vmin;

@@ -33,15 +33,16 @@
 
   BlackBoxController.prototype.onClickShootRay = function(ray) {
     var outcome = this.model.shootRay(ray);
-    this.view.renderShot(outcome, this.model.gameHasFinished, this.model.allMarblesPlaced());
+    this.view.renderShot(outcome, this.model.gridSize, this.model.gameHasFinished, this.model.allMarblesPlaced());
   };
 
   BlackBoxController.prototype.renderViews = function() {
     var model = this.model;
     var gridCopy = JSON.parse(JSON.stringify(model.grid));
     var guessesCopy = JSON.parse(JSON.stringify(model.guesses));
+    var marblesCopy = JSON.parse(JSON.stringify(model.marbles));
     this.view.renderGridConsole(gridCopy);
-    this.view.renderGrid(gridCopy, model.gridSize, model.gameHasFinished, model.allMarblesPlaced(), guessesCopy);
+    this.view.renderGrid(gridCopy, model.gridSize, model.gameHasFinished, model.allMarblesPlaced(), guessesCopy, marblesCopy);
   }
 
   // Export to root (window in browser)

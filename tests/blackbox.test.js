@@ -53,16 +53,8 @@ describe('It should create and initialise the Black Box.', () => {
 describe('It should place the marbles in valid locations.', () => {
 
   test('It should place the correct number of marbles on the grid.', () => {
-    var marbleCounter = 0;
     var blackbox = new BlackBoxModel( 8, 4, true);
-    for (var i = 1; i <= blackbox.gridSize; i++) {
-      for (var j = 1; j <= blackbox.gridSize; j++) {
-        if (blackbox.grid[i][j] === 1) {
-          marbleCounter += 1;
-        }
-      }
-    }
-    expect(marbleCounter).toBe(4);
+    expect(blackbox.marbles.length).toBe(4);
   });
 
   test('It should not place marbles on the rim.', () => {
@@ -234,17 +226,7 @@ describe('It should handle guesses as to the locations of the marbles in the Bla
 describe('It should ignore rays shot from the corners or from outside.', () => {
 
   test('It should ignore shots from the corners.', () => {
-    var blackbox = new BlackBoxModel(8, 4);
-    blackbox.grid[0] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    blackbox.grid[1] = [0, 1, 0, 0, 0, 0, 0, 0, 0, 0];
-    blackbox.grid[2] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    blackbox.grid[3] = [0, 1, 0, 0, 0, 0, 0, 0, 0, 0];
-    blackbox.grid[4] = [0, 0, 0, 0, 0, 0, 0, 0, 1, 0];
-    blackbox.grid[5] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    blackbox.grid[6] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    blackbox.grid[7] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    blackbox.grid[8] = [0, 0, 0, 0, 0, 0, 1, 0, 0, 0];
-    blackbox.grid[9] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    var blackbox = new BlackBoxModel(8, 4, true);
     expect(blackbox.shootRay(new Vector(0, 0, VECTOR.DIRECTION.DOWN)).outcome).toBe(SHOOT_RAY_OUTCOME.CORNER);
     expect(blackbox.shootRay(new Vector(0, 9, VECTOR.DIRECTION.LEFT)).outcome).toBe(SHOOT_RAY_OUTCOME.CORNER);
     expect(blackbox.shootRay(new Vector(9, 9, VECTOR.DIRECTION.UP)).outcome).toBe(SHOOT_RAY_OUTCOME.CORNER);
@@ -252,17 +234,7 @@ describe('It should ignore rays shot from the corners or from outside.', () => {
   });
 
   test('It should ignore shots from ouside the black box.', () => {
-    var blackbox = new BlackBoxModel(8, 4);
-    blackbox.grid[0] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    blackbox.grid[1] = [0, 1, 0, 0, 0, 0, 0, 0, 0, 0];
-    blackbox.grid[2] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    blackbox.grid[3] = [0, 1, 0, 0, 0, 0, 0, 0, 0, 0];
-    blackbox.grid[4] = [0, 0, 0, 0, 0, 0, 0, 0, 1, 0];
-    blackbox.grid[5] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    blackbox.grid[6] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    blackbox.grid[7] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    blackbox.grid[8] = [0, 0, 0, 0, 0, 0, 1, 0, 0, 0];
-    blackbox.grid[9] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    var blackbox = new BlackBoxModel(8, 4, true);
     expect(blackbox.shootRay(new Vector(-1, -1)).outcome).toBe(SHOOT_RAY_OUTCOME.OUTSIDE);
     expect(blackbox.shootRay(new Vector(-1, 5)).outcome).toBe(SHOOT_RAY_OUTCOME.OUTSIDE);
     expect(blackbox.shootRay(new Vector(-1, 10)).outcome).toBe(SHOOT_RAY_OUTCOME.OUTSIDE);
@@ -282,17 +254,24 @@ describe('It should ignore rays shot from the corners or from outside.', () => {
 describe('It should shoot rays from the rim.', () => {
 
   test('It should absorb rays shot at marbles.', () => {
-    var blackbox = new BlackBoxModel(8, 4);
-    blackbox.grid[0] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    blackbox.grid[1] = [0, 1, 0, 0, 0, 0, 0, 0, 0, 0];
-    blackbox.grid[2] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    blackbox.grid[3] = [0, 1, 0, 0, 0, 0, 0, 0, 0, 0];
-    blackbox.grid[4] = [0, 0, 0, 0, 0, 0, 0, 0, 1, 0];
-    blackbox.grid[5] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    blackbox.grid[6] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    blackbox.grid[7] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    blackbox.grid[8] = [0, 0, 0, 0, 0, 0, 1, 0, 0, 0];
-    blackbox.grid[9] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
+    var blackbox = new BlackBoxModel(8, 4, true);
+    // blackbox.grid[0] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    // blackbox.grid[1] = [0, 1, 0, 0, 0, 0, 0, 0, 0, 0];
+    // blackbox.grid[2] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    // blackbox.grid[3] = [0, 1, 0, 0, 0, 0, 0, 0, 0, 0];
+    // blackbox.grid[4] = [0, 0, 0, 0, 0, 0, 0, 0, 1, 0];
+    // blackbox.grid[5] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    // blackbox.grid[6] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    // blackbox.grid[7] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    // blackbox.grid[8] = [0, 0, 0, 0, 0, 0, 1, 0, 0, 0];
+    // blackbox.grid[9] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    blackbox.marbles = [];
+    privateBlackBox.placeMarbleOnGrid(1, 1, blackbox.numberOfMarbles, blackbox.marbles);
+    privateBlackBox.placeMarbleOnGrid(3, 1, blackbox.numberOfMarbles, blackbox.marbles);
+    privateBlackBox.placeMarbleOnGrid(4, 8, blackbox.numberOfMarbles, blackbox.marbles);
+    privateBlackBox.placeMarbleOnGrid(8, 6, blackbox.numberOfMarbles, blackbox.marbles);
+
     expect(blackbox.shootRay(new Vector(0, 1, VECTOR.DIRECTION.DOWN)).outcome).toBe(SHOOT_RAY_OUTCOME.ABSORBED);
     expect(blackbox.grid[0][1]).toBe('a');
     expect(blackbox.shootRay(new Vector(0, 6, VECTOR.DIRECTION.DOWN)).outcome).toBe(SHOOT_RAY_OUTCOME.ABSORBED);
@@ -320,17 +299,24 @@ describe('It should shoot rays from the rim.', () => {
   });
 
   test('It should deflect rays shot past marbles', () => {
-    var blackbox = new BlackBoxModel(8, 4);
-    blackbox.grid[0] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    blackbox.grid[1] = [0, 1, 0, 0, 0, 0, 0, 0, 0, 0];
-    blackbox.grid[2] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    blackbox.grid[3] = [0, 1, 0, 0, 0, 0, 0, 0, 0, 0];
-    blackbox.grid[4] = [0, 0, 0, 0, 0, 0, 0, 0, 1, 0];
-    blackbox.grid[5] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    blackbox.grid[6] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    blackbox.grid[7] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    blackbox.grid[8] = [0, 0, 0, 0, 0, 0, 1, 0, 0, 0];
-    blackbox.grid[9] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
+    var blackbox = new BlackBoxModel(8, 4, true);
+    // blackbox.grid[0] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    // blackbox.grid[1] = [0, 1, 0, 0, 0, 0, 0, 0, 0, 0];
+    // blackbox.grid[2] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    // blackbox.grid[3] = [0, 1, 0, 0, 0, 0, 0, 0, 0, 0];
+    // blackbox.grid[4] = [0, 0, 0, 0, 0, 0, 0, 0, 1, 0];
+    // blackbox.grid[5] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    // blackbox.grid[6] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    // blackbox.grid[7] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    // blackbox.grid[8] = [0, 0, 0, 0, 0, 0, 1, 0, 0, 0];
+    // blackbox.grid[9] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    blackbox.marbles = [];
+    privateBlackBox.placeMarbleOnGrid(1, 1, blackbox.numberOfMarbles, blackbox.marbles);
+    privateBlackBox.placeMarbleOnGrid(3, 1, blackbox.numberOfMarbles, blackbox.marbles);
+    privateBlackBox.placeMarbleOnGrid(4, 8, blackbox.numberOfMarbles, blackbox.marbles);
+    privateBlackBox.placeMarbleOnGrid(8, 6, blackbox.numberOfMarbles, blackbox.marbles);
+
     expect(blackbox.shootRay(new Vector(0, 7, VECTOR.DIRECTION.DOWN)).outcome).toBe(SHOOT_RAY_OUTCOME.ABSORBED);
     expect(blackbox.grid[0][7]).toBe('a');
     expect(blackbox.shootRay(new Vector(9, 2, VECTOR.DIRECTION.UP)).outcome).toBe(SHOOT_RAY_OUTCOME.ABSORBED);
@@ -344,17 +330,24 @@ describe('It should shoot rays from the rim.', () => {
   });
 
   test('It should reflect rays', () => {
-    var blackbox = new BlackBoxModel(8, 4);
-    blackbox.grid[0] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    blackbox.grid[1] = [0, 1, 0, 0, 0, 0, 0, 0, 0, 0];
-    blackbox.grid[2] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    blackbox.grid[3] = [0, 1, 0, 0, 0, 0, 0, 0, 0, 0];
-    blackbox.grid[4] = [0, 0, 0, 0, 0, 0, 0, 0, 1, 0];
-    blackbox.grid[5] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    blackbox.grid[6] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    blackbox.grid[7] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    blackbox.grid[8] = [0, 0, 0, 0, 0, 0, 1, 0, 0, 0];
-    blackbox.grid[9] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
+    var blackbox = new BlackBoxModel(8, 4, true);
+    // blackbox.grid[0] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    // blackbox.grid[1] = [0, 1, 0, 0, 0, 0, 0, 0, 0, 0];
+    // blackbox.grid[2] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    // blackbox.grid[3] = [0, 1, 0, 0, 0, 0, 0, 0, 0, 0];
+    // blackbox.grid[4] = [0, 0, 0, 0, 0, 0, 0, 0, 1, 0];
+    // blackbox.grid[5] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    // blackbox.grid[6] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    // blackbox.grid[7] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    // blackbox.grid[8] = [0, 0, 0, 0, 0, 0, 1, 0, 0, 0];
+    // blackbox.grid[9] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    blackbox.marbles = [];
+    privateBlackBox.placeMarbleOnGrid(1, 1, blackbox.numberOfMarbles, blackbox.marbles);
+    privateBlackBox.placeMarbleOnGrid(3, 1, blackbox.numberOfMarbles, blackbox.marbles);
+    privateBlackBox.placeMarbleOnGrid(4, 8, blackbox.numberOfMarbles, blackbox.marbles);
+    privateBlackBox.placeMarbleOnGrid(8, 6, blackbox.numberOfMarbles, blackbox.marbles);
+
     expect(blackbox.shootRay(new Vector(0, 2, VECTOR.DIRECTION.DOWN)).outcome).toBe(SHOOT_RAY_OUTCOME.REFLECTED);
     expect(blackbox.grid[0][2]).toBe('r');
     expect(blackbox.shootRay(new Vector(2, 9, VECTOR.DIRECTION.LEFT)).outcome).toBe(SHOOT_RAY_OUTCOME.REFLECTED);
@@ -374,17 +367,24 @@ describe('It should shoot rays from the rim.', () => {
   });
 
   test('It should propogate rays without reflection', () => {
-    var blackbox = new BlackBoxModel(8, 4);
-    blackbox.grid[0] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    blackbox.grid[1] = [0, 1, 0, 0, 0, 0, 0, 0, 0, 0];
-    blackbox.grid[2] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    blackbox.grid[3] = [0, 1, 0, 0, 0, 0, 0, 0, 0, 0];
-    blackbox.grid[4] = [0, 0, 0, 0, 0, 0, 0, 0, 1, 0];
-    blackbox.grid[5] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    blackbox.grid[6] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    blackbox.grid[7] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    blackbox.grid[8] = [0, 0, 0, 0, 0, 0, 1, 0, 0, 0];
-    blackbox.grid[9] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
+    var blackbox = new BlackBoxModel(8, 4, true);
+    // blackbox.grid[0] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    // blackbox.grid[1] = [0, 1, 0, 0, 0, 0, 0, 0, 0, 0];
+    // blackbox.grid[2] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    // blackbox.grid[3] = [0, 1, 0, 0, 0, 0, 0, 0, 0, 0];
+    // blackbox.grid[4] = [0, 0, 0, 0, 0, 0, 0, 0, 1, 0];
+    // blackbox.grid[5] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    // blackbox.grid[6] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    // blackbox.grid[7] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    // blackbox.grid[8] = [0, 0, 0, 0, 0, 0, 1, 0, 0, 0];
+    // blackbox.grid[9] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    blackbox.marbles = [];
+    privateBlackBox.placeMarbleOnGrid(1, 1, blackbox.numberOfMarbles, blackbox.marbles);
+    privateBlackBox.placeMarbleOnGrid(3, 1, blackbox.numberOfMarbles, blackbox.marbles);
+    privateBlackBox.placeMarbleOnGrid(4, 8, blackbox.numberOfMarbles, blackbox.marbles);
+    privateBlackBox.placeMarbleOnGrid(8, 6, blackbox.numberOfMarbles, blackbox.marbles);
+
     expect(blackbox.shootRay(new Vector(0, 3, VECTOR.DIRECTION.DOWN)).outcome).toBe(SHOOT_RAY_OUTCOME.PROPOGATED);
     expect(blackbox.grid[0][3]).toBe(1);
     expect(blackbox.grid[9][3]).toBe(1);
@@ -434,17 +434,22 @@ describe('it should score games', () => {
 
   test('it should not score incomplete games', () => {
 
-    var blackbox = new BlackBoxModel(8, 4);
-    blackbox.grid[0] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    blackbox.grid[1] = [0, 1, 0, 0, 0, 0, 0, 0, 0, 0];
-    blackbox.grid[2] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    blackbox.grid[3] = [0, 1, 0, 0, 0, 0, 0, 0, 0, 0];
-    blackbox.grid[4] = [0, 0, 0, 0, 0, 0, 0, 0, 1, 0];
-    blackbox.grid[5] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    blackbox.grid[6] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    blackbox.grid[7] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    blackbox.grid[8] = [0, 0, 0, 0, 0, 0, 1, 0, 0, 0];
-    blackbox.grid[9] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    var blackbox = new BlackBoxModel(8, 4, true);
+    // blackbox.grid[0] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    // blackbox.grid[1] = [0, 1, 0, 0, 0, 0, 0, 0, 0, 0];
+    // blackbox.grid[2] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    // blackbox.grid[3] = [0, 1, 0, 0, 0, 0, 0, 0, 0, 0];
+    // blackbox.grid[4] = [0, 0, 0, 0, 0, 0, 0, 0, 1, 0];
+    // blackbox.grid[5] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    // blackbox.grid[6] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    // blackbox.grid[7] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    // blackbox.grid[8] = [0, 0, 0, 0, 0, 0, 1, 0, 0, 0];
+    // blackbox.grid[9] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    blackbox.marbles = [];
+    privateBlackBox.placeMarbleOnGrid(1, 1, blackbox.numberOfMarbles, blackbox.marbles);
+    privateBlackBox.placeMarbleOnGrid(3, 1, blackbox.numberOfMarbles, blackbox.marbles);
+    privateBlackBox.placeMarbleOnGrid(4, 8, blackbox.numberOfMarbles, blackbox.marbles);
+    privateBlackBox.placeMarbleOnGrid(8, 6, blackbox.numberOfMarbles, blackbox.marbles);
 
     expect(blackbox.shootRay(new Vector(1, 1)).outcome).toBe(SHOOT_RAY_OUTCOME.MARBLE_PLACED);
     expect(blackbox.allMarblesPlaced()).toBe(false);
@@ -462,25 +467,34 @@ describe('it should score games', () => {
     expect(blackbox.grid[2][2]).toBe('n');
     expect(blackbox.grid[3][3]).toBe('n');
     expect(blackbox.grid[4][4]).toBe('n');
-    expect(blackbox.grid[3][1]).toBe('x');
-    expect(blackbox.grid[4][8]).toBe('x');
-    expect(blackbox.grid[8][6]).toBe('x');
+    expect(blackbox.grid[3][1]).toBe(0);
+    expect(blackbox.grid[4][8]).toBe(0);
+    expect(blackbox.grid[8][6]).toBe(0);
+
+    expect(blackbox.marbles.some(marble => marble.row === 3 && marble.column === 1)).toBe(true);
+    expect(blackbox.marbles.some(marble => marble.row === 4 && marble.column === 8)).toBe(true);
+    expect(blackbox.marbles.some(marble => marble.row === 8 && marble.column === 6)).toBe(true);
 
   });
 
   test('it should score the perfect game', () => {
 
-    var blackbox = new BlackBoxModel(8, 4);
-    blackbox.grid[0] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    blackbox.grid[1] = [0, 1, 0, 0, 0, 0, 0, 0, 0, 0];
-    blackbox.grid[2] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    blackbox.grid[3] = [0, 1, 0, 0, 0, 0, 0, 0, 0, 0];
-    blackbox.grid[4] = [0, 0, 0, 0, 0, 0, 0, 0, 1, 0];
-    blackbox.grid[5] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    blackbox.grid[6] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    blackbox.grid[7] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    blackbox.grid[8] = [0, 0, 0, 0, 0, 0, 1, 0, 0, 0];
-    blackbox.grid[9] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    var blackbox = new BlackBoxModel(8, 4, true);
+    // blackbox.grid[0] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    // blackbox.grid[1] = [0, 1, 0, 0, 0, 0, 0, 0, 0, 0];
+    // blackbox.grid[2] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    // blackbox.grid[3] = [0, 1, 0, 0, 0, 0, 0, 0, 0, 0];
+    // blackbox.grid[4] = [0, 0, 0, 0, 0, 0, 0, 0, 1, 0];
+    // blackbox.grid[5] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    // blackbox.grid[6] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    // blackbox.grid[7] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    // blackbox.grid[8] = [0, 0, 0, 0, 0, 0, 1, 0, 0, 0];
+    // blackbox.grid[9] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    blackbox.marbles = [];
+    privateBlackBox.placeMarbleOnGrid(1, 1, blackbox.numberOfMarbles, blackbox.marbles);
+    privateBlackBox.placeMarbleOnGrid(3, 1, blackbox.numberOfMarbles, blackbox.marbles);
+    privateBlackBox.placeMarbleOnGrid(4, 8, blackbox.numberOfMarbles, blackbox.marbles);
+    privateBlackBox.placeMarbleOnGrid(8, 6, blackbox.numberOfMarbles, blackbox.marbles);
 
     expect(blackbox.shootRay(new Vector(1, 1)).outcome).toBe(SHOOT_RAY_OUTCOME.MARBLE_PLACED);
     expect(blackbox.shootRay(new Vector(3, 1)).outcome).toBe(SHOOT_RAY_OUTCOME.MARBLE_PLACED);
@@ -496,17 +510,23 @@ describe('it should score games', () => {
 
   test('it should score the worst game', () => {
 
-    var blackbox = new BlackBoxModel(8, 4);
-    blackbox.grid[0] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    blackbox.grid[1] = [0, 1, 0, 0, 0, 0, 0, 0, 0, 0];
-    blackbox.grid[2] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    blackbox.grid[3] = [0, 1, 0, 0, 0, 0, 0, 0, 0, 0];
-    blackbox.grid[4] = [0, 0, 0, 0, 0, 0, 0, 0, 1, 0];
-    blackbox.grid[5] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    blackbox.grid[6] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    blackbox.grid[7] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    blackbox.grid[8] = [0, 0, 0, 0, 0, 0, 1, 0, 0, 0];
-    blackbox.grid[9] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    var blackbox = new BlackBoxModel(8, 4, true);
+    // blackbox.grid[0] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    // blackbox.grid[1] = [0, 1, 0, 0, 0, 0, 0, 0, 0, 0];
+    // blackbox.grid[2] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    // blackbox.grid[3] = [0, 1, 0, 0, 0, 0, 0, 0, 0, 0];
+    // blackbox.grid[4] = [0, 0, 0, 0, 0, 0, 0, 0, 1, 0];
+    // blackbox.grid[5] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    // blackbox.grid[6] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    // blackbox.grid[7] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    // blackbox.grid[8] = [0, 0, 0, 0, 0, 0, 1, 0, 0, 0];
+    // blackbox.grid[9] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    blackbox.marbles = [];
+    privateBlackBox.placeMarbleOnGrid(1, 1, blackbox.numberOfMarbles, blackbox.marbles);
+    privateBlackBox.placeMarbleOnGrid(3, 1, blackbox.numberOfMarbles, blackbox.marbles);
+    privateBlackBox.placeMarbleOnGrid(4, 8, blackbox.numberOfMarbles, blackbox.marbles);
+    privateBlackBox.placeMarbleOnGrid(8, 6, blackbox.numberOfMarbles, blackbox.marbles);
+
     // [0, a, r, 1, 2, 3, a, a, a, 0];
     // [a, 1, 0, g, g, g, g, 0, 0, a];
     // [r, 0, 0, 0, 0, 0, 0, 0, 0, r];
@@ -533,10 +553,14 @@ describe('it should score games', () => {
     expect(blackbox.grid[1][4]).toBe('n');
     expect(blackbox.grid[1][5]).toBe('n');
     expect(blackbox.grid[1][6]).toBe('n');
-    expect(blackbox.grid[1][1]).toBe('x');
-    expect(blackbox.grid[3][1]).toBe('x');
-    expect(blackbox.grid[4][8]).toBe('x');
-    expect(blackbox.grid[8][6]).toBe('x');
+    expect(blackbox.grid[1][1]).toBe(0);
+    expect(blackbox.grid[3][1]).toBe(0);
+    expect(blackbox.grid[4][8]).toBe(0);
+    expect(blackbox.grid[8][6]).toBe(0);
+    expect(blackbox.marbles.some(marble => marble.row === 1 && marble.column === 1)).toBe(true);
+    expect(blackbox.marbles.some(marble => marble.row === 3 && marble.column === 1)).toBe(true);
+    expect(blackbox.marbles.some(marble => marble.row === 4 && marble.column === 8)).toBe(true);
+    expect(blackbox.marbles.some(marble => marble.row === 8 && marble.column === 6)).toBe(true);
 
   });
 
