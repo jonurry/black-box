@@ -1,3 +1,19 @@
+// dependencies
+// Node.js import modules
+if (typeof exports === 'object') {
+  if (this.BLACKBOX === undefined) {
+    this.BLACKBOX = {};
+  }
+  if (this.BLACKBOX.VECTOR === undefined) {
+    var vectorModule = require('../js/vector.js');
+    this.BLACKBOX.VECTOR = vectorModule.VECTOR;
+  }
+  if (this.BLACKBOX.utility === undefined) {
+    var utilModule = require('../js/utility.js');
+    this.BLACKBOX.utility = utilModule.blackBoxUtil;
+  }
+}
+
 (function(root, BLACKBOX, undefined) {
 
   // define black box constants
@@ -19,23 +35,6 @@
     DEFLECTED: 'ray has been deflected',
     NONE: 'ray has not been deflected',
     REVERSED: 'ray has been reversed'
-  }
-
-  // dependencies
-  // Node.js import modules
-  if (typeof exports === 'object') {
-    if (BLACKBOX === undefined) {
-      BLACKBOX = {};
-    }
-    if (BLACKBOX.VECTOR === undefined) {
-      var vectorModule = require('../js/vector.js');
-      BLACKBOX.VECTOR = vectorModule.VECTOR;
-      //BLACKBOX.Vector = vectorModule.Vector;
-    }
-    if (BLACKBOX.utility === undefined) {
-      var utilModule = require('../js/utility.js');
-      BLACKBOX.utility = utilModule.blackBoxUtil;
-    }
   }
 
   // private properties
@@ -132,10 +131,11 @@
     var position;
     for (i = 0; i < numberOfMarbles; i++) {
       position = {};
+      debugger;
       do {
         position.row = BLACKBOX.utility.getRandomIntInclusive(1, gridSize);
         position.column = BLACKBOX.utility.getRandomIntInclusive(1, gridSize);
-      } while (marbles.indexOf(position) !== -1);
+      } while (marbles.length > 0 && marbles.some(marble => marble.row === position.row && marble.column === position.column));
       marbles.push(position);
     }
   };
