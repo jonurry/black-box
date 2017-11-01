@@ -374,7 +374,7 @@ if (typeof exports === 'object') {
                 }
                 result.outcome = SHOOT_RAY_OUTCOME.REFLECTED;
               } else if (deflectionOutcome === DEFLECTION.REVERSED) {
-                // FIXME: Path is not fully traced when reflected (missing a step)
+                // FIXME: Path is not fully traced when reflected (missing a step) id:4 gh:5
                 result.path.push(JSON.parse(originalRay));
               }
             };
