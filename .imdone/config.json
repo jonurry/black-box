@@ -20,7 +20,12 @@
       "REVIEW"
     ]
   },
-  "lists": [],
+  "lists": [
+    {
+      "name": "TODO",
+      "hidden": false
+    }
+  ],
   "marked": {
     "gfm": true,
     "tables": true,
@@ -30,8 +35,8 @@
     "langPrefix": "language-"
   },
   "sync": {
-    "id": "59f9d304ad580d30218ef944",
-    "name": "black-box",
+    "id": "59f9d070ad580d30218ef913",
+    "name": "jonurry/black-box",
     "useImdoneioForPriority": true
   }
 }

@@ -1,3 +1,5 @@
+// TODO: Add some more tests
+
 // Load the javascript files to be tested
 
 //let fs = require('fs');
