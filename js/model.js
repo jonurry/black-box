@@ -134,7 +134,7 @@ if (typeof exports === 'object') {
       do {
         position.row = BLACKBOX.utility.getRandomIntInclusive(1, gridSize);
         position.column = BLACKBOX.utility.getRandomIntInclusive(1, gridSize);
-      } while (marbles.length > 0 && marbles.some(marble => marble.row === position.row && marble.column === position.column));
+      } while (marbles.some(marble => marble.row === position.row && marble.column === position.column));
       marbles.push(position);
     }
   };
