@@ -1,5 +1,6 @@
-(function(root) {
-
+;!(function(root) {
+  'use strict';
+  
   var util = {
     getRandomIntInclusive: function(min, max) {
       min = Math.ceil(min);

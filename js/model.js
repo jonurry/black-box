@@ -15,6 +15,7 @@ if (typeof exports === 'object') {
 }
 
 (function(root, BLACKBOX, undefined) {
+  'use strict';
 
   // define black box constants
   const SHOOT_RAY_OUTCOME = {
@@ -129,7 +130,7 @@ if (typeof exports === 'object') {
 
   function placeMarblesRandomlyOnGrid(gridSize, numberOfMarbles, marbles) {
     var position;
-    for (i = 0; i < numberOfMarbles; i++) {
+    for (var i = 0; i < numberOfMarbles; i++) {
       position = {};
       do {
         position.row = BLACKBOX.utility.getRandomIntInclusive(1, gridSize);

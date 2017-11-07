@@ -1,4 +1,5 @@
-(function(root, BLACKBOX, undefined) {
+;!(function(root, BLACKBOX, undefined) {
+  'use strict';
 
   function createSVGPath(shot, gridSize) {
 
@@ -201,9 +202,9 @@
   View.prototype.renderGridConsole = function(grid) {
     var gridLine;
     console.log();
-    for (i = 0; i < grid.length; i++) {
+    for (var i = 0; i < grid.length; i++) {
       gridLine = '';
-      for (j = 0; j < grid.length; j++) {
+      for (var j = 0; j < grid.length; j++) {
         gridLine += String(grid[i][j]) + '\t';
       }
       console.log(gridLine + '\t' + String(i));

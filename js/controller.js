@@ -1,5 +1,6 @@
-(function(root, BLACKBOX) {
-
+;!(function(root, BLACKBOX) {
+  'use strict';
+  
   function BlackBoxController(model, view) {
 
     var self = this;

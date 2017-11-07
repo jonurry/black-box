@@ -1,4 +1,5 @@
-(function(root, undefined) {
+;!(function(root, undefined) {
+  'use strict';
 
   // define vector constants
   const VECTOR = {};
@@ -33,7 +34,6 @@
         columnInc >= -1 &&
         columnInc <= 1
       ) {
-        paramIsValid = true;
         this.position.row += rowInc;
         this.position.column += columnInc;
       }
