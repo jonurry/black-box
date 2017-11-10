@@ -6,75 +6,39 @@ body {
 	line-height: 23px;
 }
 
+/* flex layout */
+
+/*
 #controls {
-  /* flexbox */
   display: -webkit-box;
   display: -moz-box;
   display: -ms-flexbox;
   display: -webkit-flex;
   display: flex;
-  /* Horizontal Centering */
   -webkit-box-pack: center;
   -webkit-justify-content: center;
   -moz-box-pack: center;
   -ms-flex-pack: center;
   justify-content: center;
-  /* Vertical Centering */
   -webkit-box-align: center;
   -webkit-align-items: center;
   -moz-box-align: center;
   -ms-flex-align: center;
   align-items: center;
-
-  margin: 5vmin 0;
-  font-size: 4vmin;
-}
-
-#controls div, #controls button {
-    margin: 0 1vw;
-}
-
-#score {
-  text-align: center;
-}
-
-button, input, label {
-  margin: 5vmin 0;
-  font-size: 4vmin;
-}
-
-#blackbox {
-  position: relative;
-  width: 90vmin;
-  margin: auto;
-}
-
-h1 {
-  font-family: 'Passion One';
-	font-size: 20vmin;
-  text-align: center;
-  margin: 13vmin 0;
-}
-
-p {
-	font-size: 3vmin;
 }
 
 .grid, .cell {
-  /* flexbox */
   display: -webkit-box;
   display: -moz-box;
   display: -ms-flexbox;
   display: -webkit-flex;
   display: flex;
   flex-wrap: wrap;
-  /* Horizontal Centering */
   -webkit-box-pack: center;
   -webkit-justify-content: center;
   -moz-box-pack: center;
   -ms-flex-pack: center;
   justify-content: center;
-  /* Vertical Centering */
   -webkit-box-align: center;
   -webkit-align-items: center;
   -moz-box-align: center;
@@ -83,14 +47,299 @@ p {
 }
 
 .cell {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+*/
+
+/* Sizes – Number of cells per row for flex layout */
+
+/*
+.cell-18 {
+  flex-basis: 4vmin;
+  margin: 0.5vmin;
+  font-size: 4vmin;
+}
+
+.cell-17 {
+  flex-basis: 4.2vmin;
+  margin: 0.5vmin;
+  font-size: 4.2vmin;
+}
+
+.cell-16 {
+  flex-basis: 4.6vmin;
+  margin: 0.5vmin;
+  font-size: 4.6vmin;
+}
+
+.cell-15 {
+  flex-basis: 4.9vmin;
+  margin: .5vmin;
+  font-size: 4.9vmin;
+}
+
+.cell-14 {
+  flex-basis: 5.4vmin;
+  margin: .5vmin;
+  font-size: 5.4vmin;
+}
+
+.cell-13 {
+  flex-basis: 5.9vmin;
+  margin: .5vmin;
+  font-size: 5.9vmin;
+}
+
+.cell-12 {
+  flex-basis: 6vmin;
+  margin: .5vmin;
+  font-size: 6vmin;
+}
+
+.cell-11 {
+  flex-basis: 7vmin;
+  margin: .5vmin;
+  font-size: 7vmin;
+}
+
+.cell-10 {
+  flex-basis: 7vmin;
+  margin: 1vmin;
+  font-size: 7vmin;
+}
+
+.cell-9 {
+  flex-basis: 8vmin;
+  margin: 1vmin;
+  font-size: 9vmin;
+}
+
+.cell-8 {
+  flex-basis: 9vmin;
+  margin: 1vmin;
+  font-size: 9vmin;
+}
+*/
+
+/* Grid Layout */
+
+#blackboxapp {
+  display: grid;
+  width: 100%;
+  grid-gap: 1vmin;
+}
+
+@media all and (orientation: portrait) {
+
+  #blackboxapp {
+    grid-template-columns: 1fr;
+    grid-template-rows: 20vw 10vw 1fr 20vw 10vw;
+    grid-template-areas:
+      "header"
+      "controls"
+      "blackbox"
+      "score"
+      "footer";
+  }
+
+  #inputGridSizeContainer, #inputMarblesContainer, #buttonNewGameContainer {
+    width: 33.3333333%;
+    float: left;
+    text-align: center;
+  }
+
+  #score > div {
+    margin: 3vmin 0;
+  }
+
+}
+
+@media all and (orientation: landscape) {
+
+  #blackboxapp {
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: 20vw 1fr 1fr 10vw;
+    grid-template-areas:
+      "header header header"
+      "blackbox blackbox controls"
+      "blackbox blackbox score"
+      "footer footer footer";
+  }
+
+  #inputGridSizeContainer, #inputMarblesContainer, #buttonNewGameContainer {
+    text-align: center;
+  }
+
+  #controls > div, #score > div {
+    margin: 3vmin 0;
+  }
+
+}
+
+#header {
+  grid-area: header;
+}
+
+#controls {
+  grid-area: controls;
+}
+
+#blackbox {
+  grid-area: blackbox;
+}
+
+#score {
+  grid-area: score;
+}
+
+#footer {
+  grid-area: footer;
+}
+
+#blackbox {
+  display: grid;
+  width: 100%;
+  grid-gap: 1vmin;
+}
+
+#blackbox.grid-size-8 {
+  grid-template-columns: repeat(10, 1fr);
+  grid-template-rows: repeat(10, 1fr);
+}
+
+#blackbox.grid-size-9 {
+  grid-template-columns: repeat(11, 1fr);
+  grid-template-rows: repeat(11, 1fr);
+}
+
+#blackbox.grid-size-10 {
+  grid-template-columns: repeat(12, 1fr);
+  grid-template-rows: repeat(12, 1fr);
+}
+
+#blackbox.grid-size-11 {
+  grid-template-columns: repeat(13, 1fr);
+  grid-template-rows: repeat(13, 1fr);
+}
+
+#blackbox.grid-size-12 {
+  grid-template-columns: repeat(14, 1fr);
+  grid-template-rows: repeat(14, 1fr);
+}
+
+#blackbox.grid-size-13 {
+  grid-template-columns: repeat(15, 1fr);
+  grid-template-rows: repeat(15, 1fr);
+}
+
+#blackbox.grid-size-14 {
+  grid-template-columns: repeat(16, 1fr);
+  grid-template-rows: repeat(16, 1fr);
+}
+
+#blackbox.grid-size-15 {
+  grid-template-columns: repeat(17, 1fr);
+  grid-template-rows: repeat(17, 1fr);
+}
+
+#blackbox.grid-size-16 {
+  grid-template-columns: repeat(18, 1fr);
+  grid-template-rows: repeat(18, 1fr);
+}
+
+#blackbox.grid-size-8 > .guess-wrong:before, #blackbox.grid-size-8 > .guess-right:before {
+  font-size: 6vmin;
+  top: 33%;
+}
+
+#blackbox.grid-size-9 > .guess-wrong:before, #blackbox.grid-size-9 > .guess-right:before {
+  font-size: 6vmin;
+  top: 31%;
+}
+
+#blackbox.grid-size-10 > .guess-wrong:before, #blackbox.grid-size-10 > .guess-right:before {
+  font-size: 6vmin;
+  top: 29%;
+}
+
+#blackbox.grid-size-11 > .guess-wrong:before, #blackbox.grid-size-11 > .guess-right:before {
+  font-size: 5vmin;
+  top: 32%;
+}
+
+#blackbox.grid-size-12 > .guess-wrong:before, #blackbox.grid-size-12 > .guess-right:before {
+  font-size: 5vmin;
+  top: 28%;
+}
+
+#blackbox.grid-size-13 > .guess-wrong:before, #blackbox.grid-size-13 > .guess-right:before {
+  font-size: 4vmin;
+  top: 28%;
+}
+
+#blackbox.grid-size-14 > .guess-wrong:before, #blackbox.grid-size-14 > .guess-right:before {
+  font-size: 4vmin;
+  top: 26%;
+}
+
+#blackbox.grid-size-15 > .guess-wrong:before, #blackbox.grid-size-15 > .guess-right:before {
+  font-size: 4vmin;
+  top: 24%;
+}
+
+#blackbox.grid-size-16 > .guess-wrong:before, #blackbox.grid-size-16 > .guess-right:before {
+  font-size: 4vmin;
+  top: 22%;
+}
+
+/* general spacing, sizing and alignment */
+
+#controls {
+  width: 80%;
+  margin: auto;
+}
+
+#score {
+  text-align: center;
+  margin: auto;
+}
+
+button, input, label {
+  font-size: 3vw;
+  text-align: center;
+}
+
+/*
+#blackbox {
+  position: relative;
+  width: 90vmin;
+  margin: auto;
+}
+*/
+
+/* typography */
+
+h1 {
+  font-family: 'Passion One';
+	font-size: 16vw;
+  text-align: center;
+  margin: 10vw 0;
+}
+
+p {
+	font-size: 3vmin;
+}
+
+/* cell styling */
+
+.cell {
   background-color: #eee;
   -webkit-transition: all .5s ease-in-out;
   -moz-transition: all .5s ease-in-out;
   -o-transition: all .5s ease-in-out;
   transition: all .5s ease-in-out;
-  box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
 }
 
 .cell:after {
@@ -101,12 +350,6 @@ p {
 
 .cell:hover {
   background-color: #9e9e9e;
-  /*background-image:
-    radial-gradient(
-      circle at 60% 40%,
-      #eeeeee,
-      #9e9e9e 50%
-    );*/
   border-color: white;
   border-style: solid;
 }
@@ -154,15 +397,18 @@ p {
 .guess-wrong:before {
   content: "\2717"; /* cross */
   color: #f44336;
-  /*background-color: #f44336;*/
-  /*background-image: radial-gradient( circle at 60% 40%, #ef9a9a, #f44336 50% );*/
 }
 
 .guess-right:before {
   content: "\2713"; /* tick */
   color: #4caf50;
-  /* background-color: #4caf50; */
-  /* background-image: radial-gradient( circle at 60% 40%, #a5d6a7, #4caf50 50% ); */
+}
+
+.guess-wrong:before, .guess-right:before {
+  height: 0;
+  display: block;
+  text-align: center;
+  position: relative;
 }
 
 .ray-1 {
@@ -406,7 +652,8 @@ p {
 }
 
 
- /* svg properties */
+/* svg properties */
+
 svg {
   position: absolute;
 }
@@ -415,74 +662,4 @@ path {
   stroke-width: 0.5;
   stroke: blue;
   fill: none;
-}
-
-
-
-/* Sizes – Number of cells per row */
-
-.cell-18 {
-  flex-basis: 4vmin;
-  margin: 0.5vmin;
-  font-size: 4vmin;
-}
-
-.cell-17 {
-  flex-basis: 4.2vmin;
-  margin: 0.5vmin;
-  font-size: 4.2vmin;
-}
-
-.cell-16 {
-  flex-basis: 4.6vmin;
-  margin: 0.5vmin;
-  font-size: 4.6vmin;
-}
-
-.cell-15 {
-  flex-basis: 4.9vmin;
-  margin: .5vmin;
-  font-size: 4.9vmin;
-}
-
-.cell-14 {
-  flex-basis: 5.4vmin;
-  margin: .5vmin;
-  font-size: 5.4vmin;
-}
-
-.cell-13 {
-  flex-basis: 5.9vmin;
-  margin: .5vmin;
-  font-size: 5.9vmin;
-}
-
-.cell-12 {
-  flex-basis: 6vmin;
-  margin: .5vmin;
-  font-size: 6vmin;
-}
-
-.cell-11 {
-  flex-basis: 7vmin;
-  margin: .5vmin;
-  font-size: 7vmin;
-}
-
-.cell-10 {
-  flex-basis: 7vmin;
-  margin: 1vmin;
-  font-size: 7vmin;
-}
-
-.cell-9 {
-  flex-basis: 8vmin;
-  margin: 1vmin;
-  font-size: 9vmin;
-}
-
-.cell-8 {
-  flex-basis: 9vmin;
-  margin: 1vmin;
-  font-size: 9vmin;
 }

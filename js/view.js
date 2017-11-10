@@ -160,6 +160,7 @@
   function View() {
     this.view = this;
     this.validationHandlers();
+    this.bind('resizeBlackBox');
   };
 
   View.prototype.bind = function (event, handler) {
@@ -169,7 +170,8 @@
         buttonNewGame,
         buttonScoreGame,
         gridSize,
-        numberOfMarbles;
+        numberOfMarbles,
+        svg;
 
     if (event === 'newGame') {
       buttonNewGame = document.getElementById('buttonNewGame');
@@ -195,6 +197,20 @@
           handler(new BLACKBOX.Vector(row, column));
         }
       });
+    } else if (event === 'resizeBlackBox') {
+      blackboxDiv = document.getElementById('blackbox');
+      window.addEventListener('resize', function(event) {
+        svg = document.getElementById('svg');
+        if (svg !== null) {
+          var width, margin, top, left;
+          gridSize = parseInt(document.getElementById('inputGridSize').value);
+          margin = (blackboxDiv.offsetWidth + (2 * blackboxDiv.offsetLeft)) / (gridSize + 2);
+          width = (blackboxDiv.offsetWidth + (2 * blackboxDiv.offsetLeft)) - (2 * margin);
+          top = blackboxDiv.offsetTop + margin;
+          left = margin;
+          svg.style = 'width: ' + width + 'px; top: ' + top + 'px; left: ' + margin + 'px;'
+        }
+      });
     }
 
 	};
@@ -213,14 +229,13 @@
 
   View.prototype.renderGrid = function(grid, gridSize, gameHasFinished, allMarblesPlaced, guesses, marbles) {
     var blackboxDiv = document.getElementById('blackbox');
-    blackboxDiv.innerHTML = '';
     var upperGridBound = gridSize + 1;
+    blackboxDiv.innerHTML = '';
+    blackboxDiv.className = 'grid grid-size-' + gridSize;
     for (var row = 0; row <= upperGridBound; row++) {
       for (var column = 0; column <= upperGridBound; column++) {
         var cellDiv = document.createElement('div');
-        var classes = [
-          'cell', 'cell-' + (upperGridBound + 1)
-        ];
+        var classes = ['cell'];
         // render ray outcomes
         switch (grid[row][column]) {
           case 0:
@@ -265,12 +280,12 @@
     if (gameHasFinished) {
       // overlay the inner grid with an SVG element so that we can draw
       // the ray's path on top of the grid.
-      var width, margin;
-      width = gridSize / (gridSize + 2);
-      margin = (1 - width) / 2;
-      width *= 100;
-      margin *=100;
-      blackboxDiv.innerHTML += '<svg viewBox="0 0 100 100" style="width: ' + width + '%; top: ' + margin + '%; left: ' + margin + '%;"></svg>'
+      var width, margin, top, left;
+      margin = (blackboxDiv.offsetWidth + (2 * blackboxDiv.offsetLeft)) / (gridSize + 2);
+      width = (blackboxDiv.offsetWidth + (2 * blackboxDiv.offsetLeft)) - (2 * margin);
+      top = blackboxDiv.offsetTop + margin;
+      left = margin;
+      blackboxDiv.innerHTML += '<svg id="svg" viewBox="0 0 100 100" style="width: ' + width + 'px; top: ' + top + 'px; left: ' + margin + 'px;"></svg>'
     }
     // enable/disable score game button
     var buttonScoreGame = document.getElementById('buttonScoreGame');
