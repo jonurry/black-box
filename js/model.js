@@ -148,7 +148,6 @@ if (typeof exports === 'object') {
   function rayHasHitMarble(ray, marbles) {
     // check if ray will hit a marble on next move
     var position = {};
-    var result = false;
     position.row = ray.position.row + ray.direction.rowIncrement;
     position.column = ray.position.column + ray.direction.columnIncrement;
     return marbles.some(marble => marble.row === position.row && marble.column === position.column);
@@ -258,6 +257,7 @@ if (typeof exports === 'object') {
     // 1 point for each entry and exit location
     // 5 points for each guess in the wrong location
     // incomplete games will not be scored
+    var numberMissingGuesses;
     var score;
     if (this.allMarblesPlaced()) {
       score = 0;
@@ -296,7 +296,7 @@ if (typeof exports === 'object') {
       score = 'Your score is: ' + score;
       this.gameHasFinished = true;
     } else {
-      var numberMissingGuesses = this.numberOfMarbles - this.guesses.length;
+      numberMissingGuesses = this.numberOfMarbles - this.guesses.length;
       score = 'Make ' +
               numberMissingGuesses.toString() +
               ' more guess' +

@@ -165,13 +165,21 @@
 
   View.prototype.bind = function (event, handler) {
 
-		var self = this,
-        blackboxDiv,
-        buttonNewGame,
-        buttonScoreGame,
-        gridSize,
-        numberOfMarbles,
-        svg;
+    var blackboxDiv;
+    var buttonNewGame;
+    var buttonScoreGame;
+    var clickedElement;
+    var column;
+    var gridSize;
+    var left;
+    var margin;
+    var numberOfMarbles;
+    var row;
+    var score;
+    var svg;
+    var top;
+    var width;
+
 
     if (event === 'newGame') {
       buttonNewGame = document.getElementById('buttonNewGame');
@@ -184,25 +192,25 @@
     } else if (event === 'scoreGame') {
       buttonScoreGame = document.getElementById('buttonScoreGame');
       buttonScoreGame.addEventListener('click', function(event) {
-        var score = handler();
+        score = handler();
         document.getElementById('labelScore').innerHTML = score;
       });
     } else if (event === 'shootRay') {
       blackboxDiv = document.getElementById('blackbox');
       blackboxDiv.addEventListener('click', function(event) {
-        var clickedElement = event.target;
+        clickedElement = event.target;
         if (clickedElement.nodeName !== 'svg') {
-          var row = parseInt(clickedElement.dataset.pos.split(',')[0]);
-          var column = parseInt(clickedElement.dataset.pos.split(',')[1]);
+          row = parseInt(clickedElement.dataset.pos.split(',')[0]);
+          column = parseInt(clickedElement.dataset.pos.split(',')[1]);
           handler(new BLACKBOX.Vector(row, column));
         }
       });
     } else if (event === 'resizeBlackBox') {
-      blackboxDiv = document.getElementById('blackbox');
       window.addEventListener('resize', function(event) {
         svg = document.getElementById('svg');
         if (svg !== null) {
-          var width, margin, top, left;
+          // resize the svg element
+          blackboxDiv = document.getElementById('blackbox');
           gridSize = parseInt(document.getElementById('inputGridSize').value);
           margin = (blackboxDiv.offsetWidth + (2 * blackboxDiv.offsetLeft)) / (gridSize + 2);
           width = (blackboxDiv.offsetWidth + (2 * blackboxDiv.offsetLeft)) - (2 * margin);
@@ -216,7 +224,9 @@
 	};
 
   View.prototype.renderGridConsole = function(grid) {
+
     var gridLine;
+
     console.log();
     for (var i = 0; i < grid.length; i++) {
       gridLine = '';
@@ -228,14 +238,23 @@
   };
 
   View.prototype.renderGrid = function(grid, gridSize, gameHasFinished, allMarblesPlaced, guesses, marbles) {
+
     var blackboxDiv = document.getElementById('blackbox');
+    var buttonScoreGame;
+    var cellDiv;
+    var classes;
+    var left;
+    var margin;
+    var top;
     var upperGridBound = gridSize + 1;
+    var width;
+
     blackboxDiv.innerHTML = '';
     blackboxDiv.className = 'grid grid-size-' + gridSize;
     for (var row = 0; row <= upperGridBound; row++) {
       for (var column = 0; column <= upperGridBound; column++) {
-        var cellDiv = document.createElement('div');
-        var classes = ['cell'];
+        cellDiv = document.createElement('div');
+        classes = ['cell'];
         // render ray outcomes
         switch (grid[row][column]) {
           case 0:
@@ -280,7 +299,6 @@
     if (gameHasFinished) {
       // overlay the inner grid with an SVG element so that we can draw
       // the ray's path on top of the grid.
-      var width, margin, top, left;
       margin = (blackboxDiv.offsetWidth + (2 * blackboxDiv.offsetLeft)) / (gridSize + 2);
       width = (blackboxDiv.offsetWidth + (2 * blackboxDiv.offsetLeft)) - (2 * margin);
       top = blackboxDiv.offsetTop + margin;
@@ -288,18 +306,29 @@
       blackboxDiv.innerHTML += '<svg id="svg" viewBox="0 0 100 100" style="width: ' + width + 'px; top: ' + top + 'px; left: ' + margin + 'px;"></svg>'
     }
     // enable/disable score game button
-    var buttonScoreGame = document.getElementById('buttonScoreGame');
+    buttonScoreGame = document.getElementById('buttonScoreGame');
     buttonScoreGame.disabled = !(allMarblesPlaced && !gameHasFinished);
   };
 
   View.prototype.renderShot = function(shot, gridSize, gameHasFinished, allMarblesPlaced) {
+
     var OUTCOME = BLACKBOX.SHOOT_RAY_OUTCOME;
-    var buttonScoreGame = document.getElementById('buttonScoreGame');
-    var startPos = shot.path[0].position.row + ',' + shot.path[0].position.column;
-    var endPos = shot.path[shot.path.length - 1].position.row + ',' + shot.path[shot.path.length - 1].position.column;
-    var startElement = document.querySelectorAll("[data-pos='" + startPos + "']")[0];
-    var endElement = document.querySelectorAll("[data-pos='" + endPos + "']")[0];
+    var buttonScoreGame;
     var cssClass = '';
+    var endElement;
+    var endPos;
+    var pathElement;
+    var startElement;
+    var startPos;
+    var svgElement;
+    var svgPath;
+    var svgRay;
+
+    startPos = shot.path[0].position.row + ',' + shot.path[0].position.column;
+    endPos = shot.path[shot.path.length - 1].position.row + ',' + shot.path[shot.path.length - 1].position.column;
+    startElement = document.querySelectorAll("[data-pos='" + startPos + "']")[0];
+    endElement = document.querySelectorAll("[data-pos='" + endPos + "']")[0];
+    buttonScoreGame = document.getElementById('buttonScoreGame');
 
     switch (shot.outcome) {
       case OUTCOME.ABSORBED:
@@ -319,10 +348,6 @@
 
     // if gameHasFinished then trace path of ray
     if (gameHasFinished) {
-      var svgElement;
-      var svgPath;
-      var pathElement;
-      var svgRay;
       svgPath = createSVGPath(shot, gridSize);
       if (svgPath.length > 0) {
         svgElement = document.getElementsByTagName('svg')[0];
@@ -375,7 +400,6 @@
 
   View.prototype.validationHandlers = function() {
 
-    var view = this.view;
     var inputGridSize = document.getElementById('inputGridSize');
     var inputMarbles = document.getElementById('inputMarbles');
 
