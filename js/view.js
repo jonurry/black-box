@@ -212,11 +212,15 @@
           // resize the svg element
           blackboxDiv = document.getElementById('blackbox');
           gridSize = parseInt(document.getElementById('inputGridSize').value);
-          margin = (blackboxDiv.offsetWidth + (2 * blackboxDiv.offsetLeft)) / (gridSize + 2);
-          width = (blackboxDiv.offsetWidth + (2 * blackboxDiv.offsetLeft)) - (2 * margin);
+          // margin = (blackboxDiv.offsetWidth + (2 * blackboxDiv.offsetLeft)) / (gridSize + 2);
+          // width = (blackboxDiv.offsetWidth + (2 * blackboxDiv.offsetLeft)) - (2 * margin);
+          // top = blackboxDiv.offsetTop + margin;
+          // left = margin;
+          margin = blackboxDiv.offsetWidth / (gridSize + 2);
+          width = blackboxDiv.offsetWidth - (2 * margin);
           top = blackboxDiv.offsetTop + margin;
-          left = margin;
-          svg.style = 'width: ' + width + 'px; top: ' + top + 'px; left: ' + margin + 'px;'
+          left = margin + blackboxDiv.offsetLeft;
+          svg.style = 'width: ' + width + 'px; top: ' + top + 'px; left: ' + left + 'px;'
         }
       });
     }
