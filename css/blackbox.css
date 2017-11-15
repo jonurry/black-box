@@ -31,10 +31,19 @@ body {
 #blackbox {
   display: flex;
   flex-wrap: wrap;
+  max-width: 100vmin;
 }
 
 .grid .cell {
   margin: 0.25%;
+}
+
+.grid-size-6 .cell {
+  width: 12%;
+}
+
+.grid-size-7 .cell {
+  width: 10.6111%;
 }
 
 .grid-size-8 .cell {
@@ -123,6 +132,7 @@ body {
 
     #blackbox {
       grid-area: blackbox;
+      align-self: center;
     }
 
     #score {
@@ -133,6 +143,16 @@ body {
       grid-area: footer;
     }
 
+  }
+
+  #blackbox.grid-size-6 {
+    grid-template-columns: repeat(8, 1fr);
+    grid-template-rows: repeat(8, 1fr);
+  }
+
+  #blackbox.grid-size-7 {
+    grid-template-columns: repeat(9, 1fr);
+    grid-template-rows: repeat(9, 1fr);
   }
 
   #blackbox.grid-size-8 {
@@ -180,51 +200,6 @@ body {
     grid-template-rows: repeat(18, 1fr);
   }
 
-  #blackbox.grid-size-8 > .guess-wrong:before, #blackbox.grid-size-8 > .guess-right:before {
-    font-size: 6vmin;
-    top: 33%;
-  }
-
-  #blackbox.grid-size-9 > .guess-wrong:before, #blackbox.grid-size-9 > .guess-right:before {
-    font-size: 6vmin;
-    top: 31%;
-  }
-
-  #blackbox.grid-size-10 > .guess-wrong:before, #blackbox.grid-size-10 > .guess-right:before {
-    font-size: 6vmin;
-    top: 29%;
-  }
-
-  #blackbox.grid-size-11 > .guess-wrong:before, #blackbox.grid-size-11 > .guess-right:before {
-    font-size: 5vmin;
-    top: 32%;
-  }
-
-  #blackbox.grid-size-12 > .guess-wrong:before, #blackbox.grid-size-12 > .guess-right:before {
-    font-size: 5vmin;
-    top: 28%;
-  }
-
-  #blackbox.grid-size-13 > .guess-wrong:before, #blackbox.grid-size-13 > .guess-right:before {
-    font-size: 4vmin;
-    top: 28%;
-  }
-
-  #blackbox.grid-size-14 > .guess-wrong:before, #blackbox.grid-size-14 > .guess-right:before {
-    font-size: 4vmin;
-    top: 26%;
-  }
-
-  #blackbox.grid-size-15 > .guess-wrong:before, #blackbox.grid-size-15 > .guess-right:before {
-    font-size: 4vmin;
-    top: 24%;
-  }
-
-  #blackbox.grid-size-16 > .guess-wrong:before, #blackbox.grid-size-16 > .guess-right:before {
-    font-size: 4vmin;
-    top: 22%;
-  }
-
 }
 
 /* typography */
@@ -240,6 +215,8 @@ p {
 
 button, input, label {
   font-size: 2rem;
+  text-align: center;
+  max-width: 12rem;
 }
 
 /* cell styling */
@@ -259,7 +236,7 @@ button, input, label {
 }
 
 .cell:hover {
-  background-color: #9e9e9e;
+  background-color: #e0e0e0;
   border-color: white;
   border-style: solid;
 }
@@ -290,34 +267,38 @@ button, input, label {
       #fff,
       #e0e0e0 75%
     );
-  /*border: .5vmin solid #eeeeee;*/
 }
 
-.guess, .not-found {
-  border-radius: 50%;
-  background-color: #9e9e9e;
+.guess {
+  background-color: inherit;
   background-image:
     radial-gradient(
-      circle at 60% 40%,
-      #eeeeee,
-      #9e9e9e 50%
-    );
+        circle at 60% 40%,
+        #eeeeee 0%,
+        #9e9e9e 40%,
+        transparent 40%),
+    radial-gradient(
+      circle,
+      #9E9E9F 67%,
+      transparent 70%)
 }
 
-.guess-wrong:before {
-  content: "\2717"; /* cross */
-  color: #f44336;
+.guess-right {
+  background-color: #d5e2c6;
+  background-image:
+    radial-gradient(
+        circle at 60% 40%,
+        #eeeeee 0%,
+        #9e9e9e 40%,
+        transparent 40%),
+    radial-gradient(
+      circle,
+      #9E9E9F 67%,
+      transparent 70%)
 }
 
-.guess-right:before {
-  content: "\2713"; /* tick */
-  color: #4caf50;
-}
-
-.guess-wrong:before, .guess-right:before {
-  height: 0;
-  display: block;
-  position: relative;
+.guess-wrong {
+  background-color: #f8d1d0;
 }
 
 .ray-1 {
@@ -569,6 +550,6 @@ svg {
 
 path {
   stroke-width: 0.5;
-  stroke: blue;
+  stroke: dodgerblue;
   fill: none;
 }

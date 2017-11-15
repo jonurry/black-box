@@ -157,6 +157,30 @@
 
   };
 
+  function resizeSVG() {
+
+    var blackboxDiv;
+    var gridSize;
+    var left;
+    var margin;
+    var svg;
+    var top;
+    var width;
+
+    svg = document.getElementById('svg');
+    if (svg !== null) {
+      // resize the svg element
+      blackboxDiv = document.getElementById('blackbox');
+      gridSize = parseInt(document.getElementById('inputGridSize').value);
+      margin = blackboxDiv.offsetWidth / (gridSize + 2);
+      width = blackboxDiv.offsetWidth - (2 * margin);
+      top = blackboxDiv.offsetTop + margin;
+      left = margin + blackboxDiv.offsetLeft;
+      svg.style = 'width: ' + width + 'px; top: ' + top + 'px; left: ' + left + 'px;'
+    }
+
+  };
+
   function View() {
     this.view = this;
     this.validationHandlers();
@@ -206,23 +230,7 @@
         }
       });
     } else if (event === 'resizeBlackBox') {
-      window.addEventListener('resize', function(event) {
-        svg = document.getElementById('svg');
-        if (svg !== null) {
-          // resize the svg element
-          blackboxDiv = document.getElementById('blackbox');
-          gridSize = parseInt(document.getElementById('inputGridSize').value);
-          // margin = (blackboxDiv.offsetWidth + (2 * blackboxDiv.offsetLeft)) / (gridSize + 2);
-          // width = (blackboxDiv.offsetWidth + (2 * blackboxDiv.offsetLeft)) - (2 * margin);
-          // top = blackboxDiv.offsetTop + margin;
-          // left = margin;
-          margin = blackboxDiv.offsetWidth / (gridSize + 2);
-          width = blackboxDiv.offsetWidth - (2 * margin);
-          top = blackboxDiv.offsetTop + margin;
-          left = margin + blackboxDiv.offsetLeft;
-          svg.style = 'width: ' + width + 'px; top: ' + top + 'px; left: ' + left + 'px;'
-        }
-      });
+      window.addEventListener('resize', resizeSVG);
     }
 
 	};
@@ -247,11 +255,7 @@
     var buttonScoreGame;
     var cellDiv;
     var classes;
-    var left;
-    var margin;
-    var top;
     var upperGridBound = gridSize + 1;
-    var width;
 
     blackboxDiv.innerHTML = '';
     blackboxDiv.className = 'grid grid-size-' + gridSize;
@@ -303,11 +307,8 @@
     if (gameHasFinished) {
       // overlay the inner grid with an SVG element so that we can draw
       // the ray's path on top of the grid.
-      margin = (blackboxDiv.offsetWidth + (2 * blackboxDiv.offsetLeft)) / (gridSize + 2);
-      width = (blackboxDiv.offsetWidth + (2 * blackboxDiv.offsetLeft)) - (2 * margin);
-      top = blackboxDiv.offsetTop + margin;
-      left = margin;
-      blackboxDiv.innerHTML += '<svg id="svg" viewBox="0 0 100 100" style="width: ' + width + 'px; top: ' + top + 'px; left: ' + margin + 'px;"></svg>'
+      blackboxDiv.innerHTML += '<svg id="svg" viewBox="0 0 100 100"></svg>'
+      window.setTimeout(resizeSVG, 0);
     }
     // enable/disable score game button
     buttonScoreGame = document.getElementById('buttonScoreGame');
