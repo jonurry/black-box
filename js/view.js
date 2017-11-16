@@ -176,7 +176,7 @@
       width = blackboxDiv.offsetWidth - (2 * margin);
       top = blackboxDiv.offsetTop + margin;
       left = margin + blackboxDiv.offsetLeft;
-      svg.style = 'width: ' + width + 'px; top: ' + top + 'px; left: ' + left + 'px;'
+      svg.style.cssText = 'width: ' + width + 'px; top: ' + top + 'px; left: ' + left + 'px;'
     }
 
   };
@@ -371,11 +371,11 @@
             }
             break;
           case OUTCOME.PROPOGATED:
-            svgRay = svgElement.getElementsByClassName(cssClass);
-            if (svgRay.length === 0) {
+            svgRay = svgElement.querySelectorAll('path.' + cssClass)[0];
+            if (svgRay === undefined) {
               svgElement.innerHTML += pathElement.outerHTML;
             } else {
-              svgRay[0].remove();
+              svgRay.remove();
             }
             break;
         }

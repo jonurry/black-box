@@ -237,8 +237,8 @@ button, input, label {
 
 .cell:hover {
   background-color: #e0e0e0;
-  border-color: white;
-  border-style: solid;
+  /*border-color: white;
+  border-style: solid;*/
 }
 
 .corner {
