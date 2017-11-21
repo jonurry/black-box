@@ -258,7 +258,7 @@
     var upperGridBound = gridSize + 1;
 
     blackboxDiv.innerHTML = '';
-    blackboxDiv.className = 'grid grid-size-' + gridSize;
+    blackboxDiv.className = 'blackbox grid grid-size-' + gridSize;
     for (var row = 0; row <= upperGridBound; row++) {
       for (var column = 0; column <= upperGridBound; column++) {
         cellDiv = document.createElement('div');

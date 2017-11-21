@@ -1,0 +1,44 @@
+/* reset float layout */
+
+@media (orientation: landscape) {
+  .controls,
+  .score {
+    float: none;
+    width: auto;
+  }
+}
+
+/* Flex Layout - fallback for browsers that don't support grid */
+
+.main-container {
+  display: flex;
+  flex-wrap: wrap;
+  margin: auto;
+  max-width: 200vmin;
+}
+
+.controls,
+.score {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  justify-content: center;
+  margin: 1rem auto;
+  padding: 0 2rem;
+}
+
+.controls > div,
+.score > div {
+  margin: 0.5rem auto;
+}
+
+.blackbox-container {
+  flex-basis: 100vmin;
+  flex-grow: 1;
+}
+
+.blackbox {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}

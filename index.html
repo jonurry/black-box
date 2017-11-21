@@ -4,39 +4,47 @@
 		<meta charset="utf-8">
 		<title>Black Box</title>
 		<link type="text/css" rel="stylesheet" href="css/typography.css">
+		<link type="text/css" rel="stylesheet" href="css/layout-float.css">
+		<link type="text/css" rel="stylesheet" href="css/layout-flex.css">
+		<!-- <link type="text/css" rel="stylesheet" href="css/layout-grid.css"> -->
 		<link type="text/css" rel="stylesheet" href="css/blackbox.css">
 		<link type="text/css" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato|Passion+One">
 	</head>
 	<body>
-		<section id="blackboxapp">
-			<header id="header">
+		<section class="blackboxapp">
+			<header class="header">
 				<h1>Black Box</h1>
 			</header>
-			<div id="controls">
-				<div id="inputGridSizeContainer">
-					<label for="inputGridSize">Grid Size: </label>
-					<input id="inputGridSize" type="number" min="6" max="16" value="8">
+			<div class="main-container">
+				<div class="controls">
+					<div>
+						<label for="inputGridSize">Grid Size: </label>
+						<input id="inputGridSize" type="number" min="6" max="16" value="8">
+					</div>
+					<div>
+						<label for="inputMarbles">Marbles: </label>
+						<input id="inputMarbles" type="number" min="4" max="16" value="4">
+					</div>
+					<div class="buttonNewGameContainer">
+						<button id="buttonNewGame" autofocus>New Game</button>
+					</div>
 				</div>
-				<div id="inputMarblesContainer">
-					<label for="inputMarbles">Marbles: </label>
-					<input id="inputMarbles" type="number" min="4" max="16" value="4">
+				<div class="blackbox-container">
+					<div id="blackbox" class="blackbox grid"></div>
 				</div>
-				<div id="buttonNewGameContainer">
-					<button id="buttonNewGame" autofocus>New Game</button>
+				<div class="score">
+					<div>
+						<button id="buttonScoreGame">Score Game</button>
+					</div>
+					<div>
+						<label id="labelScore"></label>
+					</div>
 				</div>
 			</div>
-			<div id="blackbox" class="grid"></div>
-			<div id="score">
-				<div>
-					<button id="buttonScoreGame">Score Game</button>
-				</div>
-				<div>
-					<label id="labelScore"></label>
-				</div>
-			</div>
-			<footer id="footer">
-				<p>Black Box</p>
-				<p>Created by <a href="http://jon.urry.me">Jon Urry</a></p>
+			<footer class="footer">
+				<p><strong>Black Box</strong> - a puzzle game originally created by Eric Solomon and published by Waddingtons and Parker.</p>
+				<p>Rules: <a href="https://en.wikipedia.org/wiki/Black_Box_(game)">Wikipedia</a></p>
+				<p>This version is created by <a href="http://jon.urry.me">Jon Urry</a></p>
 			</footer>
 		</section>
 		<script src="js/utility.js"></script>
