@@ -7,7 +7,7 @@
   width: inherit;
 }
 
-@media all and (orientation:landscape) {
+@media all and (orientation: landscape) {
   /* Use grids */
   .blackboxapp {
     display: grid;
@@ -97,5 +97,5 @@
   grid-template-rows: repeat(18, 1fr);
 }
 
-@supports (display:grid) {
+@supports (display: grid) {
 }

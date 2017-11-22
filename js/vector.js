@@ -1,26 +1,24 @@
-;!(function(root, undefined) {
-  'use strict';
+!(function(root, undefined) {
+  "use strict";
 
   // define vector constants
   const VECTOR = {};
   VECTOR.DIRECTION = {
-    UP: {rowIncrement: -1, columnIncrement: 0},
-    DOWN: {rowIncrement: 1, columnIncrement: 0},
-    LEFT: {rowIncrement: 0, columnIncrement: -1},
-    RIGHT: {rowIncrement: 0, columnIncrement: 1},
-    NONE: {rowIncrement: 0, columnIncrement: 0}
+    UP: { rowIncrement: -1, columnIncrement: 0 },
+    DOWN: { rowIncrement: 1, columnIncrement: 0 },
+    LEFT: { rowIncrement: 0, columnIncrement: -1 },
+    RIGHT: { rowIncrement: 0, columnIncrement: 1 },
+    NONE: { rowIncrement: 0, columnIncrement: 0 }
   };
 
   function Vector(row, column, direction) {
-
     if (direction !== undefined) {
       this.direction = direction;
     } else {
       this.direction = VECTOR.DIRECTION.NONE;
     }
-    this.position = {row: parseInt(row, 10), column: parseInt(column, 10)};
-
-  };
+    this.position = { row: parseInt(row, 10), column: parseInt(column, 10) };
+  }
 
   Vector.prototype.move = function() {
     try {
@@ -38,7 +36,7 @@
         this.position.column += columnInc;
       }
     } catch (e) {
-      throw("The vector direction was not a valid direction.");
+      throw "The vector direction was not a valid direction.";
     }
   };
 
@@ -48,11 +46,11 @@
   };
 
   // Export to root (window in browser)
-  if (typeof define === 'function' && define.amd) {
+  if (typeof define === "function" && define.amd) {
     // requireJS
     // define(VECTOR);
     // define(Vector);
-  } else if (typeof exports === 'object') {
+  } else if (typeof exports === "object") {
     // Node.js
     module.exports.VECTOR = VECTOR;
     module.exports.Vector = Vector;
@@ -61,7 +59,6 @@
     root = root || {};
     root.BLACKBOX = root.BLACKBOX || {};
     root.BLACKBOX.VECTOR = VECTOR;
-  	root.BLACKBOX.Vector = Vector;
+    root.BLACKBOX.Vector = Vector;
   }
-
 })(this);

@@ -1,5 +1,5 @@
 .blackbox {
-  height: 100vmin;
+  height: 100%;
 }
 
 .controls,
@@ -66,15 +66,13 @@
 }
 
 @media all and (orientation: landscape) {
-
   .blackbox-container {
-      float: left;
-      height: auto;
-      width: 66.6666666667%;
+    float: left;
+    height: auto;
+    width: 66.6666666667%;
   }
 
   .blackbox {
-    height: auto;
     margin: 0 auto;
     max-width: 100vmin;
   }
@@ -88,5 +86,4 @@
   .controls {
     margin: 10vh 0;
   }
-
 }
