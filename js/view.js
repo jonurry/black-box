@@ -1,6 +1,8 @@
 !(function(root, BLACKBOX, undefined) {
   "use strict";
 
+  var intervalID;
+
   // the following code is adapted from Jake Archibald's article on animating SVG paths
   // https://jakearchibald.com/2013/animated-line-drawing-svg/
   // begin: SVG Animate
@@ -17,36 +19,43 @@
   function animateAllRays(draw) {
     if (!supportsInlineSvg) return;
 
-    function toArray(arr) {
-      return Array.prototype.slice.call(arr);
+    var begin;
+    var durations;
+    var paths;
+    var svg;
+
+    svg = document.getElementById("svg");
+    if (svg !== null) {
+      paths = toArray(svg.querySelectorAll("path"));
+      if (paths.length > 0) {
+        durations = paths.map(function(path) {
+          var length = path.getTotalLength();
+          path.style.strokeDasharray = length + " " + length;
+          path.style.strokeDashoffset = length;
+          path.style.visibility = "visible";
+          return Math.pow(length, 0.5) * 0.03;
+        });
+
+        // triggering a reflow so styles are calculated in their
+        // start position, so they animate from here
+        begin = 0;
+        paths[0].getBoundingClientRect();
+
+        if (draw) {
+          paths.forEach(function(path, i) {
+            path.style.transition = path.style.WebkitTransition =
+              "stroke-dashoffset " +
+              durations[i] +
+              "s " +
+              begin +
+              "s ease-in-out";
+            path.style.strokeDashoffset = "0";
+            begin += durations[i] + 0.1;
+          });
+        }
+      }
     }
-
-    var svg = document.getElementById("svg");
-    var paths = toArray(svg.querySelectorAll("path"));
-    var begin = 0;
-
-    var durations = paths.map(function(path) {
-      var length = path.getTotalLength();
-      path.style.strokeDasharray = length + " " + length;
-      path.style.strokeDashoffset = length;
-      path.style.visibility = "visible";
-      return Math.pow(length, 0.5) * 0.03;
-    });
-
-    // triggering a reflow so styles are calculated in their
-    // start position, so they animate from here
-    paths[0].getBoundingClientRect();
-
-    if (draw) {
-      paths.forEach(function(path, i) {
-        path.style.transition = path.style.WebkitTransition =
-          "stroke-dashoffset " + durations[i] + "s " + begin + "s ease-in-out";
-        path.style.strokeDashoffset = "0";
-        begin += durations[i] + 0.1;
-      });
-    }
-
-    setTimeout(animateAllRays, 10000, !draw);
+    intervalID = setTimeout(animateAllRays, 10000, !draw);
   }
   // end: SVG Animate
 
@@ -302,6 +311,10 @@
     }
   }
 
+  function toArray(arr) {
+    return Array.prototype.slice.call(arr);
+  }
+
   function View() {
     this.view = this;
     this.validationHandlers();
@@ -315,30 +328,38 @@
     var clickedElement;
     var column;
     var gridSize;
-    var left;
-    var margin;
     var numberOfMarbles;
+    var animateRays;
     var row;
     var score;
-    var svg;
-    var top;
-    var width;
 
-    if (event === "newGame") {
+    if (event === "animateRays") {
+      animateRays = document.getElementById("radioAnimateRaysYes");
+      animateRays.addEventListener("change", function() {
+        handler();
+      });
+      animateRays = document.getElementById("radioAnimateRaysNo");
+      animateRays.addEventListener("change", function() {
+        handler();
+      });
+    } else if (event === "newGame") {
       buttonNewGame = document.getElementById("buttonNewGame");
-      buttonNewGame.addEventListener("click", function(event) {
+      buttonNewGame.addEventListener("click", function() {
         gridSize = parseInt(document.getElementById("inputGridSize").value);
         numberOfMarbles = parseInt(
           document.getElementById("inputMarbles").value
         );
         handler(gridSize, numberOfMarbles);
-        document.getElementById("labelScore").innerHTML = "";
+        document.getElementById("score").style.display = "none";
+        document.getElementById("animateRays").style.display = "none";
       });
     } else if (event === "scoreGame") {
       buttonScoreGame = document.getElementById("buttonScoreGame");
-      buttonScoreGame.addEventListener("click", function(event) {
+      buttonScoreGame.addEventListener("click", function() {
         score = handler();
-        document.getElementById("labelScore").innerHTML = score;
+        document.getElementById("scoreValue").innerHTML = score;
+        document.getElementById("score").style.display = "block";
+        document.getElementById("animateRays").style.display = "block";
       });
     } else if (event === "shootRay") {
       blackboxDiv = document.getElementById("blackbox");
@@ -357,30 +378,48 @@
 
   View.prototype.renderAndAnimateAllRays = function(allShots, gridSize) {
     var OUTCOME = BLACKBOX.SHOOT_RAY_OUTCOME;
+    var animateRays;
+    var paths;
+    var svg;
     var svgPath;
-    allShots.forEach(function(shot) {
-      var cssClass;
-      switch (shot.outcome) {
-        case OUTCOME.ABSORBED:
-          cssClass = "hit";
-          break;
-        case OUTCOME.MARBLE_PLACED:
-        case OUTCOME.MARBLE_REMOVED:
-          cssClass = "guess";
-          break;
-        case OUTCOME.PROPOGATED:
-          cssClass = "ray-" + shot.rayNumber;
-          break;
-        case OUTCOME.REFLECTED:
-          cssClass = "reflect";
-          break;
+    animateRays =
+      document.querySelector('input[name="switch"]:checked').value === "on"
+        ? true
+        : false;
+    if (animateRays) {
+      svg = document.getElementById("svg");
+      if (svg !== null) {
+        paths = toArray(svg.querySelectorAll("path"));
+        if (paths.length === 0) {
+          allShots.forEach(function(shot) {
+            var cssClass;
+            switch (shot.outcome) {
+              case OUTCOME.ABSORBED:
+                cssClass = "hit";
+                break;
+              case OUTCOME.MARBLE_PLACED:
+              case OUTCOME.MARBLE_REMOVED:
+                cssClass = "guess";
+                break;
+              case OUTCOME.PROPOGATED:
+                cssClass = "ray-" + shot.rayNumber;
+                break;
+              case OUTCOME.REFLECTED:
+                cssClass = "reflect";
+                break;
+            }
+            svgPath = createSVGPath(shot, gridSize);
+            if (svgPath.length > 0) {
+              renderSVGPath(svgPath, shot.outcome, cssClass, false);
+            }
+          });
+        }
       }
-      svgPath = createSVGPath(shot, gridSize);
-      if (svgPath.length > 0) {
-        renderSVGPath(svgPath, shot.outcome, cssClass, false);
-      }
-    });
-    setTimeout(animateAllRays, 3000, true);
+      animateAllRays(true);
+    } else {
+      clearTimeout(intervalID);
+    }
+    return animateRays;
   };
 
   View.prototype.renderGridConsole = function(grid) {

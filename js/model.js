@@ -14,7 +14,7 @@ if (typeof exports === "object") {
   }
 }
 
-(function(root, BLACKBOX, undefined) {
+(function(root, BLACKBOX) {
   "use strict";
 
   // define black box constants
@@ -331,7 +331,6 @@ if (typeof exports === "object") {
           }
         }
       }
-      score = "Your score is: " + score;
       this.gameHasFinished = true;
     } else {
       numberMissingGuesses = this.numberOfMarbles - this.guesses.length;

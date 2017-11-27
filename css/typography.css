@@ -17,9 +17,7 @@ body,
 }
 h1,
 .h1 {
-  font-family: "Passion One";
-  font-size: 8rem;
-  /*font-size: 4.2222222rem;*/
+  font-size: 4.2222222rem;
   line-height: 5.1111111rem;
   margin-bottom: 2.5555556rem;
   margin-top: 1.2777778rem;
@@ -96,11 +94,4 @@ sup {
 }
 sub {
   bottom: -0.25em;
-}
-button,
-input,
-label {
-  font-size: 2rem;
-  max-width: 12rem;
-  text-align: center;
 }

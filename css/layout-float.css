@@ -1,3 +1,7 @@
+.blackbox-container {
+  height: 100vmin;
+}
+
 .blackbox {
   height: 100%;
 }
@@ -84,6 +88,6 @@
   }
 
   .controls {
-    margin: 10vh 0;
+    margin-bottom: 10vh;
   }
 }

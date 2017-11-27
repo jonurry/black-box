@@ -1,27 +1,39 @@
-!(function(root, BLACKBOX) {
+!(function(root) {
   "use strict";
 
   function shootAllRays(self) {
-    self.view.renderAndAnimateAllRays(self.model.turns, self.model.gridSize);
+    self.animateRays = self.view.renderAndAnimateAllRays(
+      self.model.turns,
+      self.model.gridSize
+    );
   }
 
   function BlackBoxController(model, view) {
     var self = this;
-    self.model = model;
-    self.view = view;
+    this.animateRays = true;
+    this.model = model;
+    this.view = view;
 
-    self.view.bind("newGame", function(gridSize = 8, numberOfMarbles = 4) {
+    this.view.bind("animateRays", function() {
+      self.onClickAnimateRays();
+    });
+
+    this.view.bind("newGame", function(gridSize = 8, numberOfMarbles = 4) {
       self.onClickNewGame(gridSize, numberOfMarbles);
     });
 
-    self.view.bind("scoreGame", function() {
+    this.view.bind("scoreGame", function() {
       return self.onClickScoreGame();
     });
 
-    self.view.bind("shootRay", function(ray) {
+    this.view.bind("shootRay", function(ray) {
       return self.onClickShootRay(ray);
     });
   }
+
+  BlackBoxController.prototype.onClickAnimateRays = function() {
+    shootAllRays(this);
+  };
 
   BlackBoxController.prototype.onClickNewGame = function(
     gridSize = 8,
@@ -32,10 +44,11 @@
   };
 
   BlackBoxController.prototype.onClickScoreGame = function() {
-    var intervalID;
     var score = this.model.scoreGame();
     this.renderViews();
-    intervalID = setTimeout(shootAllRays, 1000, this);
+    if (this.animateRays) {
+      setTimeout(shootAllRays, 3000, this);
+    }
     return score;
   };
 
@@ -78,4 +91,4 @@
     root.BLACKBOX = root.BLACKBOX || {};
     root.BLACKBOX.Controller = BlackBoxController;
   }
-})(this, this.BLACKBOX);
+})(this);

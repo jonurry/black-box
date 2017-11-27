@@ -1,3 +1,31 @@
+/* typogaphical tweeks */
+
+h1,
+.h1 {
+  font-family: "Passion One";
+  font-size: 8rem;
+}
+
+button,
+input,
+label {
+  font-size: 2rem;
+  max-width: 12rem;
+  text-align: center;
+}
+
+.score span {
+  font-size: 2rem;
+}
+
+.score .score-value {
+  color: chocolate;
+  font-size: 4rem;
+  font-weight: bolder;
+}
+
+/* other styling */
+
 .cell {
   -webkit-transition: all 0.5s ease-in-out;
   -moz-transition: all 0.5s ease-in-out;
