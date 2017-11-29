@@ -7,59 +7,56 @@
 //eval(fs.readFileSync('./js/vector.js').toString());
 //eval(fs.readFileSync('./js/model.js').toString());
 
-var vectorModule = require('../js/vector.js');
+var vectorModule = require("../js/vector.js");
 var Vector = vectorModule.Vector;
 const VECTOR = vectorModule.VECTOR;
 
-var modelModule = require('../js/model.js');
+var modelModule = require("../js/model.js");
 //var BLACKBOX = modelModule.BLACKBOX;
 const SHOOT_RAY_OUTCOME = modelModule.SHOOT_RAY_OUTCOME;
 var BlackBoxModel = modelModule.BlackBoxModel;
-if (process.env.NODE_ENV === 'test') {
+if (process.env.NODE_ENV === "test") {
   var privateBlackBox = modelModule.BlackBoxModel._private;
 }
 
-describe('It should create and initialise the Black Box.', () => {
-
-  test('It should create a new blackbox with default dimensions and marbles.', () => {
+describe("It should create and initialise the Black Box.", () => {
+  test("It should create a new blackbox with default dimensions and marbles.", () => {
     var blackbox = new BlackBoxModel();
     expect(blackbox.gridSize).toBe(8);
     expect(blackbox.numberOfMarbles).toBe(4);
   });
 
-  test('It should create a new blackbox with specified dimensions and marbles.', () => {
+  test("It should create a new blackbox with specified dimensions and marbles.", () => {
     var blackbox = new BlackBoxModel(16, 10);
     expect(blackbox.gridSize).toBe(16);
     expect(blackbox.numberOfMarbles).toBe(10);
   });
 
-  test('It should create the grid.', () => {
-    var blackbox = new BlackBoxModel( 8, 4, true);
+  test("It should create the grid.", () => {
+    var blackbox = new BlackBoxModel(8, 4, true);
     expect(blackbox.grid).toHaveLength(10);
     for (var i = 0; i < blackbox.grid.length; i++) {
       expect(blackbox.grid[i]).toHaveLength(10);
     }
   });
 
-  test('It should initialise the grid by populating the entire grid (incl. rim and corners) with zeros.', () => {
-    var blackbox = new BlackBoxModel( 8, 4, true);
+  test("It should initialise the grid by populating the entire grid (incl. rim and corners) with zeros.", () => {
+    var blackbox = new BlackBoxModel(8, 4, true);
     for (var i = 0; i < blackbox.grid.length; i++) {
       for (var j = 0; j < blackbox.grid[i].length; j++) {
         expect(blackbox.grid[i][j]).toBe(0);
       }
     }
   });
-
 });
 
-describe('It should place the marbles in valid locations.', () => {
-
-  test('It should place the correct number of marbles on the grid.', () => {
-    var blackbox = new BlackBoxModel( 8, 4, true);
+describe("It should place the marbles in valid locations.", () => {
+  test("It should place the correct number of marbles on the grid.", () => {
+    var blackbox = new BlackBoxModel(8, 4, true);
     expect(blackbox.marbles.length).toBe(4);
   });
 
-  test('It should not place marbles on the rim.', () => {
+  test("It should not place marbles on the rim.", () => {
     var blackbox = new BlackBoxModel();
     // try 100 new games, none should have marbles on the rim
     for (var numberOfGames = 0; numberOfGames < 100; numberOfGames++) {
@@ -74,7 +71,7 @@ describe('It should place the marbles in valid locations.', () => {
     }
   });
 
-  test('It should place marbles randomly on the grid.', () => {
+  test("It should place marbles randomly on the grid.", () => {
     var numberOfMatchedMarbles = 0;
     var blackbox1 = new BlackBoxModel(8, 4, true);
     // create a second black box and expect its marbles not to be in the same position as the first black box
@@ -88,12 +85,10 @@ describe('It should place the marbles in valid locations.', () => {
     }
     expect(numberOfMatchedMarbles).not.toBe(4);
   });
-
 });
 
-describe('It should handle guesses as to the locations of the marbles in the Black Box.', () => {
-
-  test('It should accept guesses.', () => {
+describe("It should handle guesses as to the locations of the marbles in the Black Box.", () => {
+  test("It should accept guesses.", () => {
     var blackbox = new BlackBoxModel(8, 4);
     // Create 2 Vectors and add them as guesses
     var guess1 = new Vector(3, 4);
@@ -105,7 +100,7 @@ describe('It should handle guesses as to the locations of the marbles in the Bla
     expect(blackbox.guesses[1]).toEqual(guess2.position);
   });
 
-  test('It should accept no more guesses than there are marbles in the game.', () => {
+  test("It should accept no more guesses than there are marbles in the game.", () => {
     var blackbox = new BlackBoxModel(8, 4);
     var guess1 = new Vector(1, 1);
     blackbox.guess(guess1);
@@ -126,7 +121,7 @@ describe('It should handle guesses as to the locations of the marbles in the Bla
     expect(blackbox.guesses[3]).toEqual(guess4.position);
   });
 
-  test('It should treat a duplicate guess as a withdrawal of that guess.', () => {
+  test("It should treat a duplicate guess as a withdrawal of that guess.", () => {
     var blackbox = new BlackBoxModel(8, 4);
     // first 3 guesses are different so all are added in order
     var guess1 = new Vector(1, 1);
@@ -160,41 +155,68 @@ describe('It should handle guesses as to the locations of the marbles in the Bla
     blackbox.guess(guess6);
     expect(blackbox.guesses.length).toBe(0);
   });
-
 });
 
-describe('It should ignore rays shot from the corners or from outside.', () => {
-
-  test('It should ignore shots from the corners.', () => {
+describe("It should ignore rays shot from the corners or from outside.", () => {
+  test("It should ignore shots from the corners.", () => {
     var blackbox = new BlackBoxModel(8, 4, true);
-    expect(blackbox.shootRay(new Vector(0, 0, VECTOR.DIRECTION.DOWN)).outcome).toBe(SHOOT_RAY_OUTCOME.CORNER);
-    expect(blackbox.shootRay(new Vector(0, 9, VECTOR.DIRECTION.LEFT)).outcome).toBe(SHOOT_RAY_OUTCOME.CORNER);
-    expect(blackbox.shootRay(new Vector(9, 9, VECTOR.DIRECTION.UP)).outcome).toBe(SHOOT_RAY_OUTCOME.CORNER);
-    expect(blackbox.shootRay(new Vector(9, 0, VECTOR.DIRECTION.RIGHT)).outcome).toBe(SHOOT_RAY_OUTCOME.CORNER);
+    expect(
+      blackbox.shootRay(new Vector(0, 0, VECTOR.DIRECTION.DOWN)).outcome
+    ).toBe(SHOOT_RAY_OUTCOME.CORNER);
+    expect(
+      blackbox.shootRay(new Vector(0, 9, VECTOR.DIRECTION.LEFT)).outcome
+    ).toBe(SHOOT_RAY_OUTCOME.CORNER);
+    expect(
+      blackbox.shootRay(new Vector(9, 9, VECTOR.DIRECTION.UP)).outcome
+    ).toBe(SHOOT_RAY_OUTCOME.CORNER);
+    expect(
+      blackbox.shootRay(new Vector(9, 0, VECTOR.DIRECTION.RIGHT)).outcome
+    ).toBe(SHOOT_RAY_OUTCOME.CORNER);
   });
 
-  test('It should ignore shots from ouside the black box.', () => {
+  test("It should ignore shots from ouside the black box.", () => {
     var blackbox = new BlackBoxModel(8, 4, true);
-    expect(blackbox.shootRay(new Vector(-1, -1)).outcome).toBe(SHOOT_RAY_OUTCOME.OUTSIDE);
-    expect(blackbox.shootRay(new Vector(-1, 5)).outcome).toBe(SHOOT_RAY_OUTCOME.OUTSIDE);
-    expect(blackbox.shootRay(new Vector(-1, 10)).outcome).toBe(SHOOT_RAY_OUTCOME.OUTSIDE);
-    expect(blackbox.shootRay(new Vector(10, -1)).outcome).toBe(SHOOT_RAY_OUTCOME.OUTSIDE);
-    expect(blackbox.shootRay(new Vector(10, 5)).outcome).toBe(SHOOT_RAY_OUTCOME.OUTSIDE);
-    expect(blackbox.shootRay(new Vector(10, 10)).outcome).toBe(SHOOT_RAY_OUTCOME.OUTSIDE);
-    expect(blackbox.shootRay(new Vector(-1, -1)).outcome).toBe(SHOOT_RAY_OUTCOME.OUTSIDE);
-    expect(blackbox.shootRay(new Vector(5, -1)).outcome).toBe(SHOOT_RAY_OUTCOME.OUTSIDE);
-    expect(blackbox.shootRay(new Vector(10, -1)).outcome).toBe(SHOOT_RAY_OUTCOME.OUTSIDE);
-    expect(blackbox.shootRay(new Vector(-1, 10)).outcome).toBe(SHOOT_RAY_OUTCOME.OUTSIDE);
-    expect(blackbox.shootRay(new Vector(5, 10)).outcome).toBe(SHOOT_RAY_OUTCOME.OUTSIDE);
-    expect(blackbox.shootRay(new Vector(10, 10)).outcome).toBe(SHOOT_RAY_OUTCOME.OUTSIDE);
+    expect(blackbox.shootRay(new Vector(-1, -1)).outcome).toBe(
+      SHOOT_RAY_OUTCOME.OUTSIDE
+    );
+    expect(blackbox.shootRay(new Vector(-1, 5)).outcome).toBe(
+      SHOOT_RAY_OUTCOME.OUTSIDE
+    );
+    expect(blackbox.shootRay(new Vector(-1, 10)).outcome).toBe(
+      SHOOT_RAY_OUTCOME.OUTSIDE
+    );
+    expect(blackbox.shootRay(new Vector(10, -1)).outcome).toBe(
+      SHOOT_RAY_OUTCOME.OUTSIDE
+    );
+    expect(blackbox.shootRay(new Vector(10, 5)).outcome).toBe(
+      SHOOT_RAY_OUTCOME.OUTSIDE
+    );
+    expect(blackbox.shootRay(new Vector(10, 10)).outcome).toBe(
+      SHOOT_RAY_OUTCOME.OUTSIDE
+    );
+    expect(blackbox.shootRay(new Vector(-1, -1)).outcome).toBe(
+      SHOOT_RAY_OUTCOME.OUTSIDE
+    );
+    expect(blackbox.shootRay(new Vector(5, -1)).outcome).toBe(
+      SHOOT_RAY_OUTCOME.OUTSIDE
+    );
+    expect(blackbox.shootRay(new Vector(10, -1)).outcome).toBe(
+      SHOOT_RAY_OUTCOME.OUTSIDE
+    );
+    expect(blackbox.shootRay(new Vector(-1, 10)).outcome).toBe(
+      SHOOT_RAY_OUTCOME.OUTSIDE
+    );
+    expect(blackbox.shootRay(new Vector(5, 10)).outcome).toBe(
+      SHOOT_RAY_OUTCOME.OUTSIDE
+    );
+    expect(blackbox.shootRay(new Vector(10, 10)).outcome).toBe(
+      SHOOT_RAY_OUTCOME.OUTSIDE
+    );
   });
-
 });
 
-describe('It should shoot rays from the rim.', () => {
-
-  test('It should absorb rays shot at marbles.', () => {
-
+describe("It should shoot rays from the rim.", () => {
+  test("It should absorb rays shot at marbles.", () => {
     var blackbox = new BlackBoxModel(8, 4, true);
     // blackbox.grid[0] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     // blackbox.grid[1] = [0, 1, 0, 0, 0, 0, 0, 0, 0, 0];
@@ -207,39 +229,82 @@ describe('It should shoot rays from the rim.', () => {
     // blackbox.grid[8] = [0, 0, 0, 0, 0, 0, 1, 0, 0, 0];
     // blackbox.grid[9] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     blackbox.marbles = [];
-    privateBlackBox.placeMarbleOnGrid(1, 1, blackbox.numberOfMarbles, blackbox.marbles);
-    privateBlackBox.placeMarbleOnGrid(3, 1, blackbox.numberOfMarbles, blackbox.marbles);
-    privateBlackBox.placeMarbleOnGrid(4, 8, blackbox.numberOfMarbles, blackbox.marbles);
-    privateBlackBox.placeMarbleOnGrid(8, 6, blackbox.numberOfMarbles, blackbox.marbles);
+    privateBlackBox.placeMarbleOnGrid(
+      1,
+      1,
+      blackbox.numberOfMarbles,
+      blackbox.marbles
+    );
+    privateBlackBox.placeMarbleOnGrid(
+      3,
+      1,
+      blackbox.numberOfMarbles,
+      blackbox.marbles
+    );
+    privateBlackBox.placeMarbleOnGrid(
+      4,
+      8,
+      blackbox.numberOfMarbles,
+      blackbox.marbles
+    );
+    privateBlackBox.placeMarbleOnGrid(
+      8,
+      6,
+      blackbox.numberOfMarbles,
+      blackbox.marbles
+    );
 
-    expect(blackbox.shootRay(new Vector(0, 1, VECTOR.DIRECTION.DOWN)).outcome).toBe(SHOOT_RAY_OUTCOME.ABSORBED);
-    expect(blackbox.grid[0][1]).toBe('a');
-    expect(blackbox.shootRay(new Vector(0, 6, VECTOR.DIRECTION.DOWN)).outcome).toBe(SHOOT_RAY_OUTCOME.ABSORBED);
-    expect(blackbox.grid[0][6]).toBe('a');
-    expect(blackbox.shootRay(new Vector(0, 8, VECTOR.DIRECTION.DOWN)).outcome).toBe(SHOOT_RAY_OUTCOME.ABSORBED);
-    expect(blackbox.grid[0][8]).toBe('a');
-    expect(blackbox.shootRay(new Vector(1, 9, VECTOR.DIRECTION.LEFT)).outcome).toBe(SHOOT_RAY_OUTCOME.ABSORBED);
-    expect(blackbox.grid[1][9]).toBe('a');
-    expect(blackbox.shootRay(new Vector(4, 9, VECTOR.DIRECTION.LEFT)).outcome).toBe(SHOOT_RAY_OUTCOME.ABSORBED);
-    expect(blackbox.grid[4][9]).toBe('a');
-    expect(blackbox.shootRay(new Vector(8, 9, VECTOR.DIRECTION.LEFT)).outcome).toBe(SHOOT_RAY_OUTCOME.ABSORBED);
-    expect(blackbox.grid[8][9]).toBe('a');
-    expect(blackbox.shootRay(new Vector(9, 1, VECTOR.DIRECTION.UP)).outcome).toBe(SHOOT_RAY_OUTCOME.ABSORBED);
-    expect(blackbox.grid[9][1]).toBe('a');
-    expect(blackbox.shootRay(new Vector(9, 6, VECTOR.DIRECTION.UP)).outcome).toBe(SHOOT_RAY_OUTCOME.ABSORBED);
-    expect(blackbox.grid[9][6]).toBe('a');
-    expect(blackbox.shootRay(new Vector(9, 8, VECTOR.DIRECTION.UP)).outcome).toBe(SHOOT_RAY_OUTCOME.ABSORBED);
-    expect(blackbox.grid[9][8]).toBe('a');
-    expect(blackbox.shootRay(new Vector(1, 0, VECTOR.DIRECTION.RIGHT)).outcome).toBe(SHOOT_RAY_OUTCOME.ABSORBED);
-    expect(blackbox.grid[1][0]).toBe('a');
-    expect(blackbox.shootRay(new Vector(3, 0, VECTOR.DIRECTION.RIGHT)).outcome).toBe(SHOOT_RAY_OUTCOME.ABSORBED);
-    expect(blackbox.grid[3][0]).toBe('a');
-    expect(blackbox.shootRay(new Vector(8, 0, VECTOR.DIRECTION.RIGHT)).outcome).toBe(SHOOT_RAY_OUTCOME.ABSORBED);
-    expect(blackbox.grid[8][0]).toBe('a');
+    expect(
+      blackbox.shootRay(new Vector(0, 1, VECTOR.DIRECTION.DOWN)).outcome
+    ).toBe(SHOOT_RAY_OUTCOME.ABSORBED);
+    expect(blackbox.grid[0][1]).toBe("a");
+    expect(
+      blackbox.shootRay(new Vector(0, 6, VECTOR.DIRECTION.DOWN)).outcome
+    ).toBe(SHOOT_RAY_OUTCOME.ABSORBED);
+    expect(blackbox.grid[0][6]).toBe("a");
+    expect(
+      blackbox.shootRay(new Vector(0, 8, VECTOR.DIRECTION.DOWN)).outcome
+    ).toBe(SHOOT_RAY_OUTCOME.ABSORBED);
+    expect(blackbox.grid[0][8]).toBe("a");
+    expect(
+      blackbox.shootRay(new Vector(1, 9, VECTOR.DIRECTION.LEFT)).outcome
+    ).toBe(SHOOT_RAY_OUTCOME.ABSORBED);
+    expect(blackbox.grid[1][9]).toBe("a");
+    expect(
+      blackbox.shootRay(new Vector(4, 9, VECTOR.DIRECTION.LEFT)).outcome
+    ).toBe(SHOOT_RAY_OUTCOME.ABSORBED);
+    expect(blackbox.grid[4][9]).toBe("a");
+    expect(
+      blackbox.shootRay(new Vector(8, 9, VECTOR.DIRECTION.LEFT)).outcome
+    ).toBe(SHOOT_RAY_OUTCOME.ABSORBED);
+    expect(blackbox.grid[8][9]).toBe("a");
+    expect(
+      blackbox.shootRay(new Vector(9, 1, VECTOR.DIRECTION.UP)).outcome
+    ).toBe(SHOOT_RAY_OUTCOME.ABSORBED);
+    expect(blackbox.grid[9][1]).toBe("a");
+    expect(
+      blackbox.shootRay(new Vector(9, 6, VECTOR.DIRECTION.UP)).outcome
+    ).toBe(SHOOT_RAY_OUTCOME.ABSORBED);
+    expect(blackbox.grid[9][6]).toBe("a");
+    expect(
+      blackbox.shootRay(new Vector(9, 8, VECTOR.DIRECTION.UP)).outcome
+    ).toBe(SHOOT_RAY_OUTCOME.ABSORBED);
+    expect(blackbox.grid[9][8]).toBe("a");
+    expect(
+      blackbox.shootRay(new Vector(1, 0, VECTOR.DIRECTION.RIGHT)).outcome
+    ).toBe(SHOOT_RAY_OUTCOME.ABSORBED);
+    expect(blackbox.grid[1][0]).toBe("a");
+    expect(
+      blackbox.shootRay(new Vector(3, 0, VECTOR.DIRECTION.RIGHT)).outcome
+    ).toBe(SHOOT_RAY_OUTCOME.ABSORBED);
+    expect(blackbox.grid[3][0]).toBe("a");
+    expect(
+      blackbox.shootRay(new Vector(8, 0, VECTOR.DIRECTION.RIGHT)).outcome
+    ).toBe(SHOOT_RAY_OUTCOME.ABSORBED);
+    expect(blackbox.grid[8][0]).toBe("a");
   });
 
-  test('It should deflect rays shot adjacent marbles', () => {
-
+  test("It should deflect rays shot adjacent marbles", () => {
     var blackbox = new BlackBoxModel(8, 4, true);
     // blackbox.grid[0] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     // blackbox.grid[1] = [0, 1, 0, 0, 0, 0, 0, 0, 0, 0];
@@ -252,25 +317,52 @@ describe('It should shoot rays from the rim.', () => {
     // blackbox.grid[8] = [0, 0, 0, 0, 0, 0, 1, 0, 0, 0];
     // blackbox.grid[9] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     blackbox.marbles = [];
-    privateBlackBox.placeMarbleOnGrid(1, 1, blackbox.numberOfMarbles, blackbox.marbles);
-    privateBlackBox.placeMarbleOnGrid(3, 1, blackbox.numberOfMarbles, blackbox.marbles);
-    privateBlackBox.placeMarbleOnGrid(4, 8, blackbox.numberOfMarbles, blackbox.marbles);
-    privateBlackBox.placeMarbleOnGrid(8, 6, blackbox.numberOfMarbles, blackbox.marbles);
+    privateBlackBox.placeMarbleOnGrid(
+      1,
+      1,
+      blackbox.numberOfMarbles,
+      blackbox.marbles
+    );
+    privateBlackBox.placeMarbleOnGrid(
+      3,
+      1,
+      blackbox.numberOfMarbles,
+      blackbox.marbles
+    );
+    privateBlackBox.placeMarbleOnGrid(
+      4,
+      8,
+      blackbox.numberOfMarbles,
+      blackbox.marbles
+    );
+    privateBlackBox.placeMarbleOnGrid(
+      8,
+      6,
+      blackbox.numberOfMarbles,
+      blackbox.marbles
+    );
 
-    expect(blackbox.shootRay(new Vector(0, 7, VECTOR.DIRECTION.DOWN)).outcome).toBe(SHOOT_RAY_OUTCOME.ABSORBED);
-    expect(blackbox.grid[0][7]).toBe('a');
-    expect(blackbox.shootRay(new Vector(9, 2, VECTOR.DIRECTION.UP)).outcome).toBe(SHOOT_RAY_OUTCOME.ABSORBED);
-    expect(blackbox.grid[9][2]).toBe('a');
-    expect(blackbox.shootRay(new Vector(7, 9, VECTOR.DIRECTION.LEFT)).outcome).toBe(SHOOT_RAY_OUTCOME.PROPOGATED);
+    expect(
+      blackbox.shootRay(new Vector(0, 7, VECTOR.DIRECTION.DOWN)).outcome
+    ).toBe(SHOOT_RAY_OUTCOME.ABSORBED);
+    expect(blackbox.grid[0][7]).toBe("a");
+    expect(
+      blackbox.shootRay(new Vector(9, 2, VECTOR.DIRECTION.UP)).outcome
+    ).toBe(SHOOT_RAY_OUTCOME.ABSORBED);
+    expect(blackbox.grid[9][2]).toBe("a");
+    expect(
+      blackbox.shootRay(new Vector(7, 9, VECTOR.DIRECTION.LEFT)).outcome
+    ).toBe(SHOOT_RAY_OUTCOME.PROPOGATED);
     expect(blackbox.grid[7][9]).toBe(1);
     expect(blackbox.grid[5][0]).toBe(1);
-    expect(blackbox.shootRay(new Vector(7, 0, VECTOR.DIRECTION.RIGHT)).outcome).toBe(SHOOT_RAY_OUTCOME.PROPOGATED);
+    expect(
+      blackbox.shootRay(new Vector(7, 0, VECTOR.DIRECTION.RIGHT)).outcome
+    ).toBe(SHOOT_RAY_OUTCOME.PROPOGATED);
     expect(blackbox.grid[7][0]).toBe(2);
     expect(blackbox.grid[0][5]).toBe(2);
   });
 
-  test('It should reflect rays', () => {
-
+  test("It should reflect rays", () => {
     var blackbox = new BlackBoxModel(8, 4, true);
     // blackbox.grid[0] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     // blackbox.grid[1] = [0, 1, 0, 0, 0, 0, 0, 0, 0, 0];
@@ -283,31 +375,66 @@ describe('It should shoot rays from the rim.', () => {
     // blackbox.grid[8] = [0, 0, 0, 0, 0, 0, 1, 0, 0, 0];
     // blackbox.grid[9] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     blackbox.marbles = [];
-    privateBlackBox.placeMarbleOnGrid(1, 1, blackbox.numberOfMarbles, blackbox.marbles);
-    privateBlackBox.placeMarbleOnGrid(3, 1, blackbox.numberOfMarbles, blackbox.marbles);
-    privateBlackBox.placeMarbleOnGrid(4, 8, blackbox.numberOfMarbles, blackbox.marbles);
-    privateBlackBox.placeMarbleOnGrid(8, 6, blackbox.numberOfMarbles, blackbox.marbles);
+    privateBlackBox.placeMarbleOnGrid(
+      1,
+      1,
+      blackbox.numberOfMarbles,
+      blackbox.marbles
+    );
+    privateBlackBox.placeMarbleOnGrid(
+      3,
+      1,
+      blackbox.numberOfMarbles,
+      blackbox.marbles
+    );
+    privateBlackBox.placeMarbleOnGrid(
+      4,
+      8,
+      blackbox.numberOfMarbles,
+      blackbox.marbles
+    );
+    privateBlackBox.placeMarbleOnGrid(
+      8,
+      6,
+      blackbox.numberOfMarbles,
+      blackbox.marbles
+    );
 
-    expect(blackbox.shootRay(new Vector(0, 2, VECTOR.DIRECTION.DOWN)).outcome).toBe(SHOOT_RAY_OUTCOME.REFLECTED);
-    expect(blackbox.grid[0][2]).toBe('r');
-    expect(blackbox.shootRay(new Vector(2, 9, VECTOR.DIRECTION.LEFT)).outcome).toBe(SHOOT_RAY_OUTCOME.REFLECTED);
-    expect(blackbox.grid[2][9]).toBe('r');
-    expect(blackbox.shootRay(new Vector(3, 9, VECTOR.DIRECTION.LEFT)).outcome).toBe(SHOOT_RAY_OUTCOME.REFLECTED);
-    expect(blackbox.grid[3][9]).toBe('r');
-    expect(blackbox.shootRay(new Vector(5, 9, VECTOR.DIRECTION.LEFT)).outcome).toBe(SHOOT_RAY_OUTCOME.REFLECTED);
-    expect(blackbox.grid[5][9]).toBe('r');
-    expect(blackbox.shootRay(new Vector(9, 5, VECTOR.DIRECTION.UP)).outcome).toBe(SHOOT_RAY_OUTCOME.REFLECTED);
-    expect(blackbox.grid[9][5]).toBe('r');
-    expect(blackbox.shootRay(new Vector(9, 7, VECTOR.DIRECTION.UP)).outcome).toBe(SHOOT_RAY_OUTCOME.REFLECTED);
-    expect(blackbox.grid[9][7]).toBe('r');
-    expect(blackbox.shootRay(new Vector(2, 0, VECTOR.DIRECTION.RIGHT)).outcome).toBe(SHOOT_RAY_OUTCOME.REFLECTED);
-    expect(blackbox.grid[2][0]).toBe('r');
-    expect(blackbox.shootRay(new Vector(4, 0, VECTOR.DIRECTION.RIGHT)).outcome).toBe(SHOOT_RAY_OUTCOME.REFLECTED);
-    expect(blackbox.grid[4][0]).toBe('r');
+    expect(
+      blackbox.shootRay(new Vector(0, 2, VECTOR.DIRECTION.DOWN)).outcome
+    ).toBe(SHOOT_RAY_OUTCOME.REFLECTED);
+    expect(blackbox.grid[0][2]).toBe("r");
+    expect(
+      blackbox.shootRay(new Vector(2, 9, VECTOR.DIRECTION.LEFT)).outcome
+    ).toBe(SHOOT_RAY_OUTCOME.REFLECTED);
+    expect(blackbox.grid[2][9]).toBe("r");
+    expect(
+      blackbox.shootRay(new Vector(3, 9, VECTOR.DIRECTION.LEFT)).outcome
+    ).toBe(SHOOT_RAY_OUTCOME.REFLECTED);
+    expect(blackbox.grid[3][9]).toBe("r");
+    expect(
+      blackbox.shootRay(new Vector(5, 9, VECTOR.DIRECTION.LEFT)).outcome
+    ).toBe(SHOOT_RAY_OUTCOME.REFLECTED);
+    expect(blackbox.grid[5][9]).toBe("r");
+    expect(
+      blackbox.shootRay(new Vector(9, 5, VECTOR.DIRECTION.UP)).outcome
+    ).toBe(SHOOT_RAY_OUTCOME.REFLECTED);
+    expect(blackbox.grid[9][5]).toBe("r");
+    expect(
+      blackbox.shootRay(new Vector(9, 7, VECTOR.DIRECTION.UP)).outcome
+    ).toBe(SHOOT_RAY_OUTCOME.REFLECTED);
+    expect(blackbox.grid[9][7]).toBe("r");
+    expect(
+      blackbox.shootRay(new Vector(2, 0, VECTOR.DIRECTION.RIGHT)).outcome
+    ).toBe(SHOOT_RAY_OUTCOME.REFLECTED);
+    expect(blackbox.grid[2][0]).toBe("r");
+    expect(
+      blackbox.shootRay(new Vector(4, 0, VECTOR.DIRECTION.RIGHT)).outcome
+    ).toBe(SHOOT_RAY_OUTCOME.REFLECTED);
+    expect(blackbox.grid[4][0]).toBe("r");
   });
 
-  test('It should propogate rays without reflection', () => {
-
+  test("It should propogate rays without reflection", () => {
     var blackbox = new BlackBoxModel(8, 4, true);
     // blackbox.grid[0] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     // blackbox.grid[1] = [0, 1, 0, 0, 0, 0, 0, 0, 0, 0];
@@ -320,60 +447,105 @@ describe('It should shoot rays from the rim.', () => {
     // blackbox.grid[8] = [0, 0, 0, 0, 0, 0, 1, 0, 0, 0];
     // blackbox.grid[9] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     blackbox.marbles = [];
-    privateBlackBox.placeMarbleOnGrid(1, 1, blackbox.numberOfMarbles, blackbox.marbles);
-    privateBlackBox.placeMarbleOnGrid(3, 1, blackbox.numberOfMarbles, blackbox.marbles);
-    privateBlackBox.placeMarbleOnGrid(4, 8, blackbox.numberOfMarbles, blackbox.marbles);
-    privateBlackBox.placeMarbleOnGrid(8, 6, blackbox.numberOfMarbles, blackbox.marbles);
+    privateBlackBox.placeMarbleOnGrid(
+      1,
+      1,
+      blackbox.numberOfMarbles,
+      blackbox.marbles
+    );
+    privateBlackBox.placeMarbleOnGrid(
+      3,
+      1,
+      blackbox.numberOfMarbles,
+      blackbox.marbles
+    );
+    privateBlackBox.placeMarbleOnGrid(
+      4,
+      8,
+      blackbox.numberOfMarbles,
+      blackbox.marbles
+    );
+    privateBlackBox.placeMarbleOnGrid(
+      8,
+      6,
+      blackbox.numberOfMarbles,
+      blackbox.marbles
+    );
 
-    expect(blackbox.shootRay(new Vector(0, 3, VECTOR.DIRECTION.DOWN)).outcome).toBe(SHOOT_RAY_OUTCOME.PROPOGATED);
+    expect(
+      blackbox.shootRay(new Vector(0, 3, VECTOR.DIRECTION.DOWN)).outcome
+    ).toBe(SHOOT_RAY_OUTCOME.PROPOGATED);
     expect(blackbox.grid[0][3]).toBe(1);
     expect(blackbox.grid[9][3]).toBe(1);
-    expect(blackbox.shootRay(new Vector(0, 4, VECTOR.DIRECTION.DOWN)).outcome).toBe(SHOOT_RAY_OUTCOME.PROPOGATED);
+    expect(
+      blackbox.shootRay(new Vector(0, 4, VECTOR.DIRECTION.DOWN)).outcome
+    ).toBe(SHOOT_RAY_OUTCOME.PROPOGATED);
     expect(blackbox.grid[0][4]).toBe(2);
     expect(blackbox.grid[9][4]).toBe(2);
-    expect(blackbox.shootRay(new Vector(6, 9, VECTOR.DIRECTION.LEFT)).outcome).toBe(SHOOT_RAY_OUTCOME.PROPOGATED);
+    expect(
+      blackbox.shootRay(new Vector(6, 9, VECTOR.DIRECTION.LEFT)).outcome
+    ).toBe(SHOOT_RAY_OUTCOME.PROPOGATED);
     expect(blackbox.grid[6][9]).toBe(3);
     expect(blackbox.grid[6][0]).toBe(3);
   });
-
 });
 
-describe('It should place and remove guesses using shootRay', () => {
-
-  test('it should place and remove guesses', () => {
-
+describe("It should place and remove guesses using shootRay", () => {
+  test("it should place and remove guesses", () => {
     var blackbox = new BlackBoxModel();
     blackbox.newGame();
-    expect(blackbox.shootRay(new Vector(1, 1)).outcome).toBe(SHOOT_RAY_OUTCOME.MARBLE_PLACED);
-    expect(blackbox.shootRay(new Vector(2, 2)).outcome).toBe(SHOOT_RAY_OUTCOME.MARBLE_PLACED);
-    expect(blackbox.shootRay(new Vector(3, 3)).outcome).toBe(SHOOT_RAY_OUTCOME.MARBLE_PLACED);
-    expect(blackbox.shootRay(new Vector(4, 4)).outcome).toBe(SHOOT_RAY_OUTCOME.MARBLE_PLACED);
-    expect(blackbox.shootRay(new Vector(5, 5)).outcome).toBe(SHOOT_RAY_OUTCOME.MARBLE_MAX);
-    expect(blackbox.shootRay(new Vector(6, 6)).outcome).toBe(SHOOT_RAY_OUTCOME.MARBLE_MAX);
+    expect(blackbox.shootRay(new Vector(1, 1)).outcome).toBe(
+      SHOOT_RAY_OUTCOME.MARBLE_PLACED
+    );
+    expect(blackbox.shootRay(new Vector(2, 2)).outcome).toBe(
+      SHOOT_RAY_OUTCOME.MARBLE_PLACED
+    );
+    expect(blackbox.shootRay(new Vector(3, 3)).outcome).toBe(
+      SHOOT_RAY_OUTCOME.MARBLE_PLACED
+    );
+    expect(blackbox.shootRay(new Vector(4, 4)).outcome).toBe(
+      SHOOT_RAY_OUTCOME.MARBLE_PLACED
+    );
+    expect(blackbox.shootRay(new Vector(5, 5)).outcome).toBe(
+      SHOOT_RAY_OUTCOME.MARBLE_MAX
+    );
+    expect(blackbox.shootRay(new Vector(6, 6)).outcome).toBe(
+      SHOOT_RAY_OUTCOME.MARBLE_MAX
+    );
     for (var i = 0; i < blackbox.numberOfMarbles; i++) {
       expect(blackbox.guesses[i]).toEqual(new Vector(i + 1, i + 1).position);
     }
     expect(blackbox.guesses.length).toBe(4);
-    expect(blackbox.shootRay(new Vector(2, 2)).outcome).toBe(SHOOT_RAY_OUTCOME.MARBLE_REMOVED);
-    expect(blackbox.shootRay(new Vector(1, 1)).outcome).toBe(SHOOT_RAY_OUTCOME.MARBLE_REMOVED);
-    expect(blackbox.shootRay(new Vector(4, 4)).outcome).toBe(SHOOT_RAY_OUTCOME.MARBLE_REMOVED);
+    expect(blackbox.shootRay(new Vector(2, 2)).outcome).toBe(
+      SHOOT_RAY_OUTCOME.MARBLE_REMOVED
+    );
+    expect(blackbox.shootRay(new Vector(1, 1)).outcome).toBe(
+      SHOOT_RAY_OUTCOME.MARBLE_REMOVED
+    );
+    expect(blackbox.shootRay(new Vector(4, 4)).outcome).toBe(
+      SHOOT_RAY_OUTCOME.MARBLE_REMOVED
+    );
     expect(blackbox.guesses[0]).toEqual(new Vector(3, 3).position);
     expect(blackbox.guesses.length).toBe(1);
-    expect(blackbox.shootRay(new Vector(3, 3)).outcome).toBe(SHOOT_RAY_OUTCOME.MARBLE_REMOVED);
-    expect(blackbox.shootRay(new Vector(5, 5)).outcome).toBe(SHOOT_RAY_OUTCOME.MARBLE_PLACED);
-    expect(blackbox.shootRay(new Vector(5, 5)).outcome).toBe(SHOOT_RAY_OUTCOME.MARBLE_REMOVED);
-    expect(blackbox.shootRay(new Vector(6, 6)).outcome).toBe(SHOOT_RAY_OUTCOME.MARBLE_PLACED);
+    expect(blackbox.shootRay(new Vector(3, 3)).outcome).toBe(
+      SHOOT_RAY_OUTCOME.MARBLE_REMOVED
+    );
+    expect(blackbox.shootRay(new Vector(5, 5)).outcome).toBe(
+      SHOOT_RAY_OUTCOME.MARBLE_PLACED
+    );
+    expect(blackbox.shootRay(new Vector(5, 5)).outcome).toBe(
+      SHOOT_RAY_OUTCOME.MARBLE_REMOVED
+    );
+    expect(blackbox.shootRay(new Vector(6, 6)).outcome).toBe(
+      SHOOT_RAY_OUTCOME.MARBLE_PLACED
+    );
     expect(blackbox.guesses[0]).toEqual(new Vector(6, 6).position);
     expect(blackbox.guesses.length).toBe(1);
-
   });
-
 });
 
-describe('it should score games', () => {
-
-  test('it should not score incomplete games', () => {
-
+describe("it should score games", () => {
+  test("it should not score incomplete games", () => {
     var blackbox = new BlackBoxModel(8, 4, true);
     // blackbox.grid[0] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     // blackbox.grid[1] = [0, 1, 0, 0, 0, 0, 0, 0, 0, 0];
@@ -386,39 +558,71 @@ describe('it should score games', () => {
     // blackbox.grid[8] = [0, 0, 0, 0, 0, 0, 1, 0, 0, 0];
     // blackbox.grid[9] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     blackbox.marbles = [];
-    privateBlackBox.placeMarbleOnGrid(1, 1, blackbox.numberOfMarbles, blackbox.marbles);
-    privateBlackBox.placeMarbleOnGrid(3, 1, blackbox.numberOfMarbles, blackbox.marbles);
-    privateBlackBox.placeMarbleOnGrid(4, 8, blackbox.numberOfMarbles, blackbox.marbles);
-    privateBlackBox.placeMarbleOnGrid(8, 6, blackbox.numberOfMarbles, blackbox.marbles);
+    privateBlackBox.placeMarbleOnGrid(
+      1,
+      1,
+      blackbox.numberOfMarbles,
+      blackbox.marbles
+    );
+    privateBlackBox.placeMarbleOnGrid(
+      3,
+      1,
+      blackbox.numberOfMarbles,
+      blackbox.marbles
+    );
+    privateBlackBox.placeMarbleOnGrid(
+      4,
+      8,
+      blackbox.numberOfMarbles,
+      blackbox.marbles
+    );
+    privateBlackBox.placeMarbleOnGrid(
+      8,
+      6,
+      blackbox.numberOfMarbles,
+      blackbox.marbles
+    );
 
-    expect(blackbox.shootRay(new Vector(1, 1)).outcome).toBe(SHOOT_RAY_OUTCOME.MARBLE_PLACED);
+    expect(blackbox.shootRay(new Vector(1, 1)).outcome).toBe(
+      SHOOT_RAY_OUTCOME.MARBLE_PLACED
+    );
     expect(blackbox.allMarblesPlaced()).toBe(false);
-    expect(blackbox.scoreGame()).toBe('Make 3 more guesses to get a score');
-    expect(blackbox.shootRay(new Vector(2, 2)).outcome).toBe(SHOOT_RAY_OUTCOME.MARBLE_PLACED);
+    expect(blackbox.scoreGame()).toBe("Make 3 more guesses to get a score");
+    expect(blackbox.shootRay(new Vector(2, 2)).outcome).toBe(
+      SHOOT_RAY_OUTCOME.MARBLE_PLACED
+    );
     expect(blackbox.allMarblesPlaced()).toBe(false);
-    expect(blackbox.scoreGame()).toBe('Make 2 more guesses to get a score');
-    expect(blackbox.shootRay(new Vector(3, 3)).outcome).toBe(SHOOT_RAY_OUTCOME.MARBLE_PLACED);
+    expect(blackbox.scoreGame()).toBe("Make 2 more guesses to get a score");
+    expect(blackbox.shootRay(new Vector(3, 3)).outcome).toBe(
+      SHOOT_RAY_OUTCOME.MARBLE_PLACED
+    );
     expect(blackbox.allMarblesPlaced()).toBe(false);
-    expect(blackbox.scoreGame()).toBe('Make 1 more guess to get a score');
-    expect(blackbox.shootRay(new Vector(4, 4)).outcome).toBe(SHOOT_RAY_OUTCOME.MARBLE_PLACED);
+    expect(blackbox.scoreGame()).toBe("Make 1 more guess to get a score");
+    expect(blackbox.shootRay(new Vector(4, 4)).outcome).toBe(
+      SHOOT_RAY_OUTCOME.MARBLE_PLACED
+    );
     expect(blackbox.allMarblesPlaced()).toBe(true);
-    expect(blackbox.scoreGame()).toBe('Your score is: 15');
-    expect(blackbox.grid[1][1]).toBe('y');
-    expect(blackbox.grid[2][2]).toBe('n');
-    expect(blackbox.grid[3][3]).toBe('n');
-    expect(blackbox.grid[4][4]).toBe('n');
+    expect(blackbox.scoreGame()).toBe(15);
+    expect(blackbox.grid[1][1]).toBe("y");
+    expect(blackbox.grid[2][2]).toBe("n");
+    expect(blackbox.grid[3][3]).toBe("n");
+    expect(blackbox.grid[4][4]).toBe("n");
     expect(blackbox.grid[3][1]).toBe(0);
     expect(blackbox.grid[4][8]).toBe(0);
     expect(blackbox.grid[8][6]).toBe(0);
 
-    expect(blackbox.marbles.some(marble => marble.row === 3 && marble.column === 1)).toBe(true);
-    expect(blackbox.marbles.some(marble => marble.row === 4 && marble.column === 8)).toBe(true);
-    expect(blackbox.marbles.some(marble => marble.row === 8 && marble.column === 6)).toBe(true);
-
+    expect(
+      blackbox.marbles.some(marble => marble.row === 3 && marble.column === 1)
+    ).toBe(true);
+    expect(
+      blackbox.marbles.some(marble => marble.row === 4 && marble.column === 8)
+    ).toBe(true);
+    expect(
+      blackbox.marbles.some(marble => marble.row === 8 && marble.column === 6)
+    ).toBe(true);
   });
 
-  test('it should score the perfect game', () => {
-
+  test("it should score the perfect game", () => {
     var blackbox = new BlackBoxModel(8, 4, true);
     // blackbox.grid[0] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     // blackbox.grid[1] = [0, 1, 0, 0, 0, 0, 0, 0, 0, 0];
@@ -431,29 +635,63 @@ describe('it should score games', () => {
     // blackbox.grid[8] = [0, 0, 0, 0, 0, 0, 1, 0, 0, 0];
     // blackbox.grid[9] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     blackbox.marbles = [];
-    privateBlackBox.placeMarbleOnGrid(1, 1, blackbox.numberOfMarbles, blackbox.marbles);
-    privateBlackBox.placeMarbleOnGrid(3, 1, blackbox.numberOfMarbles, blackbox.marbles);
-    privateBlackBox.placeMarbleOnGrid(4, 8, blackbox.numberOfMarbles, blackbox.marbles);
-    privateBlackBox.placeMarbleOnGrid(8, 6, blackbox.numberOfMarbles, blackbox.marbles);
+    privateBlackBox.placeMarbleOnGrid(
+      1,
+      1,
+      blackbox.numberOfMarbles,
+      blackbox.marbles
+    );
+    privateBlackBox.placeMarbleOnGrid(
+      3,
+      1,
+      blackbox.numberOfMarbles,
+      blackbox.marbles
+    );
+    privateBlackBox.placeMarbleOnGrid(
+      4,
+      8,
+      blackbox.numberOfMarbles,
+      blackbox.marbles
+    );
+    privateBlackBox.placeMarbleOnGrid(
+      8,
+      6,
+      blackbox.numberOfMarbles,
+      blackbox.marbles
+    );
 
-    expect(blackbox.shootRay(new Vector(1, 1)).outcome).toBe(SHOOT_RAY_OUTCOME.MARBLE_PLACED);
-    expect(blackbox.shootRay(new Vector(3, 1)).outcome).toBe(SHOOT_RAY_OUTCOME.MARBLE_PLACED);
-    expect(blackbox.shootRay(new Vector(4, 8)).outcome).toBe(SHOOT_RAY_OUTCOME.MARBLE_PLACED);
-    expect(blackbox.shootRay(new Vector(8, 6)).outcome).toBe(SHOOT_RAY_OUTCOME.MARBLE_PLACED);
-    expect(blackbox.scoreGame()).toBe('Your score is: 0');
-    expect(blackbox.grid[1][1]).toBe('y');
-    expect(blackbox.grid[3][1]).toBe('y');
-    expect(blackbox.grid[4][8]).toBe('y');
-    expect(blackbox.grid[8][6]).toBe('y');
-    expect(blackbox.marbles.some(marble => marble.row === 1 && marble.column === 1)).toBe(true);
-    expect(blackbox.marbles.some(marble => marble.row === 3 && marble.column === 1)).toBe(true);
-    expect(blackbox.marbles.some(marble => marble.row === 4 && marble.column === 8)).toBe(true);
-    expect(blackbox.marbles.some(marble => marble.row === 8 && marble.column === 6)).toBe(true);
-
+    expect(blackbox.shootRay(new Vector(1, 1)).outcome).toBe(
+      SHOOT_RAY_OUTCOME.MARBLE_PLACED
+    );
+    expect(blackbox.shootRay(new Vector(3, 1)).outcome).toBe(
+      SHOOT_RAY_OUTCOME.MARBLE_PLACED
+    );
+    expect(blackbox.shootRay(new Vector(4, 8)).outcome).toBe(
+      SHOOT_RAY_OUTCOME.MARBLE_PLACED
+    );
+    expect(blackbox.shootRay(new Vector(8, 6)).outcome).toBe(
+      SHOOT_RAY_OUTCOME.MARBLE_PLACED
+    );
+    expect(blackbox.scoreGame()).toBe(0);
+    expect(blackbox.grid[1][1]).toBe("y");
+    expect(blackbox.grid[3][1]).toBe("y");
+    expect(blackbox.grid[4][8]).toBe("y");
+    expect(blackbox.grid[8][6]).toBe("y");
+    expect(
+      blackbox.marbles.some(marble => marble.row === 1 && marble.column === 1)
+    ).toBe(true);
+    expect(
+      blackbox.marbles.some(marble => marble.row === 3 && marble.column === 1)
+    ).toBe(true);
+    expect(
+      blackbox.marbles.some(marble => marble.row === 4 && marble.column === 8)
+    ).toBe(true);
+    expect(
+      blackbox.marbles.some(marble => marble.row === 8 && marble.column === 6)
+    ).toBe(true);
   });
 
-  test('it should score the worst game', () => {
-
+  test("it should score the worst game", () => {
     var blackbox = new BlackBoxModel(8, 4, true);
     // blackbox.grid[0] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     // blackbox.grid[1] = [0, 1, 0, 0, 0, 0, 0, 0, 0, 0];
@@ -466,10 +704,30 @@ describe('it should score games', () => {
     // blackbox.grid[8] = [0, 0, 0, 0, 0, 0, 1, 0, 0, 0];
     // blackbox.grid[9] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     blackbox.marbles = [];
-    privateBlackBox.placeMarbleOnGrid(1, 1, blackbox.numberOfMarbles, blackbox.marbles);
-    privateBlackBox.placeMarbleOnGrid(3, 1, blackbox.numberOfMarbles, blackbox.marbles);
-    privateBlackBox.placeMarbleOnGrid(4, 8, blackbox.numberOfMarbles, blackbox.marbles);
-    privateBlackBox.placeMarbleOnGrid(8, 6, blackbox.numberOfMarbles, blackbox.marbles);
+    privateBlackBox.placeMarbleOnGrid(
+      1,
+      1,
+      blackbox.numberOfMarbles,
+      blackbox.marbles
+    );
+    privateBlackBox.placeMarbleOnGrid(
+      3,
+      1,
+      blackbox.numberOfMarbles,
+      blackbox.marbles
+    );
+    privateBlackBox.placeMarbleOnGrid(
+      4,
+      8,
+      blackbox.numberOfMarbles,
+      blackbox.marbles
+    );
+    privateBlackBox.placeMarbleOnGrid(
+      8,
+      6,
+      blackbox.numberOfMarbles,
+      blackbox.marbles
+    );
 
     // [0, a, r, 1, 2, 3, a, a, a, 0];
     // [a, 1, 0, g, g, g, g, 0, 0, a];
@@ -488,28 +746,42 @@ describe('it should score games', () => {
       blackbox.shootRay(new Vector(i, 0, VECTOR.DIRECTION.RIGHT));
       blackbox.shootRay(new Vector(i, 9, VECTOR.DIRECTION.LEFT));
     }
-    expect(blackbox.shootRay(new Vector(1, 3)).outcome).toBe(SHOOT_RAY_OUTCOME.MARBLE_PLACED);
-    expect(blackbox.shootRay(new Vector(1, 4)).outcome).toBe(SHOOT_RAY_OUTCOME.MARBLE_PLACED);
-    expect(blackbox.shootRay(new Vector(1, 5)).outcome).toBe(SHOOT_RAY_OUTCOME.MARBLE_PLACED);
-    expect(blackbox.shootRay(new Vector(1, 6)).outcome).toBe(SHOOT_RAY_OUTCOME.MARBLE_PLACED);
-    expect(blackbox.scoreGame()).toBe('Your score is: ' + ((4*8)+(4*5)).toString());
-    expect(blackbox.grid[1][3]).toBe('n');
-    expect(blackbox.grid[1][4]).toBe('n');
-    expect(blackbox.grid[1][5]).toBe('n');
-    expect(blackbox.grid[1][6]).toBe('n');
+    expect(blackbox.shootRay(new Vector(1, 3)).outcome).toBe(
+      SHOOT_RAY_OUTCOME.MARBLE_PLACED
+    );
+    expect(blackbox.shootRay(new Vector(1, 4)).outcome).toBe(
+      SHOOT_RAY_OUTCOME.MARBLE_PLACED
+    );
+    expect(blackbox.shootRay(new Vector(1, 5)).outcome).toBe(
+      SHOOT_RAY_OUTCOME.MARBLE_PLACED
+    );
+    expect(blackbox.shootRay(new Vector(1, 6)).outcome).toBe(
+      SHOOT_RAY_OUTCOME.MARBLE_PLACED
+    );
+    expect(blackbox.scoreGame()).toBe(4 * 8 + 4 * 5);
+    expect(blackbox.grid[1][3]).toBe("n");
+    expect(blackbox.grid[1][4]).toBe("n");
+    expect(blackbox.grid[1][5]).toBe("n");
+    expect(blackbox.grid[1][6]).toBe("n");
     expect(blackbox.grid[1][1]).toBe(0);
     expect(blackbox.grid[3][1]).toBe(0);
     expect(blackbox.grid[4][8]).toBe(0);
     expect(blackbox.grid[8][6]).toBe(0);
-    expect(blackbox.marbles.some(marble => marble.row === 1 && marble.column === 1)).toBe(true);
-    expect(blackbox.marbles.some(marble => marble.row === 3 && marble.column === 1)).toBe(true);
-    expect(blackbox.marbles.some(marble => marble.row === 4 && marble.column === 8)).toBe(true);
-    expect(blackbox.marbles.some(marble => marble.row === 8 && marble.column === 6)).toBe(true);
-
+    expect(
+      blackbox.marbles.some(marble => marble.row === 1 && marble.column === 1)
+    ).toBe(true);
+    expect(
+      blackbox.marbles.some(marble => marble.row === 3 && marble.column === 1)
+    ).toBe(true);
+    expect(
+      blackbox.marbles.some(marble => marble.row === 4 && marble.column === 8)
+    ).toBe(true);
+    expect(
+      blackbox.marbles.some(marble => marble.row === 8 && marble.column === 6)
+    ).toBe(true);
   });
 
-  test('it should score a \'normal\' game', () => {
-
+  test("it should score a 'normal' game", () => {
     var blackbox = new BlackBoxModel(8, 4, true);
     // blackbox.grid[0] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     // blackbox.grid[1] = [0, 1, 0, 0, 0, 0, 0, 0, 0, 0];
@@ -522,10 +794,30 @@ describe('it should score games', () => {
     // blackbox.grid[8] = [0, 0, 0, 0, 0, 0, 1, 0, 0, 0];
     // blackbox.grid[9] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     blackbox.marbles = [];
-    privateBlackBox.placeMarbleOnGrid(1, 1, blackbox.numberOfMarbles, blackbox.marbles);
-    privateBlackBox.placeMarbleOnGrid(3, 1, blackbox.numberOfMarbles, blackbox.marbles);
-    privateBlackBox.placeMarbleOnGrid(4, 8, blackbox.numberOfMarbles, blackbox.marbles);
-    privateBlackBox.placeMarbleOnGrid(8, 6, blackbox.numberOfMarbles, blackbox.marbles);
+    privateBlackBox.placeMarbleOnGrid(
+      1,
+      1,
+      blackbox.numberOfMarbles,
+      blackbox.marbles
+    );
+    privateBlackBox.placeMarbleOnGrid(
+      3,
+      1,
+      blackbox.numberOfMarbles,
+      blackbox.marbles
+    );
+    privateBlackBox.placeMarbleOnGrid(
+      4,
+      8,
+      blackbox.numberOfMarbles,
+      blackbox.marbles
+    );
+    privateBlackBox.placeMarbleOnGrid(
+      8,
+      6,
+      blackbox.numberOfMarbles,
+      blackbox.marbles
+    );
 
     // [0, 0, r, 0, 1, 0, a, a, 0, 0];
     // [a, y, 0, 0, n, n, 0, 0, 0, a];
@@ -543,60 +835,108 @@ describe('it should score games', () => {
     blackbox.shootRay(new Vector(1, 5, VECTOR.DIRECTION.NONE));
     blackbox.shootRay(new Vector(4, 8));
 
-    expect(blackbox.shootRay(new Vector(0, 2, VECTOR.DIRECTION.DOWN)).outcome).toBe(SHOOT_RAY_OUTCOME.REFLECTED);
-    expect(blackbox.shootRay(new Vector(0, 4, VECTOR.DIRECTION.DOWN)).outcome).toBe(SHOOT_RAY_OUTCOME.PROPOGATED);
-    expect(blackbox.shootRay(new Vector(0, 6, VECTOR.DIRECTION.DOWN)).outcome).toBe(SHOOT_RAY_OUTCOME.ABSORBED);
-    expect(blackbox.shootRay(new Vector(0, 7, VECTOR.DIRECTION.DOWN)).outcome).toBe(SHOOT_RAY_OUTCOME.ABSORBED);
-    expect(blackbox.shootRay(new Vector(1, 9, VECTOR.DIRECTION.LEFT)).outcome).toBe(SHOOT_RAY_OUTCOME.ABSORBED);
-    expect(blackbox.shootRay(new Vector(2, 9, VECTOR.DIRECTION.LEFT)).outcome).toBe(SHOOT_RAY_OUTCOME.REFLECTED);
-    expect(blackbox.shootRay(new Vector(4, 9, VECTOR.DIRECTION.LEFT)).outcome).toBe(SHOOT_RAY_OUTCOME.ABSORBED);
-    expect(blackbox.shootRay(new Vector(5, 9, VECTOR.DIRECTION.LEFT)).outcome).toBe(SHOOT_RAY_OUTCOME.REFLECTED);
-    expect(blackbox.shootRay(new Vector(6, 9, VECTOR.DIRECTION.LEFT)).outcome).toBe(SHOOT_RAY_OUTCOME.PROPOGATED);
-    expect(blackbox.shootRay(new Vector(7, 9, VECTOR.DIRECTION.LEFT)).outcome).toBe(SHOOT_RAY_OUTCOME.PROPOGATED);
-    expect(blackbox.shootRay(new Vector(9, 2, VECTOR.DIRECTION.UP)).outcome).toBe(SHOOT_RAY_OUTCOME.ABSORBED);
-    expect(blackbox.shootRay(new Vector(9, 4, VECTOR.DIRECTION.UP)).outcome).toBe(SHOOT_RAY_OUTCOME.DUPLICATE);
-    expect(blackbox.shootRay(new Vector(9, 6, VECTOR.DIRECTION.UP)).outcome).toBe(SHOOT_RAY_OUTCOME.ABSORBED);
-    expect(blackbox.shootRay(new Vector(9, 7, VECTOR.DIRECTION.UP)).outcome).toBe(SHOOT_RAY_OUTCOME.REFLECTED);
-    expect(blackbox.shootRay(new Vector(9, 8, VECTOR.DIRECTION.UP)).outcome).toBe(SHOOT_RAY_OUTCOME.ABSORBED);
-    expect(blackbox.shootRay(new Vector(1, 0, VECTOR.DIRECTION.RIGHT)).outcome).toBe(SHOOT_RAY_OUTCOME.ABSORBED);
-    expect(blackbox.shootRay(new Vector(2, 0, VECTOR.DIRECTION.RIGHT)).outcome).toBe(SHOOT_RAY_OUTCOME.REFLECTED);
-    expect(blackbox.shootRay(new Vector(3, 0, VECTOR.DIRECTION.RIGHT)).outcome).toBe(SHOOT_RAY_OUTCOME.ABSORBED);
-    expect(blackbox.shootRay(new Vector(5, 0, VECTOR.DIRECTION.RIGHT)).outcome).toBe(SHOOT_RAY_OUTCOME.DUPLICATE);
-    expect(blackbox.shootRay(new Vector(6, 0, VECTOR.DIRECTION.RIGHT)).outcome).toBe(SHOOT_RAY_OUTCOME.DUPLICATE);
-    expect(blackbox.shootRay(new Vector(8, 0, VECTOR.DIRECTION.RIGHT)).outcome).toBe(SHOOT_RAY_OUTCOME.ABSORBED);
-    expect(blackbox.scoreGame()).toBe('Your score is: ' + ((4+6+5+6)+(2*5)).toString());
-    expect(blackbox.grid[1][1]).toBe('y');
-    expect(blackbox.grid[1][4]).toBe('n');
-    expect(blackbox.grid[1][5]).toBe('n');
-    expect(blackbox.grid[4][8]).toBe('y');
+    expect(
+      blackbox.shootRay(new Vector(0, 2, VECTOR.DIRECTION.DOWN)).outcome
+    ).toBe(SHOOT_RAY_OUTCOME.REFLECTED);
+    expect(
+      blackbox.shootRay(new Vector(0, 4, VECTOR.DIRECTION.DOWN)).outcome
+    ).toBe(SHOOT_RAY_OUTCOME.PROPOGATED);
+    expect(
+      blackbox.shootRay(new Vector(0, 6, VECTOR.DIRECTION.DOWN)).outcome
+    ).toBe(SHOOT_RAY_OUTCOME.ABSORBED);
+    expect(
+      blackbox.shootRay(new Vector(0, 7, VECTOR.DIRECTION.DOWN)).outcome
+    ).toBe(SHOOT_RAY_OUTCOME.ABSORBED);
+    expect(
+      blackbox.shootRay(new Vector(1, 9, VECTOR.DIRECTION.LEFT)).outcome
+    ).toBe(SHOOT_RAY_OUTCOME.ABSORBED);
+    expect(
+      blackbox.shootRay(new Vector(2, 9, VECTOR.DIRECTION.LEFT)).outcome
+    ).toBe(SHOOT_RAY_OUTCOME.REFLECTED);
+    expect(
+      blackbox.shootRay(new Vector(4, 9, VECTOR.DIRECTION.LEFT)).outcome
+    ).toBe(SHOOT_RAY_OUTCOME.ABSORBED);
+    expect(
+      blackbox.shootRay(new Vector(5, 9, VECTOR.DIRECTION.LEFT)).outcome
+    ).toBe(SHOOT_RAY_OUTCOME.REFLECTED);
+    expect(
+      blackbox.shootRay(new Vector(6, 9, VECTOR.DIRECTION.LEFT)).outcome
+    ).toBe(SHOOT_RAY_OUTCOME.PROPOGATED);
+    expect(
+      blackbox.shootRay(new Vector(7, 9, VECTOR.DIRECTION.LEFT)).outcome
+    ).toBe(SHOOT_RAY_OUTCOME.PROPOGATED);
+    expect(
+      blackbox.shootRay(new Vector(9, 2, VECTOR.DIRECTION.UP)).outcome
+    ).toBe(SHOOT_RAY_OUTCOME.ABSORBED);
+    expect(
+      blackbox.shootRay(new Vector(9, 4, VECTOR.DIRECTION.UP)).outcome
+    ).toBe(SHOOT_RAY_OUTCOME.DUPLICATE);
+    expect(
+      blackbox.shootRay(new Vector(9, 6, VECTOR.DIRECTION.UP)).outcome
+    ).toBe(SHOOT_RAY_OUTCOME.ABSORBED);
+    expect(
+      blackbox.shootRay(new Vector(9, 7, VECTOR.DIRECTION.UP)).outcome
+    ).toBe(SHOOT_RAY_OUTCOME.REFLECTED);
+    expect(
+      blackbox.shootRay(new Vector(9, 8, VECTOR.DIRECTION.UP)).outcome
+    ).toBe(SHOOT_RAY_OUTCOME.ABSORBED);
+    expect(
+      blackbox.shootRay(new Vector(1, 0, VECTOR.DIRECTION.RIGHT)).outcome
+    ).toBe(SHOOT_RAY_OUTCOME.ABSORBED);
+    expect(
+      blackbox.shootRay(new Vector(2, 0, VECTOR.DIRECTION.RIGHT)).outcome
+    ).toBe(SHOOT_RAY_OUTCOME.REFLECTED);
+    expect(
+      blackbox.shootRay(new Vector(3, 0, VECTOR.DIRECTION.RIGHT)).outcome
+    ).toBe(SHOOT_RAY_OUTCOME.ABSORBED);
+    expect(
+      blackbox.shootRay(new Vector(5, 0, VECTOR.DIRECTION.RIGHT)).outcome
+    ).toBe(SHOOT_RAY_OUTCOME.DUPLICATE);
+    expect(
+      blackbox.shootRay(new Vector(6, 0, VECTOR.DIRECTION.RIGHT)).outcome
+    ).toBe(SHOOT_RAY_OUTCOME.DUPLICATE);
+    expect(
+      blackbox.shootRay(new Vector(8, 0, VECTOR.DIRECTION.RIGHT)).outcome
+    ).toBe(SHOOT_RAY_OUTCOME.ABSORBED);
+    expect(blackbox.scoreGame()).toBe(4 + 6 + 5 + 6 + 2 * 5);
+    expect(blackbox.grid[1][1]).toBe("y");
+    expect(blackbox.grid[1][4]).toBe("n");
+    expect(blackbox.grid[1][5]).toBe("n");
+    expect(blackbox.grid[4][8]).toBe("y");
     expect(blackbox.grid[3][1]).toBe(0);
     expect(blackbox.grid[8][6]).toBe(0);
-    expect(blackbox.grid[0][2]).toBe('r');
+    expect(blackbox.grid[0][2]).toBe("r");
     expect(blackbox.grid[0][4]).toBe(1);
-    expect(blackbox.grid[0][6]).toBe('a');
-    expect(blackbox.grid[0][7]).toBe('a');
-    expect(blackbox.grid[1][9]).toBe('a');
-    expect(blackbox.grid[2][9]).toBe('r');
-    expect(blackbox.grid[4][9]).toBe('a');
-    expect(blackbox.grid[5][9]).toBe('r');
+    expect(blackbox.grid[0][6]).toBe("a");
+    expect(blackbox.grid[0][7]).toBe("a");
+    expect(blackbox.grid[1][9]).toBe("a");
+    expect(blackbox.grid[2][9]).toBe("r");
+    expect(blackbox.grid[4][9]).toBe("a");
+    expect(blackbox.grid[5][9]).toBe("r");
     expect(blackbox.grid[6][9]).toBe(2);
     expect(blackbox.grid[7][9]).toBe(3);
-    expect(blackbox.grid[9][2]).toBe('a');
+    expect(blackbox.grid[9][2]).toBe("a");
     expect(blackbox.grid[9][4]).toBe(1);
-    expect(blackbox.grid[9][6]).toBe('a');
-    expect(blackbox.grid[9][7]).toBe('r');
-    expect(blackbox.grid[9][8]).toBe('a');
-    expect(blackbox.grid[1][0]).toBe('a');
-    expect(blackbox.grid[2][0]).toBe('r');
-    expect(blackbox.grid[3][0]).toBe('a');
+    expect(blackbox.grid[9][6]).toBe("a");
+    expect(blackbox.grid[9][7]).toBe("r");
+    expect(blackbox.grid[9][8]).toBe("a");
+    expect(blackbox.grid[1][0]).toBe("a");
+    expect(blackbox.grid[2][0]).toBe("r");
+    expect(blackbox.grid[3][0]).toBe("a");
     expect(blackbox.grid[5][0]).toBe(3);
     expect(blackbox.grid[6][0]).toBe(2);
-    expect(blackbox.grid[8][0]).toBe('a');
-    expect(blackbox.marbles.some(marble => marble.row === 1 && marble.column === 1)).toBe(true);
-    expect(blackbox.marbles.some(marble => marble.row === 3 && marble.column === 1)).toBe(true);
-    expect(blackbox.marbles.some(marble => marble.row === 4 && marble.column === 8)).toBe(true);
-    expect(blackbox.marbles.some(marble => marble.row === 8 && marble.column === 6)).toBe(true);
-
+    expect(blackbox.grid[8][0]).toBe("a");
+    expect(
+      blackbox.marbles.some(marble => marble.row === 1 && marble.column === 1)
+    ).toBe(true);
+    expect(
+      blackbox.marbles.some(marble => marble.row === 3 && marble.column === 1)
+    ).toBe(true);
+    expect(
+      blackbox.marbles.some(marble => marble.row === 4 && marble.column === 8)
+    ).toBe(true);
+    expect(
+      blackbox.marbles.some(marble => marble.row === 8 && marble.column === 6)
+    ).toBe(true);
   });
-
 });
