@@ -92,9 +92,6 @@ sup {
 sub {
   bottom: -0.25em; }
 
-.blackbox-container {
-  height: 100vmin; }
-
 .blackbox {
   height: 100%; }
 

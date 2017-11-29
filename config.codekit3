@@ -65,12 +65,12 @@
 		"uL": 1
 		},
 	"\/css\/layout-float.scss": {
-		"aP": 1,
+		"aP": 0,
 		"bl": 0,
 		"dP": 10,
 		"dS": 0,
 		"ft": 4,
-		"ma": 1,
+		"ma": 0,
 		"oA": 1,
 		"oAP": "\/build\/css\/layout-float.css",
 		"oF": 0,
@@ -262,7 +262,7 @@
 	"displayValue": "black-box",
 	"displayValueWasSetByUser": 0,
 	"iconImageName": "meme-fry",
-	"lastBuiltDate": 533648750
+	"lastBuiltDate": 533664177
 	},
 "projectSettings": {
 	"abortBuildOnError": 1,
