@@ -1,3 +1,9 @@
+// @codekit-prepend "utility.js";
+// @codekit-prepend "vector.js";
+// @codekit-prepend "model.js";
+// @codekit-prepend "view.js";
+// @codekit-prepend "controller.js";
+
 !(function(BLACKBOX) {
   "use strict";
 

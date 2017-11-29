@@ -38,68 +38,86 @@
 		"oAP": "\/build\/build",
 		"oF": 0
 		},
-	"\/css\/blackbox.css": {
+	"\/css\/blackbox.scss": {
 		"aP": 1,
 		"bl": 0,
-		"ft": 16,
-		"ma": 0,
+		"dP": 10,
+		"dS": 0,
+		"ft": 4,
+		"ma": 1,
 		"oA": 0,
-		"oAP": "\/build\/css\/blackbox-min.css",
+		"oAP": "\/build\/css\/blackbox.css",
 		"oF": 0,
-		"oS": 3
+		"oS": 0,
+		"uL": 1
 		},
-	"\/css\/layout-flex.css": {
+	"\/css\/layout-flex.scss": {
 		"aP": 1,
 		"bl": 0,
-		"ft": 16,
-		"ma": 0,
-		"oA": 0,
-		"oAP": "\/build\/css\/layout-flex-min.css",
+		"dP": 10,
+		"dS": 0,
+		"ft": 4,
+		"ma": 1,
+		"oA": 1,
+		"oAP": "\/build\/css\/layout-flex.css",
 		"oF": 0,
-		"oS": 3
+		"oS": 0,
+		"uL": 1
 		},
-	"\/css\/layout-float.css": {
+	"\/css\/layout-float.scss": {
 		"aP": 1,
 		"bl": 0,
-		"ft": 16,
-		"ma": 0,
-		"oA": 0,
-		"oAP": "\/build\/css\/layout-float-min.css",
+		"dP": 10,
+		"dS": 0,
+		"ft": 4,
+		"ma": 1,
+		"oA": 1,
+		"oAP": "\/build\/css\/layout-float.css",
 		"oF": 0,
-		"oS": 3
+		"oS": 0,
+		"uL": 1
 		},
-	"\/css\/layout-grid.css": {
+	"\/css\/layout-grid.scss": {
 		"aP": 1,
 		"bl": 0,
-		"ft": 16,
-		"ma": 0,
-		"oA": 0,
-		"oAP": "\/build\/css\/layout-grid-min.css",
-		"oF": 0,
-		"oS": 3
+		"dP": 10,
+		"dS": 0,
+		"ft": 4,
+		"ma": 1,
+		"oA": 1,
+		"oAP": "\/build\/css\/layout-grid.css",
+		"oF": 1,
+		"oS": 0,
+		"uL": 1
 		},
-	"\/css\/radio-button.css": {
+	"\/css\/radio-button.scss": {
 		"aP": 1,
 		"bl": 0,
-		"ft": 16,
-		"ma": 0,
-		"oA": 0,
-		"oAP": "\/build\/css\/radio-button-min.css",
+		"dP": 10,
+		"dS": 0,
+		"ft": 4,
+		"ma": 1,
+		"oA": 1,
+		"oAP": "\/build\/css\/radio-button.css",
 		"oF": 0,
-		"oS": 3
+		"oS": 0,
+		"uL": 1
 		},
-	"\/css\/typography.css": {
+	"\/css\/typography.scss": {
 		"aP": 1,
 		"bl": 0,
-		"ft": 16,
-		"ma": 0,
-		"oA": 0,
-		"oAP": "\/build\/css\/typography-min.css",
+		"dP": 10,
+		"dS": 0,
+		"ft": 4,
+		"ma": 1,
+		"oA": 1,
+		"oAP": "\/build\/css\/typography.css",
 		"oF": 0,
-		"oS": 3
+		"oS": 0,
+		"uL": 1
 		},
 	"\/index.html": {
-		"cB": 0,
+		"cB": 1,
 		"ft": 8192,
 		"oA": 0,
 		"oAP": "\/build\/index.html",
@@ -107,61 +125,61 @@
 		},
 	"\/js\/app.js": {
 		"ft": 64,
-		"ma": 0,
+		"ma": 1,
 		"mi": 1,
 		"oA": 0,
-		"oAP": "\/build\/js\/app-min.js",
-		"oF": 0,
+		"oAP": "\/build\/js\/app.js",
+		"oF": 2,
 		"sC": 3,
-		"tS": 0
+		"tS": 1
 		},
 	"\/js\/controller.js": {
 		"ft": 64,
-		"ma": 0,
+		"ma": 1,
 		"mi": 1,
-		"oA": 0,
-		"oAP": "\/build\/js\/controller-min.js",
-		"oF": 0,
+		"oA": 1,
+		"oAP": "\/build\/js\/controller.js",
+		"oF": 2,
 		"sC": 3,
 		"tS": 1
 		},
 	"\/js\/model.js": {
 		"ft": 64,
-		"ma": 0,
+		"ma": 1,
 		"mi": 1,
-		"oA": 0,
-		"oAP": "\/build\/js\/model-min.js",
-		"oF": 0,
+		"oA": 1,
+		"oAP": "\/build\/js\/model.js",
+		"oF": 2,
 		"sC": 3,
 		"tS": 1
 		},
 	"\/js\/utility.js": {
 		"ft": 64,
-		"ma": 0,
+		"ma": 1,
 		"mi": 1,
-		"oA": 0,
-		"oAP": "\/build\/js\/utility-min.js",
-		"oF": 0,
+		"oA": 1,
+		"oAP": "\/build\/js\/utility.js",
+		"oF": 2,
 		"sC": 3,
 		"tS": 1
 		},
 	"\/js\/vector.js": {
 		"ft": 64,
-		"ma": 0,
+		"ma": 1,
 		"mi": 1,
-		"oA": 0,
-		"oAP": "\/build\/js\/vector-min.js",
-		"oF": 0,
+		"oA": 1,
+		"oAP": "\/build\/js\/vector.js",
+		"oF": 2,
 		"sC": 3,
 		"tS": 0
 		},
 	"\/js\/view.js": {
 		"ft": 64,
-		"ma": 0,
+		"ma": 1,
 		"mi": 1,
-		"oA": 0,
-		"oAP": "\/build\/js\/view-min.js",
-		"oF": 0,
+		"oA": 1,
+		"oAP": "\/build\/js\/view.js",
+		"oF": 2,
 		"sC": 3,
 		"tS": 1
 		},
@@ -207,7 +225,7 @@
 		},
 	"\/tests\/blackbox.test.js": {
 		"ft": 64,
-		"ma": 0,
+		"ma": 1,
 		"mi": 1,
 		"oA": 1,
 		"oAP": "\/build\/tests\/blackbox.test-min.js",
@@ -217,7 +235,7 @@
 		},
 	"\/tests\/vector.test.js": {
 		"ft": 64,
-		"ma": 0,
+		"ma": 1,
 		"mi": 1,
 		"oA": 1,
 		"oAP": "\/build\/tests\/vector.test-min.js",
@@ -227,6 +245,15 @@
 		}
 	},
 "hooks": [
+	{
+		"enabled": 0,
+		"name": "Hook #1",
+		"predicateDataBase64Encoded": "YnBsaXN0MDDUAQIDBAUGYmNYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK8QFgcIDxQcJicqMTU6Oz5CRktMT1VZXV9VJG51bGzTCQoLDA0OXxAXTlNDb21wb3VuZFByZWRpY2F0ZVR5cGVfEA9OU1N1YnByZWRpY2F0ZXNWJGNsYXNzEAKAAoAV0hALERNaTlMub2JqZWN0c6ESgAOAFNQLFRYXGBkaG18QEU5TUmlnaHRFeHByZXNzaW9uXxAQTlNMZWZ0RXhwcmVzc2lvbl8QE05TUHJlZGljYXRlT3BlcmF0b3KAE4AOgASAEdUdHh8gCyEiIyQlWU5TT3BlcmFuZF5OU1NlbGVjdG9yTmFtZV8QEE5TRXhwcmVzc2lvblR5cGVbTlNBcmd1bWVudHOABoAFEAOACIANXHZhbHVlRm9yS2V5OtIfCygpEAGAB9IrLC0uWiRjbGFzc25hbWVYJGNsYXNzZXNfEBBOU1NlbGZFeHByZXNzaW9uoy0vMFxOU0V4cHJlc3Npb25YTlNPYmplY3TSEAsyNKEzgAmADNMLHzY3ODlZTlNLZXlQYXRogAsQCoAKXWlucHV0RnVsbFBhdGjSKyw8PV8QHE5TS2V5UGF0aFNwZWNpZmllckV4cHJlc3Npb26jPC8w0issP0BeTlNNdXRhYmxlQXJyYXmjP0EwV05TQXJyYXnSKyxDRF8QE05TS2V5UGF0aEV4cHJlc3Npb26kQ0UvMF8QFE5TRnVuY3Rpb25FeHByZXNzaW9u00cfC0hJSl8QD05TQ29uc3RhbnRWYWx1ZYAPEACAEFlibGFjay1ib3jSKyxNTl8QGU5TQ29uc3RhbnRWYWx1ZUV4cHJlc3Npb26jTS8w1AtQUVJTSShUWk5TTW9kaWZpZXJXTlNGbGFnc15OU09wZXJhdG9yVHlwZYASEGPSKyxWV18QFU5TSW5QcmVkaWNhdGVPcGVyYXRvcqNWWDBfEBNOU1ByZWRpY2F0ZU9wZXJhdG9y0issWltfEBVOU0NvbXBhcmlzb25QcmVkaWNhdGWjWlwwW05TUHJlZGljYXRl0issQV6iQTDSKyxgYV8QE05TQ29tcG91bmRQcmVkaWNhdGWjYFwwXxAPTlNLZXllZEFyY2hpdmVy0WRlVHJvb3SAAQAIABEAGgAjAC0AMgA3AFAAVgBdAHcAiQCQAJIAlACWAJsApgCoAKoArAC1AMkA3ADyAPQA9gD4APoBBQEPAR4BMQE9AT8BQQFDAUUBRwFUAVkBWwFdAWIBbQF2AYkBjQGaAaMBqAGqAawBrgG1Ab8BwQHDAcUB0wHYAfcB+wIAAg8CEwIbAiACNgI7AlICWQJrAm0CbwJxAnsCgAKcAqACqQK0ArwCywLNAs8C1ALsAvADBgMLAyMDJwMzAzgDOwNAA1YDWgNsA28DdAAAAAAAAAIBAAAAAAAAAGYAAAAAAAAAAAAAAAAAAAN2",
+		"runOrder": 0,
+		"scriptSourceString": "# set CK_OUTPUT_PATHS to an empty string if it is not present\n${CK_OUTPUT_PATHS:=\"\"}\n# split string into an array via ':'\nCK_OUTPUT_PATHS=(${CK_OUTPUT_PATHS\/\/:\/ })\nfor i in \"${CK_OUTPUT_PATHS[@]}\"  \ndo  \n    sudo gzip -nc \"$i\" > \"$i.gz\"\ndone",
+		"scriptType": 1,
+		"uuidString": "0ED864CF-D410-4763-A761-90EF9288F622"
+		}
 	],
 "manualImportLinks": {
 	},
@@ -235,7 +262,7 @@
 	"displayValue": "black-box",
 	"displayValueWasSetByUser": 0,
 	"iconImageName": "meme-fry",
-	"lastBuiltDate": 533243991
+	"lastBuiltDate": 533648750
 	},
 "projectSettings": {
 	"abortBuildOnError": 1,
@@ -274,13 +301,13 @@
 			"active": 0
 			},
 		"es2015-arrow-functions": {
-			"active": 0
+			"active": 1
 			},
 		"es2015-block-scoped-functions": {
 			"active": 0
 			},
 		"es2015-block-scoping": {
-			"active": 0
+			"active": 1
 			},
 		"es2015-classes": {
 			"active": 0
@@ -289,7 +316,7 @@
 			"active": 0
 			},
 		"es2015-constants": {
-			"active": 0
+			"active": 1
 			},
 		"es2015-destructuring": {
 			"active": 0
@@ -322,7 +349,7 @@
 			"active": 0
 			},
 		"es2015-parameters": {
-			"active": 0
+			"active": 1
 			},
 		"es2015-shorthand-properties": {
 			"active": 0
@@ -481,7 +508,7 @@
 			"active": 0
 			}
 		},
-	"babelPresetType": 193,
+	"babelPresetType": 0,
 	"babelRetainLines": 0,
 	"bowerAbbreviatedPath": "bower_components",
 	"bowerAutoCreateInfoFile": 1,
@@ -1992,12 +2019,12 @@
 		},
 	"languageDefaultsCSS": {
 		"autoOutputAction": 0,
-		"autoOutputPathFilenamePattern": "*-min.css",
+		"autoOutputPathFilenamePattern": "*.css",
 		"autoOutputPathRelativePath": "",
 		"autoOutputPathReplace1": "",
 		"autoOutputPathReplace2": "",
 		"autoOutputPathStyle": 0,
-		"createSourceMap": 0,
+		"createSourceMap": 1,
 		"outputStyle": 3,
 		"shouldRunAutoprefixer": 1,
 		"shouldRunBless": 0
@@ -2037,15 +2064,15 @@
 		},
 	"languageDefaultsJS": {
 		"autoOutputAction": 0,
-		"autoOutputPathFilenamePattern": "*-min.js",
+		"autoOutputPathFilenamePattern": "*.js",
 		"autoOutputPathRelativePath": "\/min",
 		"autoOutputPathReplace1": "",
 		"autoOutputPathReplace2": "",
 		"autoOutputPathStyle": 0,
-		"createSourceMap": 0,
+		"createSourceMap": 1,
 		"minifyOutput": 1,
 		"syntaxCheckerStyle": 3,
-		"transpilerStyle": 0
+		"transpilerStyle": 1
 		},
 	"languageDefaultsJSON": {
 		"autoOutputAction": 1,
@@ -2142,11 +2169,11 @@
 		"autoOutputPathReplace1": "sass",
 		"autoOutputPathReplace2": "css",
 		"autoOutputPathStyle": 0,
-		"createSourceMap": 0,
+		"createSourceMap": 1,
 		"debugStyle": 0,
 		"decimalPrecision": 10,
 		"outputStyle": 0,
-		"shouldRunAutoprefixer": 0,
+		"shouldRunAutoprefixer": 1,
 		"shouldRunBless": 0,
 		"useLibsass": 1
 		},

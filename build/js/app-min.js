@@ -1,1 +1,0 @@
-!function(e){"use strict";var n=new e.Model(8,4,!0),r=new e.View;new e.Controller(n,r).renderViews()}(this.BLACKBOX);
