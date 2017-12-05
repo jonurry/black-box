@@ -1,62 +1,82 @@
 <!doctype html>
 <html lang="en">
-	<head>
-		<title>Black Box</title>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-		<!-- CSS -->
-		<link type="text/css" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato|Passion+One">
-		<link type="text/css" rel="stylesheet" href="css/blackbox.css">
-	</head>
-	<body>
-		<section class="blackboxapp">
-			<header class="header">
-				<h1>Black Box</h1>
-			</header>
-			<div class="main-container">
-				<div class="controls">
-					<div>
-						<label for="inputGridSize">Grid Size: </label>
-						<input id="inputGridSize" type="number" min="6" max="16" value="8">
-					</div>
-					<div>
-						<label for="inputMarbles">Marbles: </label>
-						<input id="inputMarbles" type="number" min="4" max="16" value="4">
-					</div>
-					<div class="buttonNewGameContainer">
-						<button id="buttonNewGame" autofocus>New Game</button>
-					</div>
+
+<head>
+	<title>Black Box</title>
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<!-- CSS -->
+	<link type="text/css" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato|Passion+One">
+	<link type="text/css" rel="stylesheet" href="css/blackbox.css">
+	<link rel="apple-touch-icon" sizes="57x57" href="/apple-icon-57x57.png">
+	<link rel="apple-touch-icon" sizes="60x60" href="/apple-icon-60x60.png">
+	<link rel="apple-touch-icon" sizes="72x72" href="/apple-icon-72x72.png">
+	<link rel="apple-touch-icon" sizes="76x76" href="/apple-icon-76x76.png">
+	<link rel="apple-touch-icon" sizes="114x114" href="/apple-icon-114x114.png">
+	<link rel="apple-touch-icon" sizes="120x120" href="/apple-icon-120x120.png">
+	<link rel="apple-touch-icon" sizes="144x144" href="/apple-icon-144x144.png">
+	<link rel="apple-touch-icon" sizes="152x152" href="/apple-icon-152x152.png">
+	<link rel="apple-touch-icon" sizes="180x180" href="/apple-icon-180x180.png">
+	<link rel="icon" type="image/png" sizes="192x192" href="/android-icon-192x192.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+	<link rel="manifest" href="/manifest.json">
+	<meta name="msapplication-TileColor" content="#ffffff">
+	<meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
+	<meta name="theme-color" content="#ffffff">
+</head>
+
+<body>
+	<section class="blackboxapp">
+		<header class="header">
+			<h1>Black Box</h1>
+		</header>
+		<div class="main-container">
+			<div class="controls">
+				<div>
+					<label for="inputGridSize">Grid Size: </label>
+					<input id="inputGridSize" type="number" min="6" max="16" value="8">
 				</div>
-				<div class="blackbox-container">
-					<div id="blackbox" class="blackbox grid"></div>
+				<div>
+					<label for="inputMarbles">Marbles: </label>
+					<input id="inputMarbles" type="number" min="4" max="16" value="4">
 				</div>
-				<div class="score">
-					<div>
-						<button id="buttonScoreGame">Score Game</button>
-					</div>
-					<div id="score" style="display: none;">
-						<label id="labelScore">Your score is:</label>
-						<br/><br/><br/>
-						<span id="scoreValue" class="score-value"></span>
-					</div>
-					<div id="animateRays" style="display: none;">
-						<span>Animate:</span>
-						<p class="btn-switch">
-							<input type="radio" id="radioAnimateRaysYes" name="switch" value="on" checked class="btn-switch__radio btn-switch__radio_yes" />
-							<input type="radio" id="radioAnimateRaysNo" name="switch" value="off" class="btn-switch__radio btn-switch__radio_no" />
-							<label for="radioAnimateRaysYes" class="btn-switch__label btn-switch__label_yes"><span class="btn-switch__txt">Yes</span></label>
-							<label for="radioAnimateRaysNo" class="btn-switch__label btn-switch__label_no"><span class="btn-switch__txt">No</span></label>
-						</p>
-					</div>
+				<div class="buttonNewGameContainer">
+					<button id="buttonNewGame" autofocus>New Game</button>
 				</div>
 			</div>
-			<footer class="footer">
-				<p><strong>Black Box</strong> - a puzzle game originally created by Eric Solomon and published by Waddingtons and Parker.</p>
-				<p>Rules: <a href="https://en.wikipedia.org/wiki/Black_Box_(game)">Wikipedia</a></p>
-				<p>This version is created by <a href="http://jon.urry.me">Jon Urry</a></p>
-			</footer>
-		</section>
-		<script src="js/app.js"></script>
-	</body>
+			<div class="blackbox-container">
+				<div id="blackbox" class="blackbox grid"></div>
+			</div>
+			<div class="score">
+				<div>
+					<button id="buttonScoreGame">Score Game</button>
+				</div>
+				<div id="score" style="display: none;">
+					<label id="labelScore">Your score is:</label>
+					<br/><br/><br/>
+					<span id="scoreValue" class="score-value"></span>
+				</div>
+				<div id="animateRays" style="display: none;">
+					<span>Animate:</span>
+					<p class="btn-switch">
+						<input type="radio" id="radioAnimateRaysYes" name="switch" value="on" checked class="btn-switch__radio btn-switch__radio_yes" />
+						<input type="radio" id="radioAnimateRaysNo" name="switch" value="off" class="btn-switch__radio btn-switch__radio_no" />
+						<label for="radioAnimateRaysYes" class="btn-switch__label btn-switch__label_yes"><span class="btn-switch__txt">Yes</span></label>
+						<label for="radioAnimateRaysNo" class="btn-switch__label btn-switch__label_no"><span class="btn-switch__txt">No</span></label>
+					</p>
+				</div>
+			</div>
+		</div>
+		<footer class="footer">
+			<p><strong>Black Box</strong> - a puzzle game originally created by Eric Solomon and published by Waddingtons and Parker.</p>
+			<p>Rules: <a href="https://en.wikipedia.org/wiki/Black_Box_(game)">Wikipedia</a></p>
+			<p>This version is created by <a href="http://jon.urry.me">Jon Urry</a></p>
+		</footer>
+	</section>
+	<script src="js/app.js"></script>
+</body>
+
 </html>
