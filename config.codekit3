@@ -12,14 +12,14 @@
 	"\/.gitignore": {
 		"cB": 0,
 		"ft": 8192,
-		"oA": 0,
-		"oAP": "\/build\/.gitignore",
-		"oF": 0
+		"oA": 1,
+		"oAP": "\/docs\/.gitignore",
+		"oF": 1
 		},
 	"\/.imdone\/config.json": {
 		"ft": 524288,
 		"oA": 1,
-		"oAP": "\/build\/.imdone\/config-min.json",
+		"oAP": "\/docs\/.imdone\/config-min.json",
 		"oF": 0,
 		"oO": 0,
 		"oS": 1
@@ -27,16 +27,10 @@
 	"\/.imdone\/sort.json": {
 		"ft": 524288,
 		"oA": 1,
-		"oAP": "\/build\/.imdone\/sort-min.json",
+		"oAP": "\/docs\/.imdone\/sort-min.json",
 		"oF": 0,
 		"oO": 0,
 		"oS": 1
-		},
-	"\/build": {
-		"ft": 65536,
-		"oA": 1,
-		"oAP": "\/build\/build",
-		"oF": 0
 		},
 	"\/css\/blackbox.scss": {
 		"aP": 1,
@@ -46,7 +40,7 @@
 		"ft": 4,
 		"ma": 1,
 		"oA": 0,
-		"oAP": "\/build\/css\/blackbox.css",
+		"oAP": "\/docs\/css\/blackbox.css",
 		"oF": 0,
 		"oS": 0,
 		"uL": 1
@@ -59,7 +53,7 @@
 		"ft": 4,
 		"ma": 1,
 		"oA": 1,
-		"oAP": "\/build\/css\/layout-flex.css",
+		"oAP": "\/docs\/css\/layout-flex.css",
 		"oF": 0,
 		"oS": 0,
 		"uL": 1
@@ -72,7 +66,7 @@
 		"ft": 4,
 		"ma": 0,
 		"oA": 1,
-		"oAP": "\/build\/css\/layout-float.css",
+		"oAP": "\/docs\/css\/layout-float.css",
 		"oF": 0,
 		"oS": 0,
 		"uL": 1
@@ -85,7 +79,7 @@
 		"ft": 4,
 		"ma": 1,
 		"oA": 1,
-		"oAP": "\/build\/css\/layout-grid.css",
+		"oAP": "\/docs\/css\/layout-grid.css",
 		"oF": 1,
 		"oS": 0,
 		"uL": 1
@@ -98,7 +92,7 @@
 		"ft": 4,
 		"ma": 1,
 		"oA": 1,
-		"oAP": "\/build\/css\/radio-button.css",
+		"oAP": "\/docs\/css\/radio-button.css",
 		"oF": 0,
 		"oS": 0,
 		"uL": 1
@@ -111,16 +105,22 @@
 		"ft": 4,
 		"ma": 1,
 		"oA": 1,
-		"oAP": "\/build\/css\/typography.css",
+		"oAP": "\/docs\/css\/typography.css",
 		"oF": 0,
 		"oS": 0,
 		"uL": 1
+		},
+	"\/docs": {
+		"ft": 65536,
+		"oA": 1,
+		"oAP": "\/docs\/docs",
+		"oF": 0
 		},
 	"\/index.html": {
 		"cB": 1,
 		"ft": 8192,
 		"oA": 0,
-		"oAP": "\/build\/index.html",
+		"oAP": "\/docs\/index.html",
 		"oF": 0
 		},
 	"\/js\/app.js": {
@@ -128,7 +128,7 @@
 		"ma": 1,
 		"mi": 1,
 		"oA": 0,
-		"oAP": "\/build\/js\/app.js",
+		"oAP": "\/docs\/js\/app.js",
 		"oF": 2,
 		"sC": 3,
 		"tS": 1
@@ -138,7 +138,7 @@
 		"ma": 1,
 		"mi": 1,
 		"oA": 1,
-		"oAP": "\/build\/js\/controller.js",
+		"oAP": "\/docs\/build\/js\/controller.js",
 		"oF": 2,
 		"sC": 3,
 		"tS": 1
@@ -148,7 +148,7 @@
 		"ma": 1,
 		"mi": 1,
 		"oA": 1,
-		"oAP": "\/build\/js\/model.js",
+		"oAP": "\/docs\/build\/js\/model.js",
 		"oF": 2,
 		"sC": 3,
 		"tS": 1
@@ -158,7 +158,7 @@
 		"ma": 1,
 		"mi": 1,
 		"oA": 1,
-		"oAP": "\/build\/js\/utility.js",
+		"oAP": "\/docs\/build\/js\/utility.js",
 		"oF": 2,
 		"sC": 3,
 		"tS": 1
@@ -168,7 +168,7 @@
 		"ma": 1,
 		"mi": 1,
 		"oA": 1,
-		"oAP": "\/build\/js\/vector.js",
+		"oAP": "\/docs\/build\/js\/vector.js",
 		"oF": 2,
 		"sC": 3,
 		"tS": 0
@@ -178,7 +178,7 @@
 		"ma": 1,
 		"mi": 1,
 		"oA": 1,
-		"oAP": "\/build\/js\/view.js",
+		"oAP": "\/docs\/build\/js\/view.js",
 		"oF": 2,
 		"sC": 3,
 		"tS": 1
@@ -186,13 +186,13 @@
 	"\/node_modules": {
 		"ft": 65536,
 		"oA": 1,
-		"oAP": "\/build\/node_modules",
+		"oAP": "\/docs\/node_modules",
 		"oF": 1
 		},
 	"\/package-lock.json": {
 		"ft": 524288,
 		"oA": 1,
-		"oAP": "\/build\/package-lock-min.json",
+		"oAP": "\/docs\/package-lock-min.json",
 		"oF": 0,
 		"oO": 0,
 		"oS": 1
@@ -200,7 +200,7 @@
 	"\/package.json": {
 		"ft": 524288,
 		"oA": 1,
-		"oAP": "\/build\/package-min.json",
+		"oAP": "\/docs\/package-min.json",
 		"oF": 0,
 		"oO": 0,
 		"oS": 1
@@ -214,7 +214,7 @@
 		"eSQ": 1,
 		"ft": 4096,
 		"oA": 0,
-		"oAP": "\/build\/readme.html",
+		"oAP": "\/docs\/readme.html",
 		"oF": 0,
 		"oFM": 0,
 		"oS": 0,
@@ -228,7 +228,7 @@
 		"ma": 1,
 		"mi": 1,
 		"oA": 1,
-		"oAP": "\/build\/tests\/blackbox.test-min.js",
+		"oAP": "\/docs\/tests\/blackbox.test.js",
 		"oF": 1,
 		"sC": 3,
 		"tS": 0
@@ -238,7 +238,7 @@
 		"ma": 1,
 		"mi": 1,
 		"oA": 1,
-		"oAP": "\/build\/tests\/vector.test-min.js",
+		"oAP": "\/docs\/tests\/vector.test.js",
 		"oF": 1,
 		"sC": 3,
 		"tS": 0
@@ -262,7 +262,7 @@
 	"displayValue": "black-box",
 	"displayValueWasSetByUser": 0,
 	"iconImageName": "meme-fry",
-	"lastBuiltDate": 533664177
+	"lastBuiltDate": 534165876
 	},
 "projectSettings": {
 	"abortBuildOnError": 1,
@@ -518,7 +518,7 @@
 	"bowerUseExactVersion": 0,
 	"browserRefreshDelay": 0,
 	"buildFolderActive": 1,
-	"buildFolderName": "build",
+	"buildFolderName": "docs",
 	"cleanBuild": 1,
 	"coffeeLintFlags2": {
 		"arrow_spacing": {
@@ -1653,7 +1653,7 @@
 		},
 	"esLintSourceType": 0,
 	"externalServerAddress": "http:\/\/localhost:8888",
-	"gitIgnoreBuildFolder": 1,
+	"gitIgnoreBuildFolder": 0,
 	"hideConfigFile": 0,
 	"jsCheckerReservedNamesString": "",
 	"jsHintFlags2": {
@@ -2409,7 +2409,7 @@
 			}
 		},
 	"uglifyReservedNamesString": "$",
-	"websiteRelativeRoot": "\/build"
+	"websiteRelativeRoot": "\/docs"
 	},
 "settingsFileVersion": "3"
 }
