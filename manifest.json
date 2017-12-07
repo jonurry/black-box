@@ -1,5 +1,8 @@
 {
-  "name": "BlackBox",
+  "background_color": "white",
+  "description":
+    "A puzzle game originally created by Eric Solomon and published by Waddingtons and Parker.",
+  "display": "standalone",
   "icons": [
     {
       "src": "img/favicons/android-icon-36x36.png",
@@ -37,5 +40,7 @@
       "type": "image/png",
       "density": "4.0"
     }
-  ]
+  ],
+  "name": "Black Box",
+  "start_url": "index.html"
 }
