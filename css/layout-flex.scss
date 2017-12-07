@@ -15,28 +15,36 @@
 /* Flex Layout - fallback for browsers that don't support grid */
 
 .main-container {
+  align-content: center;
+  align-items: center;
   display: flex;
   flex-wrap: wrap;
+  justify-content: space-around;
   margin: auto;
   max-width: 200vmin;
 }
 
 .controls,
 .score {
+  align-content: space-around;
+  align-items: center;
+  align-self: center;
   display: flex;
+  flex-basis: 50vmin;
   flex-direction: column;
   flex-grow: 1;
   justify-content: center;
-  margin: 1rem auto;
+  margin: 2rem auto;
   padding: 0 2rem;
 }
 
 .controls > div,
 .score > div {
-  margin: 0.5rem auto;
+  margin: 0.5rem 0;
 }
 
 .blackbox-container {
+  align-items: center;
   flex-basis: 100vmin;
   flex-grow: 1;
 }
@@ -45,4 +53,39 @@
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+}
+
+@media (orientation: landscape) {
+  .controls,
+  .score {
+    flex-basis: 33vmin;
+    margin: 0 3rem;
+    padding: 0;
+  }
+}
+
+@media (orientation: landscape) {
+  .controls {
+    order: 1;
+  }
+}
+
+@media (orientation: landscape) {
+  .score {
+    order: 2;
+  }
+}
+
+@media (orientation: landscape) {
+  .blackbox-container {
+    flex-basis: 67vmin;
+    order: 3;
+  }
+}
+
+@media (orientation: landscape) {
+  .main-container {
+    flex-direction: column;
+    max-height: 100vmin;
+  }
 }

@@ -19,13 +19,21 @@ h1,
 button,
 input,
 label {
-  font-size: 2rem;
+  font-size: 1.5rem;
   max-width: 12rem;
   text-align: center;
 }
 
 .score span {
-  font-size: 2rem;
+  font-size: 1.5rem;
+}
+
+@media (orientation: landscape) {
+  button,
+  label,
+  input {
+    font-size: 1.5rem;
+  }
 }
 
 .score .score-value {
