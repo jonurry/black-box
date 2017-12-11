@@ -168,20 +168,23 @@ sub {
 
 /* Flex Layout - fallback for browsers that don't support grid */
 .main-container {
-  -ms-flex-line-pack: center;
-      align-content: center;
+  -ms-flex-line-pack: distribute;
+      align-content: space-around;
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
   -ms-flex-wrap: wrap;
       flex-wrap: wrap;
-  -ms-flex-pack: distribute;
-      justify-content: space-around;
-  margin: auto;
-  max-width: 200vmin; }
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center; }
 
 .controls,
 .score {
@@ -190,41 +193,6 @@ sub {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  -ms-flex-item-align: center;
-      align-self: center;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -ms-flex-preferred-size: 50vmin;
-      flex-basis: 50vmin;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  -webkit-box-flex: 1;
-      -ms-flex-positive: 1;
-          flex-grow: 1;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  margin: 2rem auto;
-  padding: 0 2rem; }
-
-.controls > div,
-.score > div {
-  margin: 0.5rem 0; }
-
-.blackbox-container {
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -ms-flex-preferred-size: 100vmin;
-      flex-basis: 100vmin;
-  -webkit-box-flex: 1;
-      -ms-flex-positive: 1;
-          flex-grow: 1; }
-
-.blackbox {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -233,43 +201,100 @@ sub {
       -ms-flex-direction: row;
           flex-direction: row;
   -ms-flex-wrap: wrap;
-      flex-wrap: wrap; }
+      flex-wrap: wrap;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center; }
 
-@media (orientation: landscape) {
-  .controls,
-  .score {
-    -ms-flex-preferred-size: 33vmin;
-        flex-basis: 33vmin;
-    margin: 0 3rem;
-    padding: 0; } }
+.controls {
+  -webkit-box-ordinal-group: 2;
+      -ms-flex-order: 1;
+          order: 1; }
 
-@media (orientation: landscape) {
-  .controls {
-    -webkit-box-ordinal-group: 2;
-        -ms-flex-order: 1;
-            order: 1; } }
+.blackbox-container {
+  -webkit-box-ordinal-group: 3;
+      -ms-flex-order: 2;
+          order: 2; }
 
-@media (orientation: landscape) {
+.score {
+  -webkit-box-ordinal-group: 4;
+      -ms-flex-order: 3;
+          order: 3; }
+
+.blackbox-container,
+.controls,
+.score {
+  -ms-flex-item-align: auto;
+      align-self: auto;
+  -webkit-box-flex: 0;
+      -ms-flex-positive: 0;
+          flex-grow: 0;
+  -ms-flex-negative: 1;
+      flex-shrink: 1;
+  -ms-flex-preferred-size: auto;
+      flex-basis: auto; }
+
+.main-container {
+  margin: auto;
+  max-width: 200vmin; }
+
+.controls,
+.score {
+  height: auto;
+  margin: 1rem auto; }
+
+.blackbox-container,
+.blackbox {
+  min-height: 100vmin;
+  min-width: 100vmin; }
+
+.controls > div,
+.score > div {
+  margin: 0.5rem; }
+
+.footer {
+  width: 100%; }
+
+@media (orientation: landscape) and (min-aspect-ratio: 3 / 2) and (min-height: 500px) {
+  .blackbox-container {
+    -webkit-box-ordinal-group: 4;
+        -ms-flex-order: 3;
+            order: 3; }
   .score {
     -webkit-box-ordinal-group: 3;
         -ms-flex-order: 2;
-            order: 2; } }
-
-@media (orientation: landscape) {
-  .blackbox-container {
-    -ms-flex-preferred-size: 67vmin;
-        flex-basis: 67vmin;
-    -webkit-box-ordinal-group: 4;
-        -ms-flex-order: 3;
-            order: 3; } }
-
-@media (orientation: landscape) {
+            order: 2; }
   .main-container {
+    max-height: 100vmin;
+    max-width: 150vmin; }
+  .controls,
+  .score {
     -webkit-box-orient: vertical;
     -webkit-box-direction: normal;
         -ms-flex-direction: column;
             flex-direction: column;
-    max-height: 100vmin; } }
+    height: 50vmin;
+    margin: 0; } }
+
+@media (orientation: landscape) and (min-aspect-ratio: 2 / 1) and (min-width: 1000px) {
+  .blackbox-container {
+    -webkit-box-ordinal-group: 3;
+        -ms-flex-order: 2;
+            order: 2; }
+  .score {
+    -webkit-box-ordinal-group: 4;
+        -ms-flex-order: 3;
+            order: 3; }
+  .main-container {
+    max-height: 100vmin;
+    max-width: 200vmin; }
+  .controls,
+  .score {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    height: 100vmin; } }
 
 .btn-switch {
   display: inline-block;

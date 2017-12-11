@@ -491,6 +491,53 @@
 		"oO": 0,
 		"oS": 1
 		},
+	"\/playground\/flex-layout\/abc.css": {
+		"aP": 1,
+		"bl": 0,
+		"ft": 16,
+		"ma": 1,
+		"oA": 0,
+		"oAP": "\/docs\/playground\/flex-layout\/abc.css",
+		"oF": 0,
+		"oS": 3
+		},
+	"\/playground\/flex-layout\/abc.html": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 0,
+		"oAP": "\/docs\/playground\/flex-layout\/abc.html",
+		"oF": 0
+		},
+	"\/playground\/flex-layout\/index.html": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 1,
+		"oAP": "\/docs\/playground\/flex-layout\/index.html",
+		"oF": 1
+		},
+	"\/playground\/flex-layout\/styles.css": {
+		"aP": 1,
+		"bl": 0,
+		"ft": 16,
+		"ma": 1,
+		"oA": 0,
+		"oAP": "\/docs\/playground\/flex-layout\/styles.css",
+		"oF": 0,
+		"oS": 3
+		},
+	"\/playground\/flex-layout\/styles.scss": {
+		"aP": 1,
+		"bl": 0,
+		"dP": 10,
+		"dS": 0,
+		"ft": 4,
+		"ma": 0,
+		"oA": 0,
+		"oAP": "\/playground\/flex-layout\/styles.css",
+		"oF": 3,
+		"oS": 0,
+		"uL": 1
+		},
 	"\/readme.md": {
 		"cB": 0,
 		"cS": 0,
@@ -548,7 +595,7 @@
 	"displayValue": "black-box",
 	"displayValueWasSetByUser": 0,
 	"iconImageName": "meme-fry",
-	"lastBuiltDate": 534170681
+	"lastBuiltDate": 534688440
 	},
 "projectSettings": {
 	"abortBuildOnError": 1,

@@ -1,0 +1,37 @@
+.box {
+  display: flex;
+  flex-flow: column wrap;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  height: 100vmin;
+  width: 200vmin;
+  background-color: grey;
+}
+
+.A {
+  order: 1;
+  flex: 0 1 auto;
+  align-self: auto;
+  min-width: 50vmin;
+  min-height: 50vmin;
+  background-color: lightblue;
+}
+
+.B {
+  order: 3;
+  flex: 0 1 auto;
+  align-self: auto;
+  min-width: 100vmin;
+  min-height: 100vmin;
+  background-color: seagreen;
+}
+
+.C {
+  order: 2;
+  flex: 0 1 auto;
+  align-self: auto;
+  min-width: 50vmin;
+  min-height: 50vmin;
+  background-color: aqua;
+}
