@@ -21,6 +21,7 @@
 
     var begin;
     var durations;
+    var interval;
     var paths;
     var svg;
 
@@ -55,7 +56,11 @@
         }
       }
     }
-    intervalID = setTimeout(animateAllRays, 10000, !draw);
+    interval = durations.reduce(
+      (accumulator, currentValue) => accumulator + currentValue,
+      0.1 * durations.length + 5
+    );
+    intervalID = setTimeout(animateAllRays, interval * 1000, !draw);
   }
   // end: SVG Animate
 
