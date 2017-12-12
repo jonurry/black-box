@@ -388,7 +388,8 @@ label.btn-switch__label.btn-switch__label_no span {
 h1,
 .h1 {
   font-family: "Passion One";
-  font-size: 8rem; }
+  font-size: 8rem;
+  line-height: 6rem; }
 
 button,
 input,
