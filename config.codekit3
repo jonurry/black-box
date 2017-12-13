@@ -463,9 +463,9 @@
 		},
 	"\/manifest.json": {
 		"ft": 524288,
-		"oA": 1,
-		"oAP": "\/docs\/manifest-min.json",
-		"oF": 0,
+		"oA": 2,
+		"oAP": "\/docs\/manifest.json",
+		"oF": 3,
 		"oO": 0,
 		"oS": 1
 		},
