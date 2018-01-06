@@ -17,7 +17,8 @@
       "XXX",
       "IDEA",
       "NOTE",
-      "REVIEW"
+      "REVIEW",
+      "TODO"
     ]
   },
   "lists": [
@@ -31,6 +32,10 @@
     },
     {
       "name": "FIXME",
+      "hidden": false
+    },
+    {
+      "name": "todo",
       "hidden": false
     }
   ],
