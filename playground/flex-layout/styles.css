@@ -1,145 +1,17 @@
-.main-container {
-  -ms-flex-line-pack: distribute;
-      align-content: space-around;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  -ms-flex-wrap: wrap;
-      flex-wrap: wrap;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center; }
-
+.main-container,
 .controls,
-.score {
-  -ms-flex-line-pack: distribute;
-      align-content: space-around;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: row;
-          flex-direction: row;
-  -ms-flex-wrap: wrap;
-      flex-wrap: wrap;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center; }
-
-.controls {
-  -webkit-box-ordinal-group: 2;
-      -ms-flex-order: 1;
-          order: 1; }
-
-.blackbox-container {
-  -webkit-box-ordinal-group: 3;
-      -ms-flex-order: 2;
-          order: 2; }
-
-.score {
-  -webkit-box-ordinal-group: 4;
-      -ms-flex-order: 3;
-          order: 3; }
-
-.blackbox-container,
-.controls,
-.score {
-  -ms-flex-item-align: auto;
-      align-self: auto;
-  -webkit-box-flex: 0;
-      -ms-flex-positive: 0;
-          flex-grow: 0;
-  -ms-flex-negative: 1;
-      flex-shrink: 1;
-  -ms-flex-preferred-size: auto;
-      flex-basis: auto; }
-
-.main-container {
-  margin: auto;
-  max-width: 200vmin; }
-
-.controls,
-.score {
-  height: auto;
-  min-width: 50vmin; }
-
+.score,
 .blackbox-container,
 .blackbox {
-  min-height: 100vmin;
-  min-width: 100vmin; }
-
-.controls > div,
-.score > div {
-  height: 2rem;
-  width: 10rem; }
-
-.footer {
-  width: 100%; }
-
-@media (orientation: landscape) and (min-aspect-ratio: 3 / 2) and (min-height: 500px) {
-  .blackbox-container {
-    -webkit-box-ordinal-group: 4;
-        -ms-flex-order: 3;
-            order: 3; }
-  .score {
-    -webkit-box-ordinal-group: 3;
-        -ms-flex-order: 2;
-            order: 2; }
-  .main-container {
-    max-height: 100vmin;
-    max-width: 150vmin; }
-  .controls,
-  .score {
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
-        -ms-flex-direction: column;
-            flex-direction: column;
-    height: 50vmin; } }
-
-@media (orientation: landscape) and (min-aspect-ratio: 2 / 1) and (min-width: 1000px) {
-  .blackbox-container {
-    -webkit-box-ordinal-group: 3;
-        -ms-flex-order: 2;
-            order: 2; }
-  .score {
-    -webkit-box-ordinal-group: 4;
-        -ms-flex-order: 3;
-            order: 3; }
-  .main-container {
-    max-height: 100vmin;
-    max-width: 200vmin; }
-  .controls,
-  .score {
-    height: 100vmin; } }
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
 
 .controls > div,
 .score > div {
   background-color: red;
+  height: 2rem;
   margin: 0.3rem;
-  height: 60px;
-  width: 230px; }
-
-.controls {
-  background-color: yellow; }
-
-.blackbox {
-  background-color: orange; }
-
-.score {
-  background-color: pink; }
-
-.footer > p {
-  background-color: blue;
-  color: white;
-  margin: 0.3rem; }
+  width: 10rem;
+}

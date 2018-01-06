@@ -245,8 +245,8 @@ sub {
 
 .blackbox-container,
 .blackbox {
-  min-height: 100vmin;
-  min-width: 100vmin; }
+  min-height: 95vmin;
+  min-width: 95vmin; }
 
 .controls > div,
 .score > div {
