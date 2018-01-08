@@ -1,21 +1,9 @@
-[Put proper content in the readme.md id:7 gh:7](#todo:)
+Web app implementation of the puzzle game released by Waddingtons and Parker in the 1970s.
 
-namespace
+Black Box is an abstract board game for one or two players, which simulates shooting rays into a black box to deduce the locations of "atoms" hidden inside. It was created by Eric Solomon. The board game was published by Waddingtons from the mid-1970s and by Parker Brothers in the late 1970s. The game can also be played with pen and paper, and there are numerous computer implementations for many different platforms, including one which can be run from the Emacs text editor.
 
-BLACKBOX = BLACKBOX || {};
-BLACKBOX.utility = util;
-BLACKBOX.VECTOR = VECTOR;
-BLACKBOX.Vector = Vector;
-BLACKBOX.SHOOT_RAY_OUTCOME = SHOOT_RAY_OUTCOME;
-BLACKBOX.Model = BlackBox;
-BLACKBOX.View = View;
-BLACKBOX.Controller = Controller;
+Black Box was inspired by the work of Godfrey Hounsfield who was awarded the 1979 Nobel Prize in Medicine for his invention of the CAT scanner.
 
+You can play this implementation of Black Box here:
 
-<div data-pos="2,3" class="cell cell-10">
-	<svg viewBox="0 0 100 100">
-    <path d="M 50 0 V 100"></path>
-<path d="M 0 50 H 100"></path>
-<path d="M 50 0 V 100"></path>
-	</svg>
-</div>
+http://blackbox.urry.me
