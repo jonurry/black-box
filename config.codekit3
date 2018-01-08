@@ -39,6 +39,13 @@
 		"oAP": "\/docs\/browserconfig.xml",
 		"oF": 0
 		},
+	"\/CNAME": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/docs\/CNAME",
+		"oF": 1
+		},
 	"\/css\/blackbox.scss": {
 		"aP": 1,
 		"bl": 0,
