@@ -16,6 +16,14 @@
 		"oAP": "\/docs\/.gitignore",
 		"oF": 1
 		},
+	"\/.imdone\/config.json": {
+		"ft": 524288,
+		"oA": 1,
+		"oAP": "\/docs\/.imdone\/config-min.json",
+		"oF": 0,
+		"oO": 0,
+		"oS": 1
+		},
 	"\/.imdone\/sort.json": {
 		"ft": 524288,
 		"oA": 1,
@@ -537,6 +545,31 @@
 		"oS": 0,
 		"uL": 1
 		},
+	"\/readme.md": {
+		"cB": 0,
+		"cS": 0,
+		"eF": 1,
+		"eL": 1,
+		"ema": 1,
+		"eSQ": 1,
+		"ft": 4096,
+		"oA": 0,
+		"oAP": "\/docs\/readme.html",
+		"oF": 0,
+		"oFM": 0,
+		"oS": 0,
+		"pHT": 0,
+		"pME": 1,
+		"rFN": 0,
+		"uCM": 0
+		},
+	"\/sitemap.xml": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/docs\/sitemap.xml",
+		"oF": 1
+		},
 	"\/tests\/blackbox.test.js": {
 		"ft": 64,
 		"ma": 1,
@@ -576,7 +609,7 @@
 	"displayValue": "black-box",
 	"displayValueWasSetByUser": 0,
 	"iconImageName": "meme-fry",
-	"lastBuiltDate": 534688440
+	"lastBuiltDate": 537880056
 	},
 "projectSettings": {
 	"abortBuildOnError": 1,
