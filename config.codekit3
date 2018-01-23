@@ -32,6 +32,14 @@
 		"oO": 0,
 		"oS": 1
 		},
+	"\/.vscode\/settings.json": {
+		"ft": 524288,
+		"oA": 1,
+		"oAP": "\/docs\/.vscode\/settings-min.json",
+		"oF": 0,
+		"oO": 0,
+		"oS": 1
+		},
 	"\/browserconfig.xml": {
 		"cB": 0,
 		"ft": 8192,
