@@ -7,7 +7,7 @@
 		"uuidString": "C148802D-1BDC-4684-AFE4-510F6CF8EF3D"
 		}
 	],
-"creatorBuild": "26148",
+"creatorBuild": "26330",
 "files": {
 	"\/.gitignore": {
 		"cB": 0,
@@ -488,7 +488,7 @@
 		"ft": 65536,
 		"oA": 1,
 		"oAP": "\/docs\/node_modules",
-		"oF": 1
+		"oF": 0
 		},
 	"\/package-lock.json": {
 		"ft": 524288,
@@ -625,6 +625,7 @@
 	"animateCSSInjections": 1,
 	"autoBuildNewItems": 1,
 	"autoprefixerBrowserString": "> 1%, last 2 versions, Firefox ESR, Opera 12.1",
+	"autoprefixerEnableIEGrid": 0,
 	"babelAuxiliaryCommentAfter": "",
 	"babelAuxiliaryCommentBefore": "",
 	"babelConfigFileHandlingType": 0,
@@ -1188,6 +1189,10 @@
 		"id-match": {
 			"active": 0,
 			"optionString": "'^[a-z]+([A-Z][a-z]+)*$', {'properties': false, 'onlyDeclarations': true}"
+			},
+		"implicit-arrow-linebreak": {
+			"active": 0,
+			"optionString": "'beside'"
 			},
 		"indent": {
 			"active": 0,

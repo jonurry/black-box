@@ -1,41 +1,41 @@
 // dependencies
 // Node.js import modules
-if (typeof exports === "object") {
+if (typeof exports === 'object') {
   if (this.BLACKBOX === undefined) {
     this.BLACKBOX = {};
   }
   if (this.BLACKBOX.VECTOR === undefined) {
-    var vectorModule = require("../js/vector.js");
+    var vectorModule = require('../js/vector.js');
     this.BLACKBOX.VECTOR = vectorModule.VECTOR;
   }
   if (this.BLACKBOX.utility === undefined) {
-    var utilModule = require("../js/utility.js");
+    var utilModule = require('../js/utility.js');
     this.BLACKBOX.utility = utilModule.blackBoxUtil;
   }
 }
 
 (function(root, BLACKBOX) {
-  "use strict";
+  'use strict';
 
   // define black box constants
   const SHOOT_RAY_OUTCOME = {
-    ABSORBED: "ray hit marble and was absorbed",
-    CORNER: "ray is in a corner",
-    DUPLICATE: "ray has already been shot",
-    INSIDE: "ray is inside the black box",
-    MARBLE_MAX: "marble ignored - maximum number already placed",
-    MARBLE_PLACED: "marble has been placed",
-    MARBLE_REMOVED: "marble has been removed",
-    NOTHING: "no outcome",
-    OUTSIDE: "ray is outside of the black box",
-    PROPOGATED: "ray has reached the rim",
-    REFLECTED: "ray has been reflected"
+    ABSORBED: 'ray hit marble and was absorbed',
+    CORNER: 'ray is in a corner',
+    DUPLICATE: 'ray has already been shot',
+    INSIDE: 'ray is inside the black box',
+    MARBLE_MAX: 'marble ignored - maximum number already placed',
+    MARBLE_PLACED: 'marble has been placed',
+    MARBLE_REMOVED: 'marble has been removed',
+    NOTHING: 'no outcome',
+    OUTSIDE: 'ray is outside of the black box',
+    PROPOGATED: 'ray has reached the rim',
+    REFLECTED: 'ray has been reflected'
   };
 
   const DEFLECTION = {
-    DEFLECTED: "ray has been deflected",
-    NONE: "ray has not been deflected",
-    REVERSED: "ray has been reversed"
+    DEFLECTED: 'ray has been deflected',
+    NONE: 'ray has not been deflected',
+    REVERSED: 'ray has been reversed'
   };
 
   // private properties
@@ -82,7 +82,7 @@ if (typeof exports === "object") {
       }
     } else {
       //ray is travelling LEFT or RIGHT
-      // ignore case where first propogated ray is encoutered at edge
+      // ignore case where first propagated ray is encountered at edge
       probe1 = marbles.some(
         marble => marble.row === row + 1 && marble.column === column
       );
@@ -176,7 +176,7 @@ if (typeof exports === "object") {
     );
   }
 
-  function rayHasRechedRim(ray, gridSize) {
+  function rayHasReachedRim(ray, gridSize) {
     var currentRow = ray.position.row;
     var currentColumn = ray.position.column;
     var gridUpperBound = gridSize + 1;
@@ -317,17 +317,17 @@ if (typeof exports === "object") {
             marble => marble.row === guess.row && marble.column === guess.column
           )
         ) {
-          this.grid[guess.row][guess.column] = "y";
+          this.grid[guess.row][guess.column] = 'y';
         } else {
           score += 5;
-          this.grid[guess.row][guess.column] = "n";
+          this.grid[guess.row][guess.column] = 'n';
         }
       }, this);
       // cycle through grid and mark any marbles that were not found
       for (var row = 1; row <= this.gridSize; row++) {
         for (var column = 1; column <= this.gridSize; column++) {
           if (this.grid[row][column] === 1) {
-            this.grid[row][column] = "x";
+            this.grid[row][column] = 'x';
           }
         }
       }
@@ -335,18 +335,18 @@ if (typeof exports === "object") {
     } else {
       numberMissingGuesses = this.numberOfMarbles - this.guesses.length;
       score =
-        "Make " +
+        'Make ' +
         numberMissingGuesses.toString() +
-        " more guess" +
-        (numberMissingGuesses === 1 ? "" : "es") +
-        " to get a score";
+        ' more guess' +
+        (numberMissingGuesses === 1 ? '' : 'es') +
+        ' to get a score';
       this.gameHasFinished = false;
     }
     return score;
   };
 
   BlackBox.prototype.shootRay = function(ray) {
-    // retrns an object that gives the overall outcome
+    // returns an object that gives the overall outcome
     // and the path that the ray took
     // {
     //  outcome: SHOOT_RAY_OUTCOME,
@@ -403,7 +403,7 @@ if (typeof exports === "object") {
       do {
         if (rayHasHitMarble(ray, marbles)) {
           if (!this.gameHasFinished) {
-            grid[originalRow][originalColumn] = "a";
+            grid[originalRow][originalColumn] = 'a';
           }
           result.path.push(JSON.parse(JSON.stringify(ray)));
           result.outcome = SHOOT_RAY_OUTCOME.ABSORBED;
@@ -413,7 +413,7 @@ if (typeof exports === "object") {
           if (deflectionOutcome !== DEFLECTION.NONE) {
             if (result.path.length === 1) {
               if (!this.gameHasFinished) {
-                grid[originalRow][originalColumn] = "r";
+                grid[originalRow][originalColumn] = 'r';
               }
               result.outcome = SHOOT_RAY_OUTCOME.REFLECTED;
             } else if (deflectionOutcome === DEFLECTION.REVERSED) {
@@ -426,13 +426,13 @@ if (typeof exports === "object") {
         if (result.outcome === SHOOT_RAY_OUTCOME.NOTHING) {
           ray.move();
           result.path.push(JSON.parse(JSON.stringify(ray)));
-          if (rayHasRechedRim(ray, gridSize)) {
+          if (rayHasReachedRim(ray, gridSize)) {
             if (
               ray.position.row === originalRow &&
               ray.position.column === originalColumn
             ) {
               if (!this.gameHasFinished) {
-                grid[originalRow][originalColumn] = "r";
+                grid[originalRow][originalColumn] = 'r';
               }
               result.outcome = SHOOT_RAY_OUTCOME.REFLECTED;
             } else {
@@ -465,14 +465,14 @@ if (typeof exports === "object") {
   };
 
   // Export to root (window in browser)
-  if (typeof define === "function" && define.amd) {
+  if (typeof define === 'function' && define.amd) {
     // requireJS
     //define(VECTOR);
-  } else if (typeof exports === "object") {
+  } else if (typeof exports === 'object') {
     // Node.js
     module.exports.SHOOT_RAY_OUTCOME = SHOOT_RAY_OUTCOME;
     module.exports.BlackBoxModel = BlackBox;
-    if (process.env.NODE_ENV === "test") {
+    if (process.env.NODE_ENV === 'test') {
       module.exports.BlackBoxModel._private = {
         checkForDeflectedRay: checkForDeflectedRay,
         createGrid: createGrid,
@@ -481,7 +481,7 @@ if (typeof exports === "object") {
         placeMarblesRandomlyOnGrid: placeMarblesRandomlyOnGrid,
         rayAlreadyShot: rayAlreadyShot,
         rayHasHitMarble: rayHasHitMarble,
-        rayHasRechedRim: rayHasRechedRim,
+        rayHasReachedRim: rayHasReachedRim,
         rayIsInCorner: rayIsInCorner,
         rayIsInsideGrid: rayIsInsideGrid,
         rayIsOutsideGrid: rayIsOutsideGrid
