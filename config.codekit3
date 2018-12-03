@@ -32,6 +32,13 @@
 		"oO": 0,
 		"oS": 1
 		},
+	"/.travis.yml": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 1,
+		"oAP": "/docs/.travis.yml",
+		"oF": 1
+		},
 	"/.vscode/settings.json": {
 		"ft": 524288,
 		"oA": 1,
