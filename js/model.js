@@ -14,8 +14,10 @@ if (typeof exports === 'object') {
   }
 }
 
-(function(root, BLACKBOX) {
+(function(root) {
   'use strict';
+
+  const BLACKBOX = root.BLACKBOX;
 
   // define black box constants
   const SHOOT_RAY_OUTCOME = {
@@ -494,4 +496,4 @@ if (typeof exports === 'object') {
     root.BLACKBOX.SHOOT_RAY_OUTCOME = SHOOT_RAY_OUTCOME;
     root.BLACKBOX.Model = BlackBox;
   }
-})(this, this.BLACKBOX);
+})(this || Window);

@@ -1,5 +1,5 @@
 !(function(root) {
-  "use strict";
+  'use strict';
 
   function shootAllRays(self) {
     self.animateRays = self.view.renderAndAnimateAllRays(
@@ -14,19 +14,19 @@
     this.model = model;
     this.view = view;
 
-    this.view.bind("animateRays", function() {
+    this.view.bind('animateRays', function() {
       self.onClickAnimateRays();
     });
 
-    this.view.bind("newGame", function(gridSize = 8, numberOfMarbles = 4) {
+    this.view.bind('newGame', function(gridSize = 8, numberOfMarbles = 4) {
       self.onClickNewGame(gridSize, numberOfMarbles);
     });
 
-    this.view.bind("scoreGame", function() {
+    this.view.bind('scoreGame', function() {
       return self.onClickScoreGame();
     });
 
-    this.view.bind("shootRay", function(ray) {
+    this.view.bind('shootRay', function(ray) {
       return self.onClickShootRay(ray);
     });
   }
@@ -79,10 +79,10 @@
   };
 
   // Export to root (window in browser)
-  if (typeof define === "function" && define.amd) {
+  if (typeof define === 'function' && define.amd) {
     // requireJS
     //define(VECTOR);
-  } else if (typeof exports === "object") {
+  } else if (typeof exports === 'object') {
     // Node.js
     module.exports.BlackBoxController = BlackBoxController;
   } else {
@@ -91,4 +91,4 @@
     root.BLACKBOX = root.BLACKBOX || {};
     root.BLACKBOX.Controller = BlackBoxController;
   }
-})(this);
+})(this || Window);

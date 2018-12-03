@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/jonurry/black-box.svg?branch=master)](https://travis-ci.org/jonurry/black-box)
+[![codecov](https://codecov.io/gh/jonurry/black-box/branch/master/graph/badge.svg)](https://codecov.io/gh/jonurry/black-box)
 
 # Black Box
 

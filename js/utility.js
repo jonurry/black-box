@@ -1,5 +1,5 @@
 !(function(root) {
-  "use strict";
+  'use strict';
 
   var util = {
     getRandomIntInclusive: function(min, max) {
@@ -10,11 +10,11 @@
   };
 
   // Export to root (window in browser)
-  if (typeof define === "function" && define.amd) {
+  if (typeof define === 'function' && define.amd) {
     // requireJS
     // define(VECTOR);
     // define(Vector);
-  } else if (typeof exports === "object") {
+  } else if (typeof exports === 'object') {
     // Node.js
     module.exports.blackBoxUtil = util;
   } else {
@@ -23,4 +23,4 @@
     root.BLACKBOX = root.BLACKBOX || {};
     root.BLACKBOX.utility = util;
   }
-})(this);
+})(this || Window);

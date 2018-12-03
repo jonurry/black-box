@@ -1,5 +1,5 @@
 !(function(root, undefined) {
-  "use strict";
+  'use strict';
 
   // define vector constants
   const VECTOR = {};
@@ -36,7 +36,7 @@
         this.position.column += columnInc;
       }
     } catch (e) {
-      throw "The vector direction was not a valid direction.";
+      throw 'The vector direction was not a valid direction.';
     }
   };
 
@@ -46,11 +46,11 @@
   };
 
   // Export to root (window in browser)
-  if (typeof define === "function" && define.amd) {
+  if (typeof define === 'function' && define.amd) {
     // requireJS
     // define(VECTOR);
     // define(Vector);
-  } else if (typeof exports === "object") {
+  } else if (typeof exports === 'object') {
     // Node.js
     module.exports.VECTOR = VECTOR;
     module.exports.Vector = Vector;
@@ -61,4 +61,4 @@
     root.BLACKBOX.VECTOR = VECTOR;
     root.BLACKBOX.Vector = Vector;
   }
-})(this);
+})(this || Window);

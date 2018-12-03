@@ -1,20 +1,21 @@
-!(function(root, BLACKBOX, undefined) {
-  "use strict";
+!(function(root, undefined) {
+  'use strict';
 
+  const BLACKBOX = root.BLACKBOX;
   var intervalID;
 
   // the following code is adapted from Jake Archibald's article on animating SVG paths
   // https://jakearchibald.com/2013/animated-line-drawing-svg/
   // begin: SVG Animate
   var supportsInlineSvg = (function() {
-    var div = document.createElement("div");
-    div.innerHTML = "<svg/>";
+    var div = document.createElement('div');
+    div.innerHTML = '<svg/>';
     return (
       (div.firstChild && div.firstChild.namespaceURI) ==
-      "http://www.w3.org/2000/svg"
+      'http://www.w3.org/2000/svg'
     );
   })();
-  document.documentElement.className += supportsInlineSvg ? " inline-svg" : "";
+  document.documentElement.className += supportsInlineSvg ? ' inline-svg' : '';
 
   function animateAllRays(draw) {
     if (!supportsInlineSvg) return;
@@ -25,15 +26,15 @@
     var paths;
     var svg;
 
-    svg = document.getElementById("svg");
+    svg = document.getElementById('svg');
     if (svg !== null) {
-      paths = toArray(svg.querySelectorAll("path"));
+      paths = toArray(svg.querySelectorAll('path'));
       if (paths.length > 0) {
         durations = paths.map(function(path) {
           var length = path.getTotalLength();
-          path.style.strokeDasharray = length + " " + length;
+          path.style.strokeDasharray = length + ' ' + length;
           path.style.strokeDashoffset = length;
-          path.style.visibility = "visible";
+          path.style.visibility = 'visible';
           return Math.pow(length, 0.5) * 0.03;
         });
 
@@ -45,12 +46,12 @@
         if (draw) {
           paths.forEach(function(path, i) {
             path.style.transition = path.style.WebkitTransition =
-              "stroke-dashoffset " +
+              'stroke-dashoffset ' +
               durations[i] +
-              "s " +
+              's ' +
               begin +
-              "s ease-in-out";
-            path.style.strokeDashoffset = "0";
+              's ease-in-out';
+            path.style.strokeDashoffset = '0';
             begin += durations[i] + 0.1;
           });
         }
@@ -81,7 +82,7 @@
       row = startVector.position.row;
       col = startVector.position.column;
       // move to start position of ray ("M x y")
-      path.push("M");
+      path.push('M');
       if (col === 0) {
         path.push(0);
       } else if (col === gridSize + 1) {
@@ -104,28 +105,28 @@
           nextVector.direction.rowIncrement === 1
         ) {
           // ray moves down one cell relative to current position "v 1-cell"
-          path.push("v");
+          path.push('v');
           path.push(cellWidth);
         } else if (
           currentVector.direction.rowIncrement === -1 &&
           nextVector.direction.rowIncrement === -1
         ) {
           // ray moves up one cell relative to current position "v -(1-cell)"
-          path.push("v");
+          path.push('v');
           path.push(-cellWidth);
         } else if (
           currentVector.direction.columnIncrement === 1 &&
           nextVector.direction.columnIncrement === 1
         ) {
           // ray moves right one cell relative to current position "h 1-cell"
-          path.push("h");
+          path.push('h');
           path.push(cellWidth);
         } else if (
           currentVector.direction.columnIncrement === -1 &&
           nextVector.direction.columnIncrement === -1
         ) {
           // ray moves left one cell relative to current position "h -(1-cell)"
-          path.push("h");
+          path.push('h');
           path.push(-cellWidth);
         } else if (
           currentVector.direction.columnIncrement === -1 &&
@@ -134,7 +135,7 @@
           // ray deflected from travelling left to travelling down
           // ray arcs anti-clockwise to left and down relative to current position
           // "a radius radius, 0 0 0, -radius radius"
-          path.push("a");
+          path.push('a');
           path.push(radius);
           path.push(radius);
           path.push(0);
@@ -149,7 +150,7 @@
           // ray deflected from travelling down to travelling right
           // ray arcs anti-clockwise from down to right relative to current position
           // "a radius radius, 0 0 0, radius radius"
-          path.push("a");
+          path.push('a');
           path.push(radius);
           path.push(radius);
           path.push(0);
@@ -164,7 +165,7 @@
           // ray deflected from travelling right to travelling up
           // ray arcs anti-clockwise to right and up relative to current position
           // "a radius radius, 0 0 0, radius -radius"
-          path.push("a");
+          path.push('a');
           path.push(radius);
           path.push(radius);
           path.push(0);
@@ -179,7 +180,7 @@
           // ray deflected from travelling up to travelling left
           // ray arcs anti-clockwise to left and up relative to current position
           // "a radius radius, 0 0 0, -radius -radius"
-          path.push("a");
+          path.push('a');
           path.push(radius);
           path.push(radius);
           path.push(0);
@@ -194,7 +195,7 @@
           // ray deflected from travelling right to travelling down
           // ray arcs clockwise to right and down relative to current position
           // "a radius radius, 0 0 1, radius radius"
-          path.push("a");
+          path.push('a');
           path.push(radius);
           path.push(radius);
           path.push(0);
@@ -209,7 +210,7 @@
           // ray deflected from travelling down to travelling left
           // ray arcs clockwise from down to left relative to current position
           // "a radius radius, 0 0 1, -radius radius"
-          path.push("a");
+          path.push('a');
           path.push(radius);
           path.push(radius);
           path.push(0);
@@ -224,7 +225,7 @@
           // ray deflected from travelling left to travelling up
           // ray arcs clockwise to left and up relative to current position
           // "a radius radius, 0 0 1, -radius -radius"
-          path.push("a");
+          path.push('a');
           path.push(radius);
           path.push(radius);
           path.push(0);
@@ -239,7 +240,7 @@
           // ray deflected from travelling up to travelling right
           // ray arcs clockwise to right and up relative to current position
           // "a radius radius, 0 0 1, radius -radius"
-          path.push("a");
+          path.push('a');
           path.push(radius);
           path.push(radius);
           path.push(0);
@@ -251,7 +252,7 @@
       }
     }
 
-    return path.join(" ");
+    return path.join(' ');
   }
 
   function renderSVGPath(svgPath, outcome, cssClass, visible = true) {
@@ -259,16 +260,16 @@
     var svgElement;
     var pathElement;
     var svgRay;
-    svgElement = document.getElementsByTagName("svg")[0];
-    pathElement = document.createElement("path");
-    pathElement.setAttribute("d", svgPath);
+    svgElement = document.getElementsByTagName('svg')[0];
+    pathElement = document.createElement('path');
+    pathElement.setAttribute('d', svgPath);
     if (visible) {
-      pathElement.style.visibility = "visible";
+      pathElement.style.visibility = 'visible';
     } else {
-      pathElement.style.visibility = "hidden";
+      pathElement.style.visibility = 'hidden';
     }
-    if (cssClass !== "") {
-      pathElement.setAttribute("class", cssClass);
+    if (cssClass !== '') {
+      pathElement.setAttribute('class', cssClass);
     }
     switch (outcome) {
       case OUTCOME.ABSORBED:
@@ -278,12 +279,12 @@
         } else {
           svgElement.innerHTML = svgElement.innerHTML.replace(
             pathElement.outerHTML,
-            ""
+            ''
           );
         }
         break;
       case OUTCOME.PROPOGATED:
-        svgRay = svgElement.querySelectorAll("path." + cssClass)[0];
+        svgRay = svgElement.querySelectorAll('path.' + cssClass)[0];
         if (svgRay === undefined) {
           svgElement.innerHTML += pathElement.outerHTML;
         } else {
@@ -302,17 +303,17 @@
     var top;
     var width;
 
-    svg = document.getElementById("svg");
+    svg = document.getElementById('svg');
     if (svg !== null) {
       // resize the svg element
-      blackboxDiv = document.getElementById("blackbox");
-      gridSize = parseInt(document.getElementById("inputGridSize").value);
+      blackboxDiv = document.getElementById('blackbox');
+      gridSize = parseInt(document.getElementById('inputGridSize').value);
       margin = blackboxDiv.offsetWidth / (gridSize + 2);
       width = blackboxDiv.offsetWidth - 2 * margin;
       top = blackboxDiv.offsetTop + margin;
       left = margin + blackboxDiv.offsetLeft;
       svg.style.cssText =
-        "width: " + width + "px; top: " + top + "px; left: " + left + "px;";
+        'width: ' + width + 'px; top: ' + top + 'px; left: ' + left + 'px;';
     }
   }
 
@@ -323,7 +324,7 @@
   function View() {
     this.view = this;
     this.validationHandlers();
-    this.bind("resizeBlackBox");
+    this.bind('resizeBlackBox');
   }
 
   View.prototype.bind = function(event, handler) {
@@ -338,46 +339,46 @@
     var row;
     var score;
 
-    if (event === "animateRays") {
-      animateRays = document.getElementById("radioAnimateRaysYes");
-      animateRays.addEventListener("change", function() {
+    if (event === 'animateRays') {
+      animateRays = document.getElementById('radioAnimateRaysYes');
+      animateRays.addEventListener('change', function() {
         handler();
       });
-      animateRays = document.getElementById("radioAnimateRaysNo");
-      animateRays.addEventListener("change", function() {
+      animateRays = document.getElementById('radioAnimateRaysNo');
+      animateRays.addEventListener('change', function() {
         handler();
       });
-    } else if (event === "newGame") {
-      buttonNewGame = document.getElementById("buttonNewGame");
-      buttonNewGame.addEventListener("click", function() {
-        gridSize = parseInt(document.getElementById("inputGridSize").value);
+    } else if (event === 'newGame') {
+      buttonNewGame = document.getElementById('buttonNewGame');
+      buttonNewGame.addEventListener('click', function() {
+        gridSize = parseInt(document.getElementById('inputGridSize').value);
         numberOfMarbles = parseInt(
-          document.getElementById("inputMarbles").value
+          document.getElementById('inputMarbles').value
         );
         handler(gridSize, numberOfMarbles);
-        document.getElementById("score").style.display = "none";
-        document.getElementById("animateRays").style.display = "none";
+        document.getElementById('score').style.display = 'none';
+        document.getElementById('animateRays').style.display = 'none';
       });
-    } else if (event === "scoreGame") {
-      buttonScoreGame = document.getElementById("buttonScoreGame");
-      buttonScoreGame.addEventListener("click", function() {
+    } else if (event === 'scoreGame') {
+      buttonScoreGame = document.getElementById('buttonScoreGame');
+      buttonScoreGame.addEventListener('click', function() {
         score = handler();
-        document.getElementById("scoreValue").innerHTML = score;
-        document.getElementById("score").style.display = "block";
-        document.getElementById("animateRays").style.display = "block";
+        document.getElementById('scoreValue').innerHTML = score;
+        document.getElementById('score').style.display = 'block';
+        document.getElementById('animateRays').style.display = 'block';
       });
-    } else if (event === "shootRay") {
-      blackboxDiv = document.getElementById("blackbox");
-      blackboxDiv.addEventListener("click", function(event) {
+    } else if (event === 'shootRay') {
+      blackboxDiv = document.getElementById('blackbox');
+      blackboxDiv.addEventListener('click', function(event) {
         clickedElement = event.target;
-        if (clickedElement.nodeName !== "svg") {
-          row = parseInt(clickedElement.dataset.pos.split(",")[0]);
-          column = parseInt(clickedElement.dataset.pos.split(",")[1]);
+        if (clickedElement.nodeName !== 'svg') {
+          row = parseInt(clickedElement.dataset.pos.split(',')[0]);
+          column = parseInt(clickedElement.dataset.pos.split(',')[1]);
           handler(new BLACKBOX.Vector(row, column));
         }
       });
-    } else if (event === "resizeBlackBox") {
-      window.addEventListener("resize", resizeSVG);
+    } else if (event === 'resizeBlackBox') {
+      window.addEventListener('resize', resizeSVG);
     }
   };
 
@@ -388,29 +389,29 @@
     var svg;
     var svgPath;
     animateRays =
-      document.querySelector('input[name="switch"]:checked').value === "on"
+      document.querySelector('input[name="switch"]:checked').value === 'on'
         ? true
         : false;
     if (animateRays) {
-      svg = document.getElementById("svg");
+      svg = document.getElementById('svg');
       if (svg !== null) {
-        paths = toArray(svg.querySelectorAll("path"));
+        paths = toArray(svg.querySelectorAll('path'));
         if (paths.length === 0) {
           allShots.forEach(function(shot) {
             var cssClass;
             switch (shot.outcome) {
               case OUTCOME.ABSORBED:
-                cssClass = "hit";
+                cssClass = 'hit';
                 break;
               case OUTCOME.MARBLE_PLACED:
               case OUTCOME.MARBLE_REMOVED:
-                cssClass = "guess";
+                cssClass = 'guess';
                 break;
               case OUTCOME.PROPOGATED:
-                cssClass = "ray-" + shot.rayNumber;
+                cssClass = 'ray-' + shot.rayNumber;
                 break;
               case OUTCOME.REFLECTED:
-                cssClass = "reflect";
+                cssClass = 'reflect';
                 break;
             }
             svgPath = createSVGPath(shot, gridSize);
@@ -432,11 +433,11 @@
 
     console.log();
     for (var i = 0; i < grid.length; i++) {
-      gridLine = "";
+      gridLine = '';
       for (var j = 0; j < grid.length; j++) {
-        gridLine += String(grid[i][j]) + "\t";
+        gridLine += String(grid[i][j]) + '\t';
       }
-      console.log(gridLine + "\t" + String(i));
+      console.log(gridLine + '\t' + String(i));
     }
   };
 
@@ -448,37 +449,37 @@
     guesses,
     marbles
   ) {
-    var blackboxDiv = document.getElementById("blackbox");
+    var blackboxDiv = document.getElementById('blackbox');
     var buttonScoreGame;
     var cellDiv;
     var classes;
     var upperGridBound = gridSize + 1;
 
-    blackboxDiv.innerHTML = "";
-    blackboxDiv.className = "blackbox grid grid-size-" + gridSize;
+    blackboxDiv.innerHTML = '';
+    blackboxDiv.className = 'blackbox grid grid-size-' + gridSize;
     for (var row = 0; row <= upperGridBound; row++) {
       for (var column = 0; column <= upperGridBound; column++) {
-        cellDiv = document.createElement("div");
-        classes = ["cell"];
+        cellDiv = document.createElement('div');
+        classes = ['cell'];
         // render ray outcomes
         switch (grid[row][column]) {
           case 0:
             // no action required
             break;
-          case "a":
-            classes.push("hit");
+          case 'a':
+            classes.push('hit');
             break;
-          case "n":
-            classes.push("guess-wrong");
+          case 'n':
+            classes.push('guess-wrong');
             break;
-          case "r":
-            classes.push("reflect");
+          case 'r':
+            classes.push('reflect');
             break;
-          case "x":
-            classes.push("not-found");
+          case 'x':
+            classes.push('not-found');
             break;
-          case "y":
-            classes.push("guess-right");
+          case 'y':
+            classes.push('guess-right');
             break;
           default:
             if (
@@ -487,7 +488,7 @@
               column === 0 ||
               column === upperGridBound
             ) {
-              classes.push("ray-" + grid[row][column]);
+              classes.push('ray-' + grid[row][column]);
             }
         }
         if (gameHasFinished) {
@@ -498,14 +499,14 @@
               parseInt(marble.column) === column
             ) {
               if (grid[row][column] === 0) {
-                classes.push("guess");
+                classes.push('guess');
               }
             }
           });
         }
         // set row and column data
-        cellDiv.dataset.pos = row + "," + column;
-        cellDiv.className = classes.join(" ");
+        cellDiv.dataset.pos = row + ',' + column;
+        cellDiv.className = classes.join(' ');
         blackboxDiv.appendChild(cellDiv);
       }
     }
@@ -516,7 +517,7 @@
       window.setTimeout(resizeSVG, 0);
     }
     // enable/disable score game button
-    buttonScoreGame = document.getElementById("buttonScoreGame");
+    buttonScoreGame = document.getElementById('buttonScoreGame');
     buttonScoreGame.disabled = !(allMarblesPlaced && !gameHasFinished);
   };
 
@@ -528,37 +529,37 @@
   ) {
     var OUTCOME = BLACKBOX.SHOOT_RAY_OUTCOME;
     var buttonScoreGame;
-    var cssClass = "";
+    var cssClass = '';
     var endElement;
     var endPos;
     var startElement;
     var startPos;
     var svgPath;
 
-    startPos = shot.path[0].position.row + "," + shot.path[0].position.column;
+    startPos = shot.path[0].position.row + ',' + shot.path[0].position.column;
     endPos =
       shot.path[shot.path.length - 1].position.row +
-      "," +
+      ',' +
       shot.path[shot.path.length - 1].position.column;
     startElement = document.querySelectorAll(
       "[data-pos='" + startPos + "']"
     )[0];
     endElement = document.querySelectorAll("[data-pos='" + endPos + "']")[0];
-    buttonScoreGame = document.getElementById("buttonScoreGame");
+    buttonScoreGame = document.getElementById('buttonScoreGame');
 
     switch (shot.outcome) {
       case OUTCOME.ABSORBED:
-        cssClass = "hit";
+        cssClass = 'hit';
         break;
       case OUTCOME.MARBLE_PLACED:
       case OUTCOME.MARBLE_REMOVED:
-        cssClass = "guess";
+        cssClass = 'guess';
         break;
       case OUTCOME.PROPOGATED:
-        cssClass = "ray-" + shot.rayNumber;
+        cssClass = 'ray-' + shot.rayNumber;
         break;
       case OUTCOME.REFLECTED:
-        cssClass = "reflect";
+        cssClass = 'reflect';
         break;
     }
 
@@ -570,7 +571,7 @@
       }
     } else {
       // game has not finished
-      cssClass = " " + cssClass;
+      cssClass = ' ' + cssClass;
       switch (shot.outcome) {
         case OUTCOME.ABSORBED:
         case OUTCOME.MARBLE_PLACED:
@@ -582,7 +583,7 @@
           }
           break;
         case OUTCOME.MARBLE_REMOVED:
-          startElement.className = startElement.className.replace(cssClass, "");
+          startElement.className = startElement.className.replace(cssClass, '');
           break;
       }
     }
@@ -592,10 +593,10 @@
   };
 
   View.prototype.validationHandlers = function() {
-    var inputGridSize = document.getElementById("inputGridSize");
-    var inputMarbles = document.getElementById("inputMarbles");
+    var inputGridSize = document.getElementById('inputGridSize');
+    var inputMarbles = document.getElementById('inputMarbles');
 
-    inputGridSize.addEventListener("focusout", function(event) {
+    inputGridSize.addEventListener('focusout', function(event) {
       var gridSize = parseInt(event.currentTarget.value);
       if (gridSize < 6) {
         event.currentTarget.value = 6;
@@ -606,8 +607,8 @@
       }
     });
 
-    inputMarbles.addEventListener("focusout", function(event) {
-      var gridSize = parseInt(document.getElementById("inputGridSize").value);
+    inputMarbles.addEventListener('focusout', function(event) {
+      var gridSize = parseInt(document.getElementById('inputGridSize').value);
       var numberOfMarbles = parseInt(event.currentTarget.value);
       if (numberOfMarbles < 4) {
         event.currentTarget.value = 4;
@@ -620,10 +621,10 @@
   };
 
   // Export to root (window in browser)
-  if (typeof define === "function" && define.amd) {
+  if (typeof define === 'function' && define.amd) {
     // requireJS
     //define(VECTOR);
-  } else if (typeof exports === "object") {
+  } else if (typeof exports === 'object') {
     // Node.js
     module.exports.BlackBoxView = View;
   } else {
@@ -632,4 +633,4 @@
     root.BLACKBOX = root.BLACKBOX || {};
     root.BLACKBOX.View = View;
   }
-})(this, this.BLACKBOX);
+})(this || Window);
