@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "test": "npx jest",
+    "test": "npm run test:cov",
     "test:watch": "npx jest --watch",
     "test:cov": "npx jest --coverage"
   },

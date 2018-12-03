@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/jonurry/black-box.svg?branch=master)](https://travis-ci.org/jonurry/black-box)
+
 # Black Box
 
 Web app implementation of the puzzle game released by Waddingtons and Parker in the 1970s.
