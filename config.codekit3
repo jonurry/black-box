@@ -54,6 +54,12 @@
 		"oAP": "/docs/CNAME",
 		"oF": 1
 		},
+	"/coverage": {
+		"ft": 65536,
+		"oA": 1,
+		"oAP": "/docs/coverage",
+		"oF": 0
+		},
 	"/css/blackbox.scss": {
 		"aP": 1,
 		"bl": 0,
@@ -2605,7 +2611,7 @@
 		],
 	"overrideExternalServerCSS": 0,
 	"previewPathAddition": "",
-	"skippedFoldersString": "log, _logs, logs, _cache, cache, /storage/framework/sessions, node_modules",
+	"skippedFoldersString": "_cache,cache,log,_logs,logs,node_modules,/storage/framework/sessions,coverage",
 	"sourceFolderName": "source",
 	"susyVersion": 3,
 	"tsAllowSyntheticDefaultImports": 0,
