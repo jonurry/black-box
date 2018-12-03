@@ -3,6 +3,33 @@
     "test": "jest"
   },
   "devDependencies": {
-    "jest": "^23.6.0"
-  }
+    "jest": "^23.6.0",
+    "sass": "^1.15.1"
+  },
+  "name": "black-box",
+  "description": "Web app implementation of the puzzle game released by Waddingtons and Parker in the 1970s.",
+  "version": "1.0.0",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs",
+    "test": "tests"
+  },
+  "dependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jonurry/black-box.git"
+  },
+  "keywords": [
+    "black",
+    "box",
+    "game",
+    "waddingtons",
+    "parker"
+  ],
+  "author": "Jon Urry <jon@urry.me> (http://jon.urry.me)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jonurry/black-box/issues"
+  },
+  "homepage": "https://github.com/jonurry/black-box#readme"
 }
