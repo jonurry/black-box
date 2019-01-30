@@ -1,8 +1,9 @@
 {
   "scripts": {
-    "test": "npm run test:cov",
-    "test:watch": "npx jest --watch",
-    "test:cov": "npx jest --coverage"
+    "test": "npm run test:c",
+    "test:c": "npx jest --coverage",
+    "test:v": "npx jest --verbose",
+    "test:w": "npx jest --watch"
   },
   "devDependencies": {
     "jest": "^23.6.0",
